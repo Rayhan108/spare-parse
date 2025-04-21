@@ -24,16 +24,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="" lang="en">
+    <html className="dark" lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-black`}
         monica-id="ofpnmcalabcbjgholdjcjblkibolbppb"
         monica-version="7.9.1"
         cz-shortcut-listen="true"
+        data-new-gr-c-s-check-loaded="14.1232.0"
+        data-gr-ext-installed=""
       >
         <Header></Header>
         {children}
       </body>
-    </html>
+    </html >
   );
 }
