@@ -92,7 +92,7 @@ const Header = () => {
                     {
                         subMenu &&
                         // bg-gradient-to-r from-[#243631] to-[#6e7675] dark:bg-gradient-to-r dark:from-[#cfcfcf] dark:to-[#a8acab]
-                        <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all'>
+                        <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all z-50'>
                             <div className='flex items-center justify-between mb-5'>
                                 <p className='text-gray-200 dark:text-black'>Dark Mode:</p>
                                 <button
