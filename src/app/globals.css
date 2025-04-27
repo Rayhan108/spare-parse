@@ -4,3 +4,37 @@
 @theme {
     --color-primary: #F56100;
   }
+
+  #google_translate_element .goog-te-gadget {
+    font-family: Arial, sans-serif;
+    font-size: 1px;
+    color: #e4e4e4;
+    width: 100px;
+    margin-left: 20px;
+  }
+  .goog-te-combo {
+    background: #1f1f1f !important;
+    padding: 5px;
+}
+  .goog-te-banner-frame.skiptranslate {
+    display: none !important;
+  }
+  /* Hide "Powered by Google Translate" text */
+  .goog-te-gadget span {
+    display: none !important;
+  }
+  /* select.goog-te-combo {
+    width: 140px !important;
+} */
+  .goog-te-banner-frame {
+    display: none !important;
+  }
+  /* Style the dropdown */
+  .goog-te-combo {
+    padding: 5px;
+    border-radius: 4px;
+  }
+  
+  .goog-te-gadget .goog-te-combo {
+    margin: 11px 0 !important;
+}

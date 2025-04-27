@@ -9,6 +9,7 @@ import { PiShoppingCartLight } from 'react-icons/pi';
 import { GoPerson } from 'react-icons/go';
 import { useEffect, useState } from 'react';
 import { LuShoppingBag } from 'react-icons/lu';
+import GoogleTranslate from '../translate/GoogleTranslate';
 
 const Header = () => {
 
@@ -46,6 +47,7 @@ const Header = () => {
         <div>
             <div className=" bg-black dark:bg-[#3f3f3f] h-12 text-md text-center text-white flex items-center justify-center">
                 Summer Sale For All Parking Light And Free Express Delivery - OFF 50%! <span className=" ml-2 font-semibold underline cursor-pointer">ShopNow</span>
+                <GoogleTranslate></GoogleTranslate>
             </div>
             <nav className='  border-b border-gray-200 dark:border-gray-600 dark:bg-black'>
                 <div className=' container mx-auto py-4 flex items-center justify-between relative'>

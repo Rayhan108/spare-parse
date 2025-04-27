@@ -37,8 +37,8 @@ export default function RootLayout({
           data-new-gr-c-s-check-loaded="14.1232.0"
           data-gr-ext-installed=""
         >
-          <Header />
-          {children}
+            <Header />
+            {children}
         </body>
       </ConfigProvider>
     </html >
