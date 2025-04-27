@@ -44,7 +44,7 @@ const Header = () => {
 
     return (
         <div>
-            <div className=" bg-[#df5800] dark:bg-[#df5800] h-10 text-md text-center text-white flex items-center justify-center">
+            <div className=" bg-black dark:bg-[#3f3f3f] h-12 text-md text-center text-white flex items-center justify-center">
                 Summer Sale For All Parking Light And Free Express Delivery - OFF 50%! <span className=" ml-2 font-semibold underline cursor-pointer">ShopNow</span>
             </div>
             <nav className='  border-b border-gray-200 dark:border-gray-600 dark:bg-black'>
@@ -92,7 +92,7 @@ const Header = () => {
                     {
                         subMenu &&
                         // bg-gradient-to-r from-[#243631] to-[#6e7675] dark:bg-gradient-to-r dark:from-[#cfcfcf] dark:to-[#a8acab]
-                        <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all'>
+                        <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all z-50'>
                             <div className='flex items-center justify-between mb-5'>
                                 <p className='text-gray-200 dark:text-black'>Dark Mode:</p>
                                 <button

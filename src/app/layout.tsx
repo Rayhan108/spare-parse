@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Shared/Header";
+import { ConfigProvider } from "antd";
+import { mainTheme } from "@/theme/ant-theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,17 +28,19 @@ export default function RootLayout({
 }>) {
   return (
     <html className="" lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-black`}
-        monica-id="ofpnmcalabcbjgholdjcjblkibolbppb"
-        monica-version="7.9.1"
-        cz-shortcut-listen="true"
-        data-new-gr-c-s-check-loaded="14.1232.0"
-        data-gr-ext-installed=""
-      >
-        <Header></Header>
-        {children}
-      </body>
+      <ConfigProvider theme={mainTheme as any}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-black`}
+          monica-id="ofpnmcalabcbjgholdjcjblkibolbppb"
+          monica-version="7.9.1"
+          cz-shortcut-listen="true"
+          data-new-gr-c-s-check-loaded="14.1232.0"
+          data-gr-ext-installed=""
+        >
+          <Header />
+          {children}
+        </body>
+      </ConfigProvider>
     </html >
   );
 }

@@ -1,9 +1,11 @@
-import Hero from "@/components/Shared/Home/Hero";
+import Hero from "@/components/Home/Hero";
+import SelectYourVehicle from "@/components/Home/SelectYourVehicle";
 
 export default function Home() {
   return (
     <div className="">
       <Hero></Hero>
+      <SelectYourVehicle></SelectYourVehicle>
     </div>
   );
 }
