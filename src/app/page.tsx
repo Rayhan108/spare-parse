@@ -1,6 +1,7 @@
 import Category from "@/components/Home/Category";
 import ExploreProducts from "@/components/Home/ExploreProducts";
 import Hero from "@/components/Home/Hero";
+import NewArrival from "@/components/Home/NewArrival";
 import SelectYourVehicle from "@/components/Home/SelectYourVehicle";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <SelectYourVehicle></SelectYourVehicle>
       <Category></Category>
       <ExploreProducts></ExploreProducts>
+      <NewArrival></NewArrival>
     </div>
   );
 }
