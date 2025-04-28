@@ -2,7 +2,7 @@ import { Select } from "antd";
 
 const SelectYourVehicle = () => {
     return (
-        <div className="container mx-auto shadow-md border-t-[10px] border-t-[#f56100] border-b border-b-[#FCCEB0] border-r border-r-[#FCCEB0] border-l border-l-[#FCCEB0] py-14">
+        <div className="container mx-auto shadow-md border-t-[10px] border-t-[#f56100] border-b border-b-[#FCCEB0] border-r border-r-[#FCCEB0] border-l border-l-[#FCCEB0] py-14 mt-10">
             <div className="text-center">
                 <h2 className="text-4xl font-semibold dark:text-white">Select Your Vehicle</h2>
                 <p className="text-[#5A5B54] mt-3 dark:text-gray-300">For finding the correct part</p>
