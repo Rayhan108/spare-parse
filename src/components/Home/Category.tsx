@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import engine from '../../../public/category/engine.svg'
@@ -5,12 +6,14 @@ import engine_oil from '../../../public/category/engine_oil.svg'
 import exhaust from '../../../public/category/exhaust.svg'
 import light from '../../../public/category/head_light.svg'
 import spark_plug from '../../../public/category/spark_plug.svg'
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import Image from "next/image";
+import { useState } from "react";
 
 const Category = () => {
-    const swiper = useSwiper();
+    const [swiper, setSwiper] = useState<any>(null);
+
     const items = [
         { src: engine_oil, alt: 'Engine Oil', title: 'Engine Oil' },
         { src: exhaust, alt: 'Exhaust', title: 'Exhaust' },
@@ -20,7 +23,6 @@ const Category = () => {
         { src: engine, alt: 'Engine', title: 'Engine' },
         { src: spark_plug, alt: 'Spark Plug', title: 'Spark Plug' },
     ];
-
 
     return (
         <div className="container mx-auto py-32">
@@ -34,13 +36,13 @@ const Category = () => {
                 <div className="flex items-center gap-4">
                     <button
                         className="bg-[#f5f5f5] p-2 rounded-full"
-                        onClick={() => swiper.slidePrev()}
+                        onClick={() => swiper?.slidePrev()}
                     >
                         <FiArrowLeft size={35} className="cursor-pointer" />
                     </button>
                     <button
                         className="bg-[#f5f5f5] p-2 rounded-full"
-                        onClick={() => swiper.slideNext()}
+                        onClick={() => swiper?.slideNext()}
                     >
                         <FiArrowRight size={35} className="cursor-pointer" />
                     </button>
@@ -49,8 +51,9 @@ const Category = () => {
             <div>
                 <Swiper
                     spaceBetween={30}
-                    className="flex"
                     slidesPerView={6}
+                    onSwiper={(swiperInstance) => setSwiper(swiperInstance)}
+                    className="flex"
                 >
                     {items.map((item, index) => (
                         <SwiperSlide key={index}>
