@@ -47,7 +47,7 @@ const Header = () => {
         <div>
             <div className=" bg-black dark:bg-[#3f3f3f] h-12 text-md text-center text-white flex items-center justify-center">
                 Summer Sale For All Parking Light And Free Express Delivery - OFF 50%! <span className=" ml-2 font-semibold underline cursor-pointer">ShopNow</span>
-                <GoogleTranslate></GoogleTranslate>
+                <GoogleTranslate/>
             </div>
             <nav className='  border-b border-gray-200 dark:border-gray-600 dark:bg-black'>
                 <div className=' container mx-auto py-4 flex items-center justify-between relative'>
@@ -85,8 +85,8 @@ const Header = () => {
                         </ConfigProvider>
                         <IoIosHeartEmpty className=' w-10 h-10 cursor-pointer dark:text-white' />
                         <PiShoppingCartLight className=' w-10 h-10 cursor-pointer dark:text-white' />
-                        <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-1 '>
-                            <GoPerson className='w-6 h-6 text-white cursor-pointer ' />
+                        <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-2 '>
+                            <GoPerson className='w-6 h-6 text-white cursor-pointer -mr-[1x]' />
                         </div>
 
 
