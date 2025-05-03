@@ -38,3 +38,8 @@
   .goog-te-gadget .goog-te-combo {
     margin: 11px 0 !important;
 }
+/* This targets the actual placeholder text inside the input */
+.custom-input input::placeholder {
+  color: rgba(255, 255, 255, 0.562);
+  opacity: 1; /* Ensures it's fully visible */
+}
