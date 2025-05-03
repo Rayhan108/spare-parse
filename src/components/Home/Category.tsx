@@ -25,33 +25,52 @@ const Category = () => {
     ];
 
     return (
-        <div className="container mx-auto py-32">
+        <div className="container mx-auto py-20 md:py-32">
             <div className="flex gap-2 items-center mb-5">
                 <span className="bg-primary h-10 px-[10px] rounded-md">
                 </span>
                 <p className="text-primary font-semibold text-lg">Categories</p>
             </div>
             <div className="flex justify-between items-center mb-16">
-                <h2 className="text-5xl dark:text-white">Browse By Category</h2>
+                <h2 className=" text-2xl md:text-3xl lg:text-5xl dark:text-white">Browse By Category</h2>
                 <div className="flex items-center gap-4">
                     <button
                         className="bg-[#f5f5f5] p-2 rounded-full"
                         onClick={() => swiper?.slidePrev()}
                     >
-                        <FiArrowLeft size={35} className="cursor-pointer" />
+                        <FiArrowLeft className="cursor-pointer w-6 md:w-8 h-6 md:h-8" />
                     </button>
                     <button
                         className="bg-[#f5f5f5] p-2 rounded-full"
                         onClick={() => swiper?.slideNext()}
                     >
-                        <FiArrowRight size={35} className="cursor-pointer" />
+                        <FiArrowRight className="cursor-pointer w-6 md:w-8 h-6 md:h-8" />
                     </button>
                 </div>
             </div>
             <div>
                 <Swiper
                     spaceBetween={30}
-                    slidesPerView={6}
+                    breakpoints={{
+                        1200: {
+                            slidesPerView: 6,
+                        },
+                        1024: {
+                            slidesPerView: 5,
+                        },
+                        800: {
+                            slidesPerView: 4,
+                        },
+                        600: {
+                            slidesPerView: 3,
+                        },
+                        480: {
+                            slidesPerView: 2,
+                        },
+                        320: {
+                            slidesPerView: 1,
+                        },
+                    }}
                     onSwiper={(swiperInstance) => setSwiper(swiperInstance)}
                     className="flex"
                 >

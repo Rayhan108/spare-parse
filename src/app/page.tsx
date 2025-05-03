@@ -1,13 +1,13 @@
+import Hero from "@/components/Home/Hero";
+import SelectYourVehicle from "@/components/Home/SelectYourVehicle";
 import Category from "@/components/Home/Category";
 import ExploreProducts from "@/components/Home/ExploreProducts";
-import Hero from "@/components/Home/Hero";
 import NewArrival from "@/components/Home/NewArrival";
-import SelectYourVehicle from "@/components/Home/SelectYourVehicle";
 import ServiceFeatures from "@/components/Home/ServiceFeatures";
 
 export default function Home() {
   return (
-    <div className="">
+    <div className=" px-3 md:px-0">
       <Hero></Hero>
       <SelectYourVehicle></SelectYourVehicle>
       <Category></Category>

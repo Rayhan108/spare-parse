@@ -9,7 +9,8 @@ import { PiShoppingCartLight } from 'react-icons/pi';
 import { GoPerson } from 'react-icons/go';
 import { useEffect, useState } from 'react';
 import { LuShoppingBag } from 'react-icons/lu';
-import GoogleTranslate from '../../translate/GoogleTranslate';
+// import GoogleTranslate from '../../translate/GoogleTranslate';
+import { RxHamburgerMenu } from 'react-icons/rx';
 
 const Header = () => {
 
@@ -45,11 +46,13 @@ const Header = () => {
 
     return (
         <div>
-            <div className=" bg-black dark:bg-[#3f3f3f] h-12 text-md text-center text-white flex items-center justify-center">
+            <div className=" bg-black dark:bg-[#3f3f3f] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0 ">
                 Summer Sale For All Parking Light And Free Express Delivery - OFF 50%! <span className=" ml-2 font-semibold underline cursor-pointer">ShopNow</span>
-                <GoogleTranslate/>
+                <div className=' flex justify-center items-center '>
+                    {/* <GoogleTranslate /> */}
+                </div>
             </div>
-            <nav className='  border-b border-gray-200 dark:border-gray-600 dark:bg-black'>
+            <nav className='  border-b border-gray-200 dark:border-gray-600 dark:bg-black px-3 lg:px-0'>
                 <div className=' container mx-auto py-4 flex items-center justify-between relative'>
                     <div>
                         {
@@ -60,13 +63,13 @@ const Header = () => {
                         }
 
                     </div>
-                    <div className=' flex items-center justify-between gap-12'>
+                    <div className=' hidden lg:flex items-center justify-between gap-12'>
                         <Link href='/' className=' text-lg dark:text-white'>Home</Link>
                         <Link href='/' className=' text-lg dark:text-white'>Contact</Link>
                         <Link href='/' className=' text-lg dark:text-white'>About</Link>
                         <Link href='/' className=' text-lg dark:text-white'>Sign Up</Link>
                     </div>
-                    <div className=' w-[380px] flex items-center justify-between gap-4'>
+                    <div className=' hidden w-[380px] lg:flex items-center justify-between gap-4'>
                         <ConfigProvider
                             theme={{
                                 components: {
@@ -121,6 +124,9 @@ const Header = () => {
                             </div>
                         </div>
                     }
+                    <div>
+                        <RxHamburgerMenu size={25} className=' text-black block lg:hidden' />
+                    </div>
                 </div>
 
             </nav>
