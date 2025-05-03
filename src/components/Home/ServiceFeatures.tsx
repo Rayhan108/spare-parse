@@ -9,18 +9,18 @@ const ServiceFeatures = () => {
             <div className=' flex justify-between'>
                 <div className=' flex flex-col justify-center items-center'>
                     <Image src={delivery} height={500} width={500} alt='delivery' className='w-18 bg-primary rounded-full p-3 outline-[14px] outline-[#fff1e8] mb-10' />
-                    <h2 className=' text-xl font-bold mb-2'>FREE AND FAST DELIVERY</h2>
-                    <p>Free delivery for all orders over $140</p>
+                    <h2 className=' text-xl font-bold mb-2 dark:text-white'>FREE AND FAST DELIVERY</h2>
+                    <p className='  dark:text-white'>Free delivery for all orders over $140</p>
                 </div>
                 <div className=' flex flex-col justify-center items-center'>
                     <Image src={customer_service} height={500} width={500} alt='delivery' className='w-18 bg-primary rounded-full p-3 outline-[14px] outline-[#fff1e8] mb-10' />
-                    <h2 className=' text-xl font-bold mb-2'>24/7 CUSTOMER SERVICE</h2>
-                    <p>Friendly 24/7 customer support</p>
+                    <h2 className=' text-xl font-bold mb-2 dark:text-white'>24/7 CUSTOMER SERVICE</h2>
+                    <p className='  dark:text-white'>Friendly 24/7 customer support</p>
                 </div>
                 <div className=' flex flex-col justify-center items-center'>
                     <Image src={money_back} height={500} width={500} alt='delivery' className='w-18 bg-primary rounded-full p-3 outline-[14px] outline-[#fff1e8] mb-10' />
-                    <h2 className=' text-xl font-bold mb-2'>MONEY BACK GUARANTEE</h2>
-                    <p>We reurn money within 30 days</p>
+                    <h2 className=' text-xl font-bold mb-2 dark:text-white'>MONEY BACK GUARANTEE</h2>
+                    <p className='  dark:text-white'>We reurn money within 30 days</p>
                 </div>
             </div>
         </div>
