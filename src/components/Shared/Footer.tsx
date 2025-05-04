@@ -1,3 +1,4 @@
+"use client"
 import { ConfigProvider, Input } from "antd";
 import Link from "next/link";
 import { AiOutlineSend } from "react-icons/ai";

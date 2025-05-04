@@ -2,10 +2,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Shared/Header";
 import { ConfigProvider } from "antd";
 import { mainTheme } from "@/theme/ant-theme";
-import Footer from "@/components/Shared/Footer";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,9 +37,7 @@ export default function RootLayout({
           data-new-gr-c-s-check-loaded="14.1233.0"
           data-gr-ext-installed=""
         >
-          <Header />
           {children}
-          <Footer />
         </body>
       </ConfigProvider>
     </html >
