@@ -13,6 +13,7 @@ import { useState } from "react";
 
 const Category = () => {
     const [swiper, setSwiper] = useState<any>(null);
+    const [select, setSelect] = useState<string | null>(null);
 
     const items = [
         { src: engine_oil, alt: 'Engine Oil', title: 'Engine Oil' },
@@ -76,7 +77,7 @@ const Category = () => {
                 >
                     {items.map((item, index) => (
                         <SwiperSlide key={index}>
-                            <div className="border flex flex-col items-center justify-center h-[170px] rounded cursor-pointer">
+                            <div onClick={() => setSelect(item.title)} className={`${item.title === select && " bg-primary"} border flex flex-col items-center justify-center h-[170px] rounded cursor-pointer`}>
                                 <Image src={item.src} alt={item.alt} width={500} height={500} className="dark:text-white w-16" />
                                 <h3 className="text-xl text-center mt-4 dark:text-white">{item.title}</h3>
                             </div>
