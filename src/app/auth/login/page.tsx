@@ -7,18 +7,16 @@ import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
 
 
-interface SignUpFormValues {
-    fullName: string
+interface LogInFormValues {
     email: string
-    phoneNumber: string
     password: string
 }
 
-export default function SignUpForm(): JSX.Element {
-    const [form] = Form.useForm<SignUpFormValues>()
+export default function LogInForm(): JSX.Element {
+    const [form] = Form.useForm<LogInFormValues>()
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
 
-    const onFinish = (values: SignUpFormValues): void => {
+    const onFinish = (values: LogInFormValues): void => {
         console.log("Success:", values)
     }
 
@@ -26,17 +24,10 @@ export default function SignUpForm(): JSX.Element {
         <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
             <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14  py-10 rounded-lg">
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl font-semibold">LOG IN</h1>
+                    <h1 className="text-2xl font-semibold">SIGN UP</h1>
                 </div>
 
-                <Form<SignUpFormValues> form={form} name="signup" layout="vertical" onFinish={onFinish} autoComplete="off">
-                    <Form.Item
-                        label="Full Name"
-                        name="fullName"
-                        rules={[{ required: true, message: "Please input your full name!" }]}
-                    >
-                        <Input placeholder="Enter your full name" className="h-10" />
-                    </Form.Item>
+                <Form<LogInFormValues> form={form} name="signup" layout="vertical" onFinish={onFinish} autoComplete="off">
 
                     <Form.Item
                         label="Email"
@@ -47,14 +38,6 @@ export default function SignUpForm(): JSX.Element {
                         ]}
                     >
                         <Input placeholder="Enter your email" className="h-10" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Phone Number"
-                        name="phoneNumber"
-                        rules={[{ required: true, message: "Please input your phone number!" }]}
-                    >
-                        <Input placeholder="Enter your mobile number" className="h-10" />
                     </Form.Item>
 
                     <Form.Item
@@ -73,11 +56,15 @@ export default function SignUpForm(): JSX.Element {
                         />
                     </Form.Item>
 
+                    <div className=" flex justify-end -mt-2 mb-6 text-black">
+                        <Link className=" text-black" href={"#"}>Forgot Password?</Link>
+                    </div>
+
                     <Form.Item className="mt-6">
                         <button
                             className=" bg-primary  w-full py-2 rounded-md cursor-pointer text-white"
                         >
-                            SIGN UP
+                            Log In
                         </button>
                     </Form.Item>
                 </Form>
@@ -100,9 +87,9 @@ export default function SignUpForm(): JSX.Element {
 
                 <div className="text-center mt-4">
                     <span className="text-sm">
-                        Already have an account?
-                        <Link href="/auth/login" className="text-primary">
-                            Log in
+                        Don’t have an account?{" "}
+                        <Link href="/auth/sign-up" className="text-primary">
+                            SIGN UP
                         </Link>
                     </span>
                 </div>
