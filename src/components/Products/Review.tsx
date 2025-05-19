@@ -107,7 +107,7 @@ export default function Reviews() {
 
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-6 mt-8">
                     {reviews.map((review) => (
                         <div key={review.id} className=" bg-white mb-5 px-5 py-10 rounded">
                             <div className="flex items-center ">

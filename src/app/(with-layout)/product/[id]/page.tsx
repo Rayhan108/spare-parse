@@ -14,6 +14,8 @@ import { PiTruck } from 'react-icons/pi';
 import { TfiReload } from 'react-icons/tfi';
 import Reviews from '@/components/Products/Review';
 import Description from '@/components/Products/Description';
+import Reference from '@/components/Products/Reference';
+import Link from 'next/link';
 
 
 const SingleProduct = () => {
@@ -111,7 +113,7 @@ const SingleProduct = () => {
                     </div>
                     <div className='mt-6 flex justify-between items-center'>
                         <div className=' flex gap-4'>
-                            <button className='border-2 border-primary px-14 py-2 text-lg rounded text-primary font-semibold cursor-pointer'>Add to Cart</button>
+                            <Link href={`/cart`}><button className='border-2 border-primary px-14 py-2 text-lg rounded text-primary font-semibold cursor-pointer'>Add to Cart</button></Link>
                             <button className=' text-white bg-primary px-14 py-2 text-lg rounded cursor-pointer'>Buy Now</button>
                         </div>
                         <div>
@@ -147,6 +149,15 @@ const SingleProduct = () => {
                     <div className="flex border-b">
                         <div className="w-full flex">
                             <button
+                                onClick={() => setActiveTab("reference")}
+                                className={`flex-1 py-3 text-center ${activeTab === "reference"
+                                    ? "border-b-2 border-black font-medium"
+                                    : "text-gray-500 hover:text-gray-700"
+                                    } cursor-pointer`}
+                            >
+                                Reference
+                            </button>
+                            <button
                                 onClick={() => setActiveTab("description")}
                                 className={`flex-1 py-3 text-center ${activeTab === "description"
                                     ? "border-b-2 border-black font-medium"
@@ -173,6 +184,10 @@ const SingleProduct = () => {
                     {/* Reviews Tab Content */}
                     {activeTab === "reviews" && (
                         <Reviews></Reviews>
+
+                    )}
+                    {activeTab === "reference" && (
+                        <Reference></Reference>
 
                     )}
                 </div>

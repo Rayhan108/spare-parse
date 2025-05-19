@@ -34,7 +34,7 @@ export default function RootLayout({
           monica-id="ofpnmcalabcbjgholdjcjblkibolbppb"
           monica-version="7.9.1"
           cz-shortcut-listen="true"
-          data-new-gr-c-s-check-loaded="14.1233.0"
+          data-new-gr-c-s-check-loaded="14.1235.0"
           data-gr-ext-installed=""
         >
           {children}
