@@ -74,24 +74,24 @@ const SingleProduct = () => {
                         <p className=' text-primary'>In Stock</p>
                     </div>
                     <div className=' py-4'>
-                        <h1 className=' text-5xl font-bold'>$292.00</h1>
+                        <h1 className=' text-5xl font-bold dark:text-white'>$292.00</h1>
                     </div>
                     <div>
-                        <p className=' text-lg pb-4 border-b-2 border-[#7f7f7f]'>The MRF 17/250 tyre appears to refer to a motorcycle tyre with a 17-inch rim diameter and a 2.50-inch width. This size is commonly used on commuter motorcycles, particularly for front-wheel applications. </p>
+                        <p className=' text-lg pb-4 border-b-2 dark:text-white border-[#7f7f7f]'>The MRF 17/250 tyre appears to refer to a motorcycle tyre with a 17-inch rim diameter and a 2.50-inch width. This size is commonly used on commuter motorcycles, particularly for front-wheel applications. </p>
                     </div>
                     <div className=' text-2xl flex justify-between items-center mt-4'>
-                        <div className=' flex items-center'>
+                        <div className=' flex items-center dark:text-white'>
                             <h3>Brand:</h3>
                             <h3>MRF</h3>
                         </div>
-                        <div className=' flex items-center'>
+                        <div className=' flex items-center dark:text-white'>
                             <h3>Colour:</h3>
                             <h3>Black</h3>
                         </div>
                     </div>
                     <div className='flex justify-between items-center mt-6'>
-                        <div className=' flex items-center'>
-                            <h3 className=' text-2xl'>Size: </h3>
+                        <div className=' flex items-center '>
+                            <h3 className=' text-2xl dark:text-white '>Size: </h3>
                             <div className='flex gap-3 items-center ml-3'>
                                 {sizes.map((size) => (
                                     <button
@@ -106,35 +106,35 @@ const SingleProduct = () => {
                             </div>
                         </div>
                         <div className=' flex items-center'>
-                            <button className=' py-[10px] rounded-l-md  px-2 border cursor-pointer hover:bg-primary hover:text-white'><FiMinus /></button>
-                            <button className=' py-[6px] border-t border-y px-6'>2</button>
-                            <button className=' py-[10px] rounded-r-md  px-2 border cursor-pointer hover:bg-primary hover:text-white'><LuPlus /></button>
+                            <button className=' py-[10px] rounded-l-md  px-2 border dark:border-white cursor-pointer hover:bg-primary hover:text-white dark:text-white'><FiMinus /></button>
+                            <button className=' py-[6px] border-t border-y px-6  dark:text-white'>2</button>
+                            <button className=' py-[10px] rounded-r-md  px-2 border dark:border-white cursor-pointer hover:bg-primary hover:text-white dark:text-white'><LuPlus /></button>
                         </div>
                     </div>
                     <div className='mt-6 flex justify-between items-center'>
                         <div className=' flex gap-4'>
-                            <Link href={`/cart`}><button className='border-2 border-primary px-14 py-2 text-lg rounded text-primary font-semibold cursor-pointer'>Add to Cart</button></Link>
-                            <button className=' text-white bg-primary px-14 py-2 text-lg rounded cursor-pointer'>Buy Now</button>
+                            <Link href={`/cart`}><button className='border-2 border-primary dark:border-white px-14 py-2 text-lg rounded text-primary font-semibold cursor-pointer'>Add to Cart</button></Link>
+                            <button className=' text-white bg-primary px-14 py-2 text-lg rounded cursor-pointer  dark:text-white'>Buy Now</button>
                         </div>
                         <div>
                             <button className=' cursor-pointer'>
-                                <IoIosHeartEmpty className=' border px-[7px] py-[4px] rounded w-10 h-10' />
+                                <IoIosHeartEmpty className=' border px-[7px] py-[4px] rounded w-10 h-10 dark:text-white dark:border-white' />
                             </button>
                         </div>
                     </div>
-                    <div className=' border mt-8 rounded-md'>
-                        <div className=' py-5 px-6 flex items-center gap-5 text-lg border-b'>
-                            <PiTruck size={30} />
+                    <div className=' border mt-8 rounded-md dark:border-white'>
+                        <div className=' py-5 px-6 flex items-center gap-5 text-lg border-b dark:border-white dark:text-white'>
+                            <PiTruck size={30} className=' dark:text-white' />
                             <div>
-                                <p className=' font-semibold'>$50 off standard delivery in your area.</p>
-                                <p>Enter your postal code for Delivery Availability</p>
+                                <p className=' font-semibold dark:text-white'>$50 off standard delivery in your area.</p>
+                                <p className=' dark:text-white'>Enter your postal code for Delivery Availability</p>
                             </div>
                         </div>
                         <div className=' py-5 px-6 flex items-center gap-5 text-lg'>
-                            <TfiReload size={30} />
+                            <TfiReload size={30} className=' dark:text-white ' />
                             <div>
-                                <p className=' font-semibold'>Return Delivery</p>
-                                <p>Free 30 Days Delivery Returns. Details</p>
+                                <p className=' font-semibold dark:text-white'>Return Delivery</p>
+                                <p className=' dark:text-white'>Free 30 Days Delivery Returns. Details</p>
                             </div>
                         </div>
                     </div>
@@ -146,20 +146,20 @@ const SingleProduct = () => {
             <div className=" container mx-auto">
                 {/* Custom Tabs */}
                 <div className="w-full">
-                    <div className="flex border-b">
+                    <div className="flex border-b dark:border-white">
                         <div className="w-full flex">
                             <button
                                 onClick={() => setActiveTab("reference")}
-                                className={`flex-1 py-3 text-center ${activeTab === "reference"
+                                className={`flex-1 py-3 text-center dark:text-white ${activeTab === "reference"
                                     ? "border-b-2 border-black font-medium"
-                                    : "text-gray-500 hover:text-gray-700"
+                                    : "text-gray-500 hover:text-gray-700 "
                                     } cursor-pointer`}
                             >
                                 Reference
                             </button>
                             <button
                                 onClick={() => setActiveTab("description")}
-                                className={`flex-1 py-3 text-center ${activeTab === "description"
+                                className={`flex-1 py-3 text-center dark:text-white ${activeTab === "description"
                                     ? "border-b-2 border-black font-medium"
                                     : "text-gray-500 hover:text-gray-700"
                                     } cursor-pointer`}
@@ -168,7 +168,7 @@ const SingleProduct = () => {
                             </button>
                             <button
                                 onClick={() => setActiveTab("reviews")}
-                                className={`flex-1 py-3 text-center ${activeTab === "reviews" ? "border-b-2 border-black font-medium" : "text-gray-500 hover:text-gray-700"
+                                className={`flex-1 py-3 text-center dark:text-white ${activeTab === "reviews" ? "border-b-2 border-black font-medium" : "text-gray-500 hover:text-gray-700"
                                     } cursor-pointer`}
                             >
                                 Reviews(48)

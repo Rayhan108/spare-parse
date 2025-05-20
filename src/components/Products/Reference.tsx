@@ -1,7 +1,7 @@
 
 const Reference = () => {
   return (
-    <div className=" p-8  my-8 px-4 font-sans text-gray-900 text-sm leading-relaxed">
+    <div className=" p-8  my-8 px-4 font-sans text-gray-900 text-sm leading-relaxed dark:text-white">
       {/* OE Numbers Section */}
       <h2 className="text-lg font-semibold mb-4">OE Numbers</h2>
       <table className="w-full mb-10">

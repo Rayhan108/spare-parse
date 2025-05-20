@@ -52,7 +52,7 @@ export default function Reviews() {
 
     return (
         <div>
-            <div className=" bg-[#f2fcf6] p-8">
+            <div className=" bg-[#f2fcf6] p-8 ">
                 <div className=" bg-white rounded-lg py-10 mb-8">
                     <div className="flex flex-col items-center">
                         <div className=" font-semibold flex items-center gap-3">
@@ -71,12 +71,12 @@ export default function Reviews() {
                             </ConfigProvider>
                         </div>
 
-                        <div className=" mt-4 text-xl">Overall Rating</div>
+                        <div className=" mt-4 text-xl dark:text-white">Overall Rating</div>
                     </div>
                 </div>
 
                 <div className="">
-                    <div className="font-medium text-gray-700 mb-3 text-lg">Rating</div>
+                    <div className="font-medium text-gray-700 mb-3 text-lg dark:text-white">Rating</div>
                     <ConfigProvider
                         theme={{
                             components: {
@@ -178,7 +178,7 @@ export default function Reviews() {
                 >
 
                     <Form form={form} layout="vertical" onFinish={handleSubmit}>
-                        <h2 className="text-2xl font-semibold mb-6">Add a Review</h2>
+                        <h2 className="text-2xl font-semibold mb-6  dark:text-white">Add a Review</h2>
                         <Form.Item name="rating" label="Your Rating" className="mb-4">
                             <ConfigProvider
                                 theme={{
