@@ -86,8 +86,8 @@ const Header = () => {
                         >
                             <Input style={{ backgroundColor: '#f0f0f0' }} suffix={<FiSearch className=" text-black w-6 h-6" />} className=' w-[280px]' placeholder='What are you looking for?' type="text" />
                         </ConfigProvider>
-                        <IoIosHeartEmpty className=' w-10 h-10 cursor-pointer dark:text-white' />
-                        <PiShoppingCartLight className=' w-10 h-10 cursor-pointer dark:text-white' />
+                        <Link href={`/wishlist`}><IoIosHeartEmpty className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
+                        <Link href={`/cart`}><PiShoppingCartLight className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
                         <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-2 '>
                             <GoPerson className='w-6 h-6 text-white cursor-pointer -mr-[1x]' />
                         </div>

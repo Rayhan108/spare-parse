@@ -23,7 +23,7 @@ export default function LogInForm(): JSX.Element {
         <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
             <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14  py-10 rounded-lg">
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl font-semibold">SIGN UP</h1>
+                    <h1 className="text-2xl font-semibold">Log In</h1>
                 </div>
 
                 <Form<LogInFormValues> form={form} name="signup" layout="vertical" onFinish={onFinish} autoComplete="off">
