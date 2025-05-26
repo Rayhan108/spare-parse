@@ -6,6 +6,8 @@ import { IoEyeOutline } from "react-icons/io5";
 import productPic from '../../../../public/products/wheel2.svg';
 import { useState } from "react";
 import ProductDetailModal from "@/components/MyOrder/ProductDetailModal";
+import ProductTrackModal from "@/components/MyOrder/ProductTrackModal";
+import { CiDeliveryTruck } from "react-icons/ci";
 
 const MyOrder = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +22,19 @@ const MyOrder = () => {
 
     const handleCancel = () => {
         setIsModalOpen(false);
+    };
+    const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
+
+    const showTrackModal = () => {
+        setIsTrackModalOpen(true);
+    };
+
+    const handleTrackOk = () => {
+        setIsTrackModalOpen(false);
+    };
+
+    const handleTrackCancel = () => {
+        setIsTrackModalOpen(false);
     };
 
     interface OrderItem {
@@ -97,15 +112,16 @@ const MyOrder = () => {
                 />
             </div>
 
-            <div>
-                <table className="w-full border-separate border-spacing-y-8">
+            <div className="overflow-x-scroll md:overflow-hidden">
+                <table className="w-full border-separate border-spacing-y-8 ">
                     <thead>
                         <tr className="shadow-[0px_10px_30px_rgba(0,0,0,0.04)]">
                             <th className="p-4 text-left">Orders</th>
                             <th className="p-4 text-left">Price</th>
                             <th className="p-4 text-left">Quantity</th>
                             <th className="p-4 text-left">Subtotal</th>
-                            <th className="p-4 text-left">Action</th>
+                            <th className="p-4 text-left">Order Details</th>
+                            <th className="p-4 text-left">Order Track</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -124,11 +140,15 @@ const MyOrder = () => {
                                 <td className="p-6">
                                     <IoEyeOutline onClick={showModal} size={25} className="cursor-pointer text-lg" />
                                 </td>
+                                <td className="p-6">
+                                    <CiDeliveryTruck onClick={showTrackModal} size={28} className="cursor-pointer text-lg" />
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
                 <ProductDetailModal isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel}></ProductDetailModal>
+                <ProductTrackModal isModalOpen={isTrackModalOpen} handleOk={handleTrackOk} handleCancel={handleTrackCancel}></ProductTrackModal>
             </div>
 
         </div>

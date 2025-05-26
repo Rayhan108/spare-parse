@@ -62,7 +62,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, ha
         >
             <div className="container mx-auto p-5">
                 <div>
-                    <h2 className='text-2xl font-semibold mb-4'>Product Detail</h2>
+                    <h2 className='text-2xl font-semibold mb-4'>Order Details</h2>
                 </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-primary pt-8 pb-4 mb-6 text-sm text-gray-700 overflow-x-auto">
                     <span className='whitespace-nowrap'>Order Derail</span>
