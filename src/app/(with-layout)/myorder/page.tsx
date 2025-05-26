@@ -4,8 +4,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoEyeOutline } from "react-icons/io5";
 import productPic from '../../../../public/products/wheel2.svg';
+import { useState } from "react";
+import ProductDetailModal from "@/components/MyOrder/ProductDetailModal";
 
 const MyOrder = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
     interface OrderItem {
         key: string;
@@ -107,13 +122,13 @@ const MyOrder = () => {
                                 <td className="p-6">{item.quantity.toString().padStart(2, "0")}</td>
                                 <td className="p-6">${item.subtotal}</td>
                                 <td className="p-6">
-                                    <IoEyeOutline size={25} className="cursor-pointer text-lg" />
+                                    <IoEyeOutline onClick={showModal} size={25} className="cursor-pointer text-lg" />
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-
+                <ProductDetailModal isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel}></ProductDetailModal>
             </div>
 
         </div>
