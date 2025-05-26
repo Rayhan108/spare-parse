@@ -97,7 +97,7 @@ const MyOrder = () => {
                         title: <Link href={`/`}><p className="dark:text-white">Home</p></Link>,
                     },
                     {
-                        title: <Link className="dark:text-white" href={`/myorders`}><p className="dark:text-white">My Orders</p></Link>,
+                        title: <Link className="dark:text-white" href={`/myorder`}><p className="dark:text-white">My Orders</p></Link>,
                     }
                 ]}
             />

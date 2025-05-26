@@ -59,7 +59,7 @@ const Header = () => {
                             isDarkMode ?
                                 <h2 className=' text-5xl font-bold text-white'>Logo</h2>
                                 :
-                                <Image className='w-42' src={logo} width={500} height={500} alt="logo" />
+                                <Link href={`/`}><Image className='w-42' src={logo} width={500} height={500} alt="logo" /></Link>
                         }
 
                     </div>
