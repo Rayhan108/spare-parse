@@ -116,12 +116,12 @@ const MyOrder = () => {
                 <table className="w-full border-separate border-spacing-y-8 ">
                     <thead>
                         <tr className="shadow-[0px_10px_30px_rgba(0,0,0,0.04)]">
-                            <th className="p-4 text-left">Orders</th>
-                            <th className="p-4 text-left">Price</th>
-                            <th className="p-4 text-left">Quantity</th>
-                            <th className="p-4 text-left">Subtotal</th>
-                            <th className="p-4 text-left">Order Details</th>
-                            <th className="p-4 text-left">Order Track</th>
+                            <th className="p-4 text-left dark:text-white">Orders</th>
+                            <th className="p-4 text-left dark:text-white">Price</th>
+                            <th className="p-4 text-left dark:text-white">Quantity</th>
+                            <th className="p-4 text-left dark:text-white">Subtotal</th>
+                            <th className="p-4 text-left dark:text-white">Order Details</th>
+                            <th className="p-4 text-left dark:text-white">Order Track</th>
                         </tr>
                     </thead>
                     <tbody>
