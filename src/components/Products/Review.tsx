@@ -52,7 +52,7 @@ export default function Reviews() {
 
     return (
         <div>
-            <div className=" bg-[#f2fcf6] p-8 ">
+            <div className=" bg-[#f2fcf6] dark:bg-black p-8 ">
                 <div className=" bg-white rounded-lg py-10 mb-8">
                     <div className="flex flex-col items-center">
                         <div className=" font-semibold flex items-center gap-3">

@@ -19,15 +19,15 @@ const About = () => {
                     <Breadcrumb
                         items={[
                             {
-                                title: <Link href="/">Home</Link>,
+                                title: <Link href="/"><p className="dark:text-white">Home</p></Link>,
                             },
                             {
-                                title: <Link href="/about">About</Link>,
+                                title: <Link href="/about"><p className="dark:text-white">About</p></Link>,
                             }
                         ]}
                     />
                 </div>
-                <div className=" flex">
+                <div className=" flex dark:text-white">
                     <div className=" md:w-1/2 h-[400px] 2xl:h-[700px] flex flex-col justify-center">
                         <h2 className=" text-5xl font-bold">Our Story</h2>
                         <p className=" mt-5 text-lg">At Sparedoc, we&apos;re transforming the way you shop for car parts. As a trusted e-commerce platform, we offer a wide selection of genuine and aftermarket auto components, accessories, and tools. Whether you&apos;re a car owner, garage professional, or enthusiast, we make it easy to find everything your vehicle needs — quickly, reliably, and all in one place.</p>
@@ -37,7 +37,7 @@ const About = () => {
                     </div>
                 </div>
 
-                <div className=" grid grid-cols-1 md:grid-cols-3 gap-8 py-14">
+                <div className=" grid grid-cols-1 md:grid-cols-3 gap-8 py-14 dark:text-white">
                     <div>
                         <Image src={person1} alt="image" width={500} height={500} className="" />
                         <div className=" mt-4">
@@ -76,7 +76,7 @@ const About = () => {
                     </div>
                 </div>
 
-                <div className=' px-3 xl:px-0 xl:w-[1100px] mx-auto py-16 md:py-20'>
+                <div className=' px-3 xl:px-0 xl:w-[1100px] mx-auto py-16 md:py-20 dark:text-white'>
                     <div className=' flex flex-col md:flex-row gap-16 md:gap-0 justify-between'>
                         <div className=' flex flex-col justify-center items-center'>
                             <Image src={delivery} height={500} width={500} alt='delivery' className='w-18 bg-primary rounded-full p-3 outline-[14px] outline-[#fff1e8] mb-10' />
