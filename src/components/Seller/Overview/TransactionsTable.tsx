@@ -1,9 +1,6 @@
 "use client";
 // components/TransactionsTableAntd.tsx
-import { Table, Button, ConfigProvider } from "antd";
-import { CalendarOutlined } from "@ant-design/icons";
-import { CiCalendar } from "react-icons/ci";
-import { IoCalendarClearOutline } from "react-icons/io5";
+import { Table, ConfigProvider } from "antd";
 import { LuCalendar } from "react-icons/lu";
 
 interface Transaction {
