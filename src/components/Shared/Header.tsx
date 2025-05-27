@@ -122,6 +122,12 @@ const Header = () => {
                                     <p className=' text-md text-white dark:text-black'>My Order</p>
                                 </Link>
                             </div>
+                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
+                                <Link className=' flex  gap-3' href={`/seller/overview`}>
+                                    <LuShoppingBag className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
+                                    <p className=' text-md text-white dark:text-black'>Seller Overview</p>
+                                </Link>
+                            </div>
                             <div className=' mb-3 cursor-pointer'>
                                 <Link className=' flex items-center gap-3' href={`/auth/login`}>
                                     <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
