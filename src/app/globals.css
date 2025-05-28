@@ -43,3 +43,18 @@
   color: rgba(255, 255, 255, 0.562);
   opacity: 1; /* Ensures it's fully visible */
 }
+/* Tiptap heading size */
+@layer base {
+
+  h1 { 
+    font-size: 1.8rem; 
+  }
+
+  h2 { 
+    font-size: 1.4rem; 
+  }
+
+  h3 { 
+    font-size: 1.2rem; 
+  }
+}

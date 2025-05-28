@@ -17,5 +17,12 @@ export const mainTheme = {
             colorBorder: "rgb(223,88,0)",
             controlHeight: 44
         },
+        "Input": {
+            "activeBorderColor": "rgb(245,97,0)",
+            "hoverBorderColor": "rgb(245,97,0)",
+            "colorBorder": "rgb(245,97,0)",
+            "borderRadius": -1,
+            "controlHeight": 40
+        }
     },
 };
