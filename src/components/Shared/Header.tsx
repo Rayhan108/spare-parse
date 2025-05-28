@@ -1,6 +1,7 @@
 "use client"
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
+import darkLogo from '../../../public/dark-logo.svg';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
 import { ConfigProvider, Input } from 'antd';
@@ -57,7 +58,7 @@ const Header = () => {
                     <div>
                         {
                             isDarkMode ?
-                                <h2 className=' text-5xl font-bold text-white'>Logo</h2>
+                            <Link href={`/`}><Image className='w-42' src={darkLogo} width={500} height={500} alt="logo" /></Link>
                                 :
                                 <Link href={`/`}><Image className='w-42' src={logo} width={500} height={500} alt="logo" /></Link>
                         }

@@ -72,8 +72,8 @@ const CurrentOrders = () => {
                         />
                     </div>
                     <div>
-                        <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Current Orders</h2>
-                        <p className="text-sm sm:text-base text-gray-500 max-w-xs sm:max-w-md">
+                        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">Current Orders</h2>
+                        <p className="text-sm sm:text-base text-gray-500 max-w-xs sm:max-w-md dark:text-white">
                             Manage your current orders and track booking orders.
                         </p>
                     </div>
@@ -101,8 +101,8 @@ const CurrentOrders = () => {
                                 />
                             </div>
                             <div>
-                                <p className="font-semibold text-gray-800">{order?.name}</p>
-                                <p className="text-gray-500 text-sm">{order?.date}</p>
+                                <p className="font-semibold text-gray-800 dark:text-white">{order?.name}</p>
+                                <p className="text-gray-500 text-sm dark:text-white">{order?.date}</p>
                             </div>
                         </div>
 
@@ -117,8 +117,8 @@ const CurrentOrders = () => {
                                 />
                             </div>
                             <div className="min-w-0">
-                                <p className="font-semibold text-gray-800 truncate">{order?.productName}</p>
-                                <p className="text-gray-500 text-sm truncate">{order?.productDescription}</p>
+                                <p className="font-semibold text-gray-800 truncate dark:text-white">{order?.productName}</p>
+                                <p className="text-gray-500 text-sm truncate ">{order?.productDescription}</p>
                             </div>
                         </div>
 
