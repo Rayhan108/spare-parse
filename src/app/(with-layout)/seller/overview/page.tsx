@@ -14,16 +14,16 @@ const Overview = () => {
             <div className=' flex items-center gap-5'>
                 <Image src={logo} width={400} height={400} alt='logo' className=' w-22 rounded-full' />
                 <div>
-                    <h1 className=' text-3xl sm:text-4xl font-semibold'>Welcome Back, Hatem!</h1>
-                    <p className=' mt-1'>Here’s an overview of your business performance and activities today.</p>
+                    <h1 className=' text-3xl sm:text-4xl font-semibold dark:text-white'>Welcome Back, Hatem!</h1>
+                    <p className=' mt-1 dark:text-white'>Here’s an overview of your business performance and activities today.</p>
                 </div>
             </div>
 
             <div className=' grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
                 <div className="px-4 py-8 border border-primary rounded-lg flex items-center justify-between">
                     <div>
-                        <p className="text-lg text-gray-600 mb-2">Current Orders</p>
-                        <p className="text-3xl font-bold">05</p>
+                        <p className="text-lg text-gray-600 mb-2 dark:text-white">Current Orders</p>
+                        <p className="text-3xl font-bold dark:text-white">05</p>
                     </div>
                     <div className="bg-primary rounded-full p-3">
                         <LuCalendarCheck className="h-6 w-6 text-white" />
@@ -31,8 +31,8 @@ const Overview = () => {
                 </div>
                 <div className="px-4 py-8 border border-primary rounded-lg flex items-center justify-between">
                     <div>
-                        <p className="text-lg text-gray-600 mb-2">Available Balance</p>
-                        <p className="text-3xl font-bold">$450</p>
+                        <p className="text-lg text-gray-600 mb-2 dark:text-white">Available Balance</p>
+                        <p className="text-3xl font-bold dark:text-white">$450</p>
                     </div>
                     <div className="bg-primary rounded-full p-3">
                         <PiWallet className="h-6 w-6 text-white" />
@@ -40,8 +40,8 @@ const Overview = () => {
                 </div>
                 <div className="px-4 py-8 border border-primary rounded-lg flex items-center justify-between">
                     <div>
-                        <p className="text-lg text-gray-600 mb-2">Total Orders</p>
-                        <p className="text-3xl font-bold">500</p>
+                        <p className="text-lg text-gray-600 mb-2 dark:text-white">Total Orders</p>
+                        <p className="text-3xl font-bold dark:text-white">500</p>
                     </div>
                     <div className="bg-primary rounded-full p-3">
                         <LuCalendarCheck className="h-6 w-6 text-white" />

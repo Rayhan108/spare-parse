@@ -73,8 +73,8 @@ const LastReviews = () => {
                         />
                     </div>
                     <div>
-                        <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Last 5 Reviews</h2>
-                        <p className="text-sm sm:text-base text-gray-500 max-w-xs sm:max-w-md">
+                        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">Last 5 Reviews</h2>
+                        <p className="text-sm sm:text-base text-gray-500 max-w-xs sm:max-w-md dark:text-white">
                             See your recent product reviews
                         </p>
                     </div>
@@ -104,8 +104,8 @@ const LastReviews = () => {
                                     />
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-gray-800">{order?.name}</p>
-                                    <p className="text-gray-500 text-sm">{order?.date}</p>
+                                    <p className="font-semibold text-gray-800 dark:text-white">{order?.name}</p>
+                                    <p className="text-gray-500 text-sm dark:text-white">{order?.date}</p>
                                 </div>
                             </div>
 
@@ -121,7 +121,7 @@ const LastReviews = () => {
                                     />
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="font-semibold text-gray-800 truncate">{order?.productName}</p>
+                                    <p className="font-semibold text-gray-800 truncate dark:text-white">{order?.productName}</p>
                                     <p className="text-gray-500 text-sm truncate">{order?.productDescription}</p>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@ const LastReviews = () => {
                         {/* Right side: star rating */}
                         <div className="flex gap-1 items-center mt-3 sm:mt-0 flex-shrink-0 text-sm">
                             <FaStar className="text-yellow-400" size={20} />
-                            <p>(5)</p>
+                            <p className=" dark:text-white">(5)</p>
                         </div>
                     </div>
                 ))}

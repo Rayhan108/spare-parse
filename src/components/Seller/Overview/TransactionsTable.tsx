@@ -122,13 +122,13 @@ export default function TransactionsTableAntd() {
     return (
         <div>
             <div className=" flex justify-between items-center my-5">
-                <h2 style={{ fontWeight: 600, marginBottom: 16 }} className=" text-lg sm:text-2xl">Transactions</h2>
+                <h2 style={{ fontWeight: 600, marginBottom: 16 }} className=" text-lg sm:text-2xl dark:text-white">Transactions</h2>
 
                 <div style={{ marginBottom: 12, textAlign: "right" }}>
                     <button
                         className=" sm:text-lg border border-primary rounded-lg px-4 py-2 flex gap-2 items-center"
                     >
-                        <LuCalendar size={22} className=" text-black" /> <p className=" font-semibold">Last 10 Transactions</p>
+                        <LuCalendar size={22} className=" text-black dark:text-white" /> <p className=" font-semibold  dark:text-white">Last 10 Transactions</p>
                     </button>
                 </div>
             </div>
