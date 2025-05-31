@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { LuShoppingBag } from 'react-icons/lu';
 // import GoogleTranslate from '../../translate/GoogleTranslate';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import MobileMenu from './MobileMenu';
 
 const Header = () => {
 
@@ -45,6 +46,18 @@ const Header = () => {
         });
     };
 
+    // mobile menu
+    // ========================================================
+    const [open, setOpen] = useState(false);
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div>
             <div className=" bg-black dark:bg-[#3f3f3f] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0 ">
@@ -58,7 +71,7 @@ const Header = () => {
                     <div>
                         {
                             isDarkMode ?
-                            <Link href={`/`}><Image className='w-42' src={darkLogo} width={500} height={500} alt="logo" /></Link>
+                                <Link href={`/`}><Image className='w-42' src={darkLogo} width={500} height={500} alt="logo" /></Link>
                                 :
                                 <Link href={`/`}><Image className='w-42' src={logo} width={500} height={500} alt="logo" /></Link>
                         }
@@ -139,8 +152,9 @@ const Header = () => {
                         </div>
                     }
                     <div className=' block lg:hidden'>
-                        <RxHamburgerMenu size={25} className=' text-black ' />
+                        <RxHamburgerMenu onClick={showDrawer} size={25} className=' text-black ' />
                     </div>
+                    <MobileMenu open={open} onClose={onClose}></MobileMenu>
                 </div>
 
             </nav>
