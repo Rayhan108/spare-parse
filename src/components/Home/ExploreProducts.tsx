@@ -11,7 +11,7 @@ const ExploreProducts = () => {
             <div className="flex justify-between items-center mb-16">
                 <h2 className="text-2xl md:text-3xl lg:text-5xl dark:text-white">Explore Our Products</h2>
             </div>
-            <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+            <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-10">
                 <ProductCart></ProductCart>
                 <ProductCart></ProductCart>
                 <ProductCart></ProductCart>

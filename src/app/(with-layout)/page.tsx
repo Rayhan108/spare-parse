@@ -7,7 +7,7 @@ import ServiceFeatures from "@/components/Home/ServiceFeatures";
 
 export default function Home() {
   return (
-    <div className=" px-3 md:px-0">
+    <div className=" px-4 md:px-0">
       <Hero></Hero>
       <SelectYourVehicle></SelectYourVehicle>
       <Category></Category>
