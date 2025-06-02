@@ -10,7 +10,7 @@ import { RiFacebookLine } from "react-icons/ri";
 
 const Footer = () => {
     return (
-        <div className=' bg-[#682e09] dark:bg-[#1d1d1d] px-3 lg:px-0'>
+        <div className=' bg-[#383838] dark:bg-[#1d1d1d] px-3 lg:px-0'>
             <div className=" container mx-auto py-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 justify-between">
                 <div>
                     <h2 className="text-2xl text-white mb-4">Exclusive</h2>

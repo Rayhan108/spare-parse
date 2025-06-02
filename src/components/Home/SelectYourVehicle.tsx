@@ -7,7 +7,7 @@ const SelectYourVehicle = () => {
                 <h2 className="text-4xl font-semibold dark:text-white">Select Your Vehicle</h2>
                 <p className="text-[#5A5B54] mt-3 dark:text-gray-300">For finding the correct part</p>
             </div>
-            <div className="px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-8">
+            <div className=" px-4 md:px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-8">
                 {/* Select 1 */}
                 <div className="flex items-center w-full">
                     <span className="bg-[#f56100] py-[10px] px-4 text-white">1</span>
