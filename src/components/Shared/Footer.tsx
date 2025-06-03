@@ -83,7 +83,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className=" flex items-center justify-center text-white border-t border-white py-4">
+            <div className=" flex items-center justify-center text-white border-t border-primary py-4">
                 <LuCopyright size={22} /><p className=" text-sm md:text-lg ml-2">Copyright Sparedoc 2025. All right reserved</p>
             </div>
         </div>

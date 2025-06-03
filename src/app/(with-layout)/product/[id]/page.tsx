@@ -80,11 +80,11 @@ const SingleProduct = () => {
                         <p className=' text-lg pb-4 border-b-2 dark:text-white border-[#7f7f7f]'>The MRF 17/250 tyre appears to refer to a motorcycle tyre with a 17-inch rim diameter and a 2.50-inch width. This size is commonly used on commuter motorcycles, particularly for front-wheel applications. </p>
                     </div>
                     <div className=' text-2xl flex justify-between items-center mt-4'>
-                        <div className=' flex items-center dark:text-white'>
+                        <div className=' flex gap-1 items-center dark:text-white'>
                             <h3>Brand:</h3>
                             <h3>MRF</h3>
                         </div>
-                        <div className=' flex items-center dark:text-white'>
+                        <div className=' flex gap-1 items-center dark:text-white'>
                             <h3>Colour:</h3>
                             <h3>Black</h3>
                         </div>

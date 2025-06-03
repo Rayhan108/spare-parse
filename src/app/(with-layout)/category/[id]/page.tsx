@@ -86,7 +86,7 @@ const Category = () => {
                 >
                     {items.map((item, index) => (
                         <SwiperSlide key={index}>
-                            <div onClick={() => setSelect(item.title)} className={`${item.title === select && " bg-primary"} flex flex-col items-center justify-center  rounded cursor-pointer`}>
+                            <div onClick={() => setSelect(item.title)} className={`${item.title === select && " "} flex flex-col items-center justify-center  rounded cursor-pointer`}>
                                 <Image src={item.src} alt={item.alt} width={500} height={500} className="dark:text-white w-52" />
                                 <h3 className="text-xl text-center mt-4 dark:text-white">{item.title}</h3>
                             </div>

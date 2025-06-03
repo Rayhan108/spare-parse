@@ -25,7 +25,7 @@ const Hero = () => {
                     <Link href={`/category/7777`}><button className="text-lg cursor-pointer dark:text-white">Engine</button></Link>
                 </div>
             </div>
-            <div className="hidden md:block md:w-[20%] h-[400px] border-r border-gray-200 dark:border-gray-600">
+            <div className="hidden md:block md:w-[20%] h-[420px] border-r border-gray-200 dark:border-gray-600">
                 <div className="flex flex-col items-start gap-5 pt-10">
                     <Link href={`/category/7777`}><button className="text-lg cursor-pointer dark:text-white">Engine Oil</button></Link>
                     <Link href={`/category/7777`}><button className="text-lg cursor-pointer dark:text-white">Spark Plug</button></Link>
@@ -37,7 +37,7 @@ const Hero = () => {
                 </div>
             </div>
 
-            <div className=" w-full md:w-[80%] md:pl-5 lg:pl-10 py-5 lg:py-10">
+            <div className=" w-full md:w-[80%] md:pl-5 lg:pl-5 py-5 lg:py-5">
                 {/* <Carousel>
                     <SliderItem></SliderItem>
                 </Carousel> */}
