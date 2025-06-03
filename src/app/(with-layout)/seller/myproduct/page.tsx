@@ -5,8 +5,10 @@ import SelectProduct from "@/components/Seller/MyProduct/SelectProduct";
 import { useState } from "react";
 import { IoAdd } from "react-icons/io5";
 
+
 const MyProduct = () => {
-        const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -19,6 +21,7 @@ const MyProduct = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
     return (
         <div className=" container mx-auto py-8 md:py-16 px-4 md:px-0">
             <SelectProduct></SelectProduct>
@@ -37,6 +40,7 @@ const MyProduct = () => {
                         Add Product
                     </button>
                     <AddProductModal isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel}></AddProductModal>
+
                 </div>
                 <MyProductCart></MyProductCart>
                 <MyProductCart></MyProductCart>

@@ -18,7 +18,7 @@ interface ProductDetailModalProps {
     handleCancel: () => any;
 }
 
-const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handleOk, handleCancel }) => {
+const EditProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handleOk, handleCancel }) => {
     const { Option } = Select;
     const [form] = Form.useForm();
     const [nextCompoment, SetNextComponent] = useState('details');
@@ -83,7 +83,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                     {
                         nextCompoment !== 'details' && <IoMdArrowRoundBack onClick={() => SetNextComponent('details')} className='mb-4 cursor-pointer' size={30} />
                     }
-                    <h2 className='text-2xl font-semibold mb-4'>Upload Product</h2>
+                    <h2 className='text-2xl font-semibold mb-4'>Edit Product</h2>
                 </div>
                 {
                     nextCompoment === 'details' ?
@@ -296,4 +296,4 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
     );
 };
 
-export default AddProductModal;
+export default EditProductModal;

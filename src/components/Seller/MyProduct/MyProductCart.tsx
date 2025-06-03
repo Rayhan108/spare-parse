@@ -3,9 +3,12 @@ import Image from "next/image";
 import productImage from '../../../../public/products/wheel1.svg'
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useState } from "react";
+import EditProductModal from "./EditProductModal";
+import { TbEdit } from "react-icons/tb";
 
 const MyProductCart = () => {
-    const title = "Gucci duffle bag"
+    const title = "Car Tier"
     const price = 960
     const originalPrice = 1160
     // const discountPercentage = 35
@@ -18,6 +21,19 @@ const MyProductCart = () => {
     const handleRemove = () => {
         console.log("Removed")
     }
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    // ================
+    const showEditModal = () => {
+        setIsEditModalOpen(true);
+    };
+
+    const handleEditOk = () => {
+        setIsEditModalOpen(false);
+    };
+
+    const handleEditCancel = () => {
+        setIsEditModalOpen(false);
+    };
 
     return (
         <div className=" overflow-hidden rounded">
@@ -31,6 +47,13 @@ const MyProductCart = () => {
                     aria-label="Remove item"
                 >
                     <RiDeleteBin6Line size={40} className=" bg-white rounded-full p-2 cursor-pointer" />
+                </button>
+                <button
+                    onClick={showEditModal}
+                    className="absolute left-2 top-2 "
+                    aria-label="Remove item"
+                >
+                    <TbEdit size={40} className=" bg-white rounded-full p-2 cursor-pointer" />
                 </button>
                 <div className="flex h-58 items-center justify-center">
                     <Image
@@ -56,6 +79,7 @@ const MyProductCart = () => {
                     <span className="ml-2 text-gray-500 line-through">${originalPrice}</span>
                 </div>
             </div>
+            <EditProductModal isModalOpen={isEditModalOpen} handleOk={handleEditOk} handleCancel={handleEditCancel}></EditProductModal>
         </div>
     );
 };
