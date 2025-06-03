@@ -23,6 +23,11 @@ export const mainTheme = {
             "colorBorder": "rgb(245,97,0)",
             "borderRadius": -1,
             "controlHeight": 40
+        },
+        "Pagination": {
+            "colorPrimary": "rgb(223,88,0)",
+            "colorPrimaryBorder": "rgb(223,88,0)",
+            "colorPrimaryHover": "rgb(223,88,0)"
         }
     },
 };
