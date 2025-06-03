@@ -3,6 +3,7 @@ import productImage from '../../../../public/products/wheel3.svg'
 import ordersIcon from '../../../../public/seller/orders-icon.svg'
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
+import Link from "next/link";
 
 const LastReviews = () => {
     const orders = [
@@ -80,7 +81,7 @@ const LastReviews = () => {
                     </div>
                 </div>
                 <div className="w-6 h-6 flex items-center justify-center">
-                    <MdOutlineArrowForwardIos className="cursor-pointer" size={24} />
+                    <Link href={'/seller/overview/reviews'}><MdOutlineArrowForwardIos className="cursor-pointer" size={24} /></Link> 
                 </div>
             </div>
 
