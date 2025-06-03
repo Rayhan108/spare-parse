@@ -1,3 +1,4 @@
+"use client"
 import Image from 'next/image';
 import logo from '../../../../../public/seller/seller-icon.svg'
 import { LuCalendarCheck } from 'react-icons/lu';
@@ -5,8 +6,16 @@ import { PiWallet } from 'react-icons/pi';
 import CurrentOrders from '@/components/Seller/Overview/CurrentOrders';
 import LastReviews from '@/components/Seller/Overview/LastReviews';
 import TransactionsTable from '@/components/Seller/Overview/TransactionsTable';
+import { useState } from 'react';
+import { Pagination } from 'antd';
 
 const Overview = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    console.log(currentPage);
+    const pageSize = 10;
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
 
     return (
@@ -54,9 +63,15 @@ const Overview = () => {
                 <LastReviews></LastReviews>
             </div>
 
-            <div>
+            <div className='mb-5'>
                 <TransactionsTable></TransactionsTable>
             </div>
+            <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={50}
+                onChange={handlePageChange}
+            />
         </div>
     );
 };
