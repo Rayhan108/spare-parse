@@ -20,7 +20,7 @@ const ServiceFeatures = () => {
                 <div className=' flex flex-col justify-center items-center'>
                     <Image src={money_back} height={500} width={500} alt='delivery' className='w-18 bg-primary rounded-full p-3 outline-[14px] outline-[#fff1e8] mb-10' />
                     <h2 className=' text-xl font-bold mb-2 dark:text-white'>MONEY BACK GUARANTEE</h2>
-                    <p className='  dark:text-white'>We reurn money within 30 days</p>
+                    <p className='  dark:text-white'>We return money within 30 days</p>
                 </div>
             </div>
         </div>

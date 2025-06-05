@@ -15,17 +15,17 @@ const NewArrival = () => {
             <div className=' flex flex-col lg:flex-row gap-10'>
                 <div className="lg:w-1/2 h-[500px] lg:h-[800px] bg-cover bg-center rounded-lg relative" style={{ backgroundImage: `url(${image.src})` }}>
                     <div className=' absolute bottom-10 left-8 text-white'>
-                        <h2 className=' text-4xl mb-5'>New Alloy Reem</h2>
+                        <h2 className=' text-4xl mb-5'>New Alloy rim</h2>
                         <p className=' text-xl text-[#FAFAFA]'>Silver and White version alloy</p>
-                        <p className=' text-xl text-[#FAFAFA]'>reem for the on road.</p>
+                        <p className=' text-xl text-[#FAFAFA]'>rim for the on road.</p>
                         <button className=' text-2xl border-b border-white mt-5'>Shop Now</button>
                     </div>
                 </div>
                 <div className='lg:w-1/2 h-[800px] flex flex-col gap-10'>
                     <div className="w-full h-[400px] bg-cover bg-center rounded-lg relative" style={{ backgroundImage: `url(${image2.src})` }}>
                         <div className=' absolute bottom-10 left-8 text-white'>
-                            <h2 className=' text-4xl mb-5'>New Alloy Reem</h2>
-                            <p className=' text-xl text-[#FAFAFA]'>Silver and White version alloy reem</p>
+                            <h2 className=' text-4xl mb-5'>New Alloy rim</h2>
+                            <p className=' text-xl text-[#FAFAFA]'>Silver and White version alloy rim</p>
                             <p className=' text-xl text-[#FAFAFA]'>for the on road.</p>
                             <button className=' text-2xl border-b border-white mt-5'>Shop Now</button>
                         </div>
@@ -34,17 +34,17 @@ const NewArrival = () => {
                     <div className=' flex flex-row gap-5 sm:gap-10'>
                         <div className="w-1/2 h-[300px] sm:h-[400px] bg-cover bg-center rounded-lg relative" style={{ backgroundImage: `url(${image.src})` }}>
                             <div className=' absolute bottom-10 left-3 sm:left-8 text-white'>
-                                <h2 className=' text-xl mb-1'>New Alloy Reem</h2>
+                                <h2 className=' text-xl mb-1'>New Alloy rim</h2>
                                 <p className=' text-sm text-[#FAFAFA]'>Silver and White version alloy</p>
-                                <p className=' text-sm text-[#FAFAFA]'>reem for the on road.</p>
+                                <p className=' text-sm text-[#FAFAFA]'>rim for the on road.</p>
                                 <button className=' text-lg border-b border-white mt-1'>Shop Now</button>
                             </div>
                         </div>
                         <div className="w-1/2 h-[300px] sm:h-[400px] bg-cover bg-center rounded-lg relative" style={{ backgroundImage: `url(${image.src})` }}>
                             <div className=' absolute bottom-10 left-3 sm:left-8 text-white'>
-                                <h2 className=' text-xl mb-1'>New Alloy Reem</h2>
+                                <h2 className=' text-xl mb-1'>New Alloy rim</h2>
                                 <p className=' text-sm text-[#FAFAFA]'>Silver and White version alloy</p>
-                                <p className=' text-sm text-[#FAFAFA]'>reem for the on road.</p>
+                                <p className=' text-sm text-[#FAFAFA]'>rim for the on road.</p>
                                 <button className=' text-lg border-b border-white mt-1'>Shop Now</button>
                             </div>
                         </div>
