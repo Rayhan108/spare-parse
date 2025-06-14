@@ -3,6 +3,16 @@ import ProductCart from "@/components/Home/ProductCart";
 import { Input, Pagination, Select } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import wheel from '../../../../public/products/wheels.jpg'
+import sparksPlug from '../../../../public/products/car-sparks-plug.jpg'
+import engine from '../../../../public/products/engine.jpg'
+import engine1 from '../../../../public/products/engine1.jpg'
+import engineOil from '../../../../public/products/engine_oil.jpg'
+// import engineOil1 from '../../../../public/products/engine_oil1.jpg'
+import exhaust from '../../../../public/products/exhaust.jpg'
+import exhaust1 from '../../../../public/products/exhaust1.jpg'
+import lights from '../../../../public/products/lights.jpg'
+// import lights1 from '../../../../public/products/lights1.jpg'
 
 const Product = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -12,6 +22,18 @@ const Product = () => {
         setCurrentPage(page);
     };
 
+    const products = [
+        { id: 1, title: 'Wheels', image: wheel, price: 250, rating: 4, reviews: 84 },
+        { id: 2, title: 'Spark Plug', image: sparksPlug, price: 35, rating: 5, reviews: 42 },
+        { id: 3, title: 'Engine', image: engine, price: 950, rating: 4, reviews: 110 },
+        { id: 4, title: 'Engine Type 2', image: engine1, price: 1000, rating: 4, reviews: 89 },
+        { id: 5, title: 'Engine Oil', image: engineOil, price: 45, rating: 4, reviews: 67 },
+        // { id: 6, title: 'Engine Oil Type 2', image: engineOil1, price: 50, rating: 3, reviews: 58 },
+        { id: 7, title: 'Exhaust', image: exhaust, price: 320, rating: 5, reviews: 96 },
+        { id: 8, title: 'Exhaust Type 2', image: exhaust1, price: 350, rating: 4, reviews: 78 },
+        { id: 9, title: 'Lights', image: lights, price: 120, rating: 4, reviews: 123 },
+        //   { id: 10, title: 'Lights Type 2', image: lights1, price: 130, rating: 5, reviews: 145 },
+    ];
     return (
         <div className=" container mx-auto py-8 md:py-16 ">
             <div className=" container mx-auto shadow-md border-t-[10px] border-t-[#f56100] border-b border-b-[#FCCEB0] border-r border-r-[#FCCEB0] border-l border-l-[#FCCEB0] py-14">
@@ -102,14 +124,16 @@ const Product = () => {
 
             <div className="container mx-auto  mt-10 mb-8" >
                 <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-10">
-                    <ProductCart></ProductCart>
-                    <ProductCart></ProductCart>
-                    <ProductCart></ProductCart>
-                    <ProductCart></ProductCart>
-                    <ProductCart></ProductCart>
-                    <ProductCart></ProductCart>
-                    <ProductCart></ProductCart>
-                    <ProductCart></ProductCart>
+                    {products.map((product) => (
+                        <ProductCart
+                            key={product.id}
+                            image={product.image}
+                            title={product.title}
+                            price={product.price}
+                            rating={product.rating}
+                            reviews={product.reviews}
+                        />
+                    ))}
                 </div>
             </div>
             <Pagination
