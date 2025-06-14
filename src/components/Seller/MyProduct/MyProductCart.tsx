@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image";
-import productImage from '../../../../public/products/wheel1.svg'
+// import imageSrc from '../../../../public/products/wheel1.svg'
+import imageSrc from '../../../../public/products/wheel3.svg'
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useState } from "react";
@@ -12,7 +13,6 @@ const MyProductCart = () => {
     const price = 960
     const originalPrice = 1160
     // const discountPercentage = 35
-    const imageSrc = productImage
 
     const handleAddToCart = () => {
         console.log("Added to cart")
