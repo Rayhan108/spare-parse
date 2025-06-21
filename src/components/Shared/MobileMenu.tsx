@@ -76,7 +76,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
                 <Link onClick={onClose} href='/' className=' text-lg text-black '><p className="text-black">Home</p></Link>
                 <Link onClick={onClose} href='/contact' className=' text-lg text-black '><p className="text-black">Contact</p></Link>
                 <Link onClick={onClose} href='/about' className=' text-lg text-black '><p className="text-black">About</p></Link>
-                <Link onClick={onClose} href='/seller/myproduct' className=' text-lg '><p></p>My Product</Link>
+                {/* <Link onClick={onClose} href='/seller/myproduct' className=' text-lg '><p></p>My Product</Link> */}
                 <Link onClick={onClose} href='/auth/sign-up' className=' text-lg text-black '><p className="text-black">Sign Up</p></Link>
             </div>
 
@@ -110,12 +110,12 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
                             <p className=' text-md text-white '>My Order</p>
                         </Link>
                     </div>
-                    <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
+                    {/* <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
                         <Link className=' flex  gap-3' href={`/seller/overview`}>
                             <LuShoppingBag className='w-6 h-6 text-white cursor-pointer  ' />
                             <p className=' text-md text-white '>Seller Overview</p>
                         </Link>
-                    </div>
+                    </div> */}
                     <div className=' mb-3 cursor-pointer'>
                         <Link onClick={onClose} className=' flex items-center gap-3' href={`/auth/login`}>
                             <GoPerson className='w-6 h-6 text-white cursor-pointer  ' />
