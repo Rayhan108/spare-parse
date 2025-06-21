@@ -1,5 +1,6 @@
 "use client"
 import Image from 'next/image';
+// import logo from '../../../public/logo.svg';
 import logo from '../../../public/logo.svg';
 import darkLogo from '../../../public/dark-logo.svg';
 import Link from 'next/link';
@@ -7,7 +8,7 @@ import { FiSearch } from 'react-icons/fi';
 import { ConfigProvider, Input } from 'antd';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import { PiShoppingCartLight } from 'react-icons/pi';
-import { GoPerson, GoVersions } from 'react-icons/go';
+import { GoPerson, } from 'react-icons/go';
 import { useEffect, useState } from 'react';
 import { LuShoppingBag } from 'react-icons/lu';
 // import GoogleTranslate from '../../translate/GoogleTranslate';
@@ -60,8 +61,8 @@ const Header = () => {
 
     return (
         <div>
-            <div className=" bg-black dark:bg-[#3f3f3f] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0 ">
-                Summer Sale For All Parking Light And Free Express Delivery - OFF 50%! <span className=" ml-2 font-semibold underline cursor-pointer">ShopNow</span>
+            <div className=" bg-[#df5800] dark:bg-[#df5800] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0 ">
+                Summer Sale For All Parking Light And Free Express Delivery - OFF 50%! <Link href={`/product`}><span className=" ml-2 font-semibold underline cursor-pointer">ShopNow</span></Link>
                 <div className=' flex justify-center items-center '>
                     {/* <GoogleTranslate /> */}
                 </div>
@@ -81,7 +82,7 @@ const Header = () => {
                         <Link href='/' className=' text-lg dark:text-white'>Home</Link>
                         <Link href='/contact' className=' text-lg dark:text-white'>Contact</Link>
                         <Link href='/about' className=' text-lg dark:text-white'>About</Link>
-                        <Link href='/seller/myproduct' className=' text-lg dark:text-white'>My Product</Link>
+                        {/* <Link href='/seller/myproduct' className=' text-lg dark:text-white'>My Product</Link> */}
                         <Link href='/auth/sign-up' className=' text-lg dark:text-white'>Sign Up</Link>
                     </div>
                     <div className=' hidden w-[380px] lg:flex items-center justify-between gap-4'>
@@ -137,12 +138,12 @@ const Header = () => {
                                     <p className=' text-md text-white dark:text-black'>My Order</p>
                                 </Link>
                             </div>
-                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
+                            {/* <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
                                 <Link className=' flex  gap-3' href={`/seller/overview`}>
                                     <GoVersions className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
                                     <p className=' text-md text-white dark:text-black'>Seller Overview</p>
                                 </Link>
-                            </div>
+                            </div> */}
                             <div className=' mb-3 cursor-pointer'>
                                 <Link className=' flex items-center gap-3' href={`/auth/login`}>
                                     <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
