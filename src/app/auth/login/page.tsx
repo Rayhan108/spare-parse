@@ -1,10 +1,14 @@
 "use client"
 import { JSX } from "react"
-import { Form, Input } from "antd"
+import { Form, Input, notification } from "antd"
 import { FaFacebook } from "react-icons/fa"
 import type React from "react"
 import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
+import { useLogInMutation } from "@/redux/features/auth/authApi"
+import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { setUser } from "@/redux/features/auth/authSlice"
 
 
 interface LogInFormValues {
@@ -13,14 +17,54 @@ interface LogInFormValues {
 }
 
 export default function LogInForm(): JSX.Element {
+    const [api, contextHolder] = notification.useNotification();
     const [form] = Form.useForm<LogInFormValues>()
+    const [logIn, { isLoading }] = useLogInMutation();
+    const router = useRouter();
+    const dispatch = useDispatch();
 
-    const onFinish = (values: LogInFormValues): void => {
-        console.log("Success:", values)
-    }
+    const onFinish = (values: LogInFormValues) => {
+        const loginData = {
+            email: values.email,
+            password: values.password,
+        }
+
+        logIn(loginData).unwrap()
+            .then((data) => {
+                console.log(data);
+                const userData = {
+                    _id: data?.data?._id,
+                    fullName: data?.data?.fullName,
+                    email: data?.data?.email,
+                    role: data?.data?.role,
+                }
+                const accessToken = data?.data?.accessToken
+                const refreshToken = data?.data?.refreshToken
+                dispatch(setUser({ user: userData, accessToken: accessToken, refreshToken }))
+                api.open({
+                    type: 'success',
+                    message: 'Log In',
+                    description: 'Log In successfully!',
+                    placement: 'topRight',
+                });
+                if (data?.data?.role === "BUYER") {
+                    router.push(`/`)
+                }
+            })
+            .catch((error) => {
+                api.open({
+                    type: 'error',
+                    message: error?.data?.message,
+                    description: 'Log In failed. Please try again.',
+                    placement: 'topRight',
+                });
+            })
+    };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+            {contextHolder}
             <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14  py-10 rounded-lg">
                 <div className="text-center mb-6">
                     <h1 className="text-2xl font-semibold">Log In</h1>
@@ -55,29 +99,28 @@ export default function LogInForm(): JSX.Element {
                     </div>
 
                     <Form.Item className="mt-6">
-                        <Link href={'/'}>
-                            <button
-                                className=" bg-primary  w-full py-2 rounded-md cursor-pointer text-white"
-                            >
-                                Log In
-                            </button>
-                        </Link>
+                        <button
+                            disabled={isLoading}
+                            className=" bg-primary  w-full py-2 rounded-md cursor-pointer text-white"
+                        >
+                            {isLoading ? "Loading..." : "Log In"}
+                        </button>
                     </Form.Item>
                 </Form>
 
                 <div className="mt-4">
                     <button
                         className=" w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md mb-4 cursor-pointer"
-                        onClick={(): void => console.log("Google sign up clicked")}
+                        onClick={(): void => console.log("Google Log In clicked")}
                     >
-                        <FcGoogle size={25} className="mr-2" /> Sign up with Google
+                        <FcGoogle size={25} className="mr-2" /> Log In with Google
                     </button>
 
                     <button
                         className=" w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md cursor-pointer "
-                        onClick={(): void => console.log("Facebook sign up clicked")}
+                        onClick={(): void => console.log("Facebook Log In clicked")}
                     >
-                        <FaFacebook size={25} className="mr-2 text-[#0689ff]" /> Sign up with Facebook
+                        <FaFacebook size={25} className="mr-2 text-[#0689ff]" /> Log In with Facebook
                     </button>
                 </div>
 
