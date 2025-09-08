@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import Image from 'next/image';
 // import logo from '../../../public/logo.svg';
@@ -8,17 +9,21 @@ import { FiSearch } from 'react-icons/fi';
 import { ConfigProvider, Input } from 'antd';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import { PiShoppingCartLight } from 'react-icons/pi';
-import { GoPerson, } from 'react-icons/go';
+import { GoPerson, GoVersions, } from 'react-icons/go';
 import { useEffect, useState } from 'react';
 import { LuShoppingBag } from 'react-icons/lu';
 // import GoogleTranslate from '../../translate/GoogleTranslate';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import MobileMenu from './MobileMenu';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '@/redux/features/auth/authSlice';
 
 const Header = () => {
-
+    const user = useSelector((state: any) => state.logInUser)
+    console.log(user.user);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [subMenu, setSubMenu] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const storedMode = localStorage.getItem('darkMode');
@@ -59,6 +64,11 @@ const Header = () => {
         setOpen(false);
     };
 
+    const handleLogOut = () => {
+        dispatch(logout());
+        window.location.replace('/auth/login')
+    };
+
     return (
         <div>
             <div className=" bg-[#df5800] dark:bg-[#df5800] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0 ">
@@ -83,75 +93,96 @@ const Header = () => {
                         <Link href='/contact' className=' text-lg dark:text-white'>Contact</Link>
                         <Link href='/about' className=' text-lg dark:text-white'>About</Link>
                         {/* <Link href='/seller/myproduct' className=' text-lg dark:text-white'>My Product</Link> */}
-                        <Link href='/auth/sign-up' className=' text-lg dark:text-white'>Sign Up</Link>
-                    </div>
-                    <div className=' hidden w-[380px] lg:flex items-center justify-between gap-4'>
-                        <ConfigProvider
-                            theme={{
-                                components: {
-                                    "Input": {
-                                        "activeBorderColor": "rgba(22,119,255,0)",
-                                        "hoverBorderColor": "rgba(64,150,255,0)",
-                                        "colorBorder": "rgba(217,217,217,0)",
-                                        "colorPrimaryHover": "rgba(64,150,255,0)",
-                                        "colorPrimaryActive": "rgba(9,89,217,0)",
-                                        "controlHeight": 36,
-                                    }
-                                },
-                            }}
-                        >
-                            <Input style={{ backgroundColor: '#f0f0f0' }} suffix={<FiSearch className=" text-black w-6 h-6" />} className=' w-[280px]' placeholder='What are you looking for?' type="text" />
-                        </ConfigProvider>
-                        <Link href={`/wishlist`}><IoIosHeartEmpty className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
-                        <Link href={`/cart`}><PiShoppingCartLight className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
-                        <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-2 '>
-                            <GoPerson className='w-6 h-6 text-white cursor-pointer -mr-[1x]' />
-                        </div>
-
-
+                        <Link href='/auth/login' className=' text-lg dark:text-white'>Log In</Link>
                     </div>
                     {
-                        subMenu &&
-                        // bg-gradient-to-r from-[#243631] to-[#6e7675] dark:bg-gradient-to-r dark:from-[#cfcfcf] dark:to-[#a8acab]
-                        <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all z-50'>
-                            <div className='flex items-center justify-between mb-5'>
-                                <p className='text-gray-200 dark:text-black'>Dark Mode:</p>
-                                <button
-                                    onClick={handleToggle}
-                                    className={`w-14 h-6 cursor-pointer flex items-center rounded-full p-1 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}
+                        user.user &&
+                        <>
+
+                            <div className=' hidden w-[380px] lg:flex items-center justify-between gap-4'>
+                                <ConfigProvider
+                                    theme={{
+                                        components: {
+                                            "Input": {
+                                                "activeBorderColor": "rgba(22,119,255,0)",
+                                                "hoverBorderColor": "rgba(64,150,255,0)",
+                                                "colorBorder": "rgba(217,217,217,0)",
+                                                "colorPrimaryHover": "rgba(64,150,255,0)",
+                                                "colorPrimaryActive": "rgba(9,89,217,0)",
+                                                "controlHeight": 36,
+                                            }
+                                        },
+                                    }}
                                 >
-                                    <div
-                                        className={`w-4 h-4 bg-white rounded-full transition-all ${isDarkMode ? 'translate-x-8' : ''}`}
-                                    ></div>
-                                </button>
+                                    <Input style={{ backgroundColor: '#f0f0f0' }} suffix={<FiSearch className=" text-black w-6 h-6" />} className=' w-[280px]' placeholder='What are you looking for?' type="text" />
+                                </ConfigProvider>
+                                {
+                                    user.user.role === "BUYER" &&
+                                    <>
+                                        <Link href={`/wishlist`}><IoIosHeartEmpty className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
+                                        <Link href={`/cart`}><PiShoppingCartLight className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
+                                    </>
+                                }
+
+                                <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-2 '>
+                                    <GoPerson className='w-6 h-6 text-white cursor-pointer -mr-[1x]' />
+                                </div>
+
 
                             </div>
-                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
-                                <Link className=' flex  gap-3' href={`/myprofile`}>
-                                    <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                    <p className=' text-md text-white dark:text-black'>Manage My Account</p>
-                                </Link>
-                            </div>
-                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
-                                <Link className=' flex  gap-3' href={`/myorder`}>
-                                    <LuShoppingBag className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                    <p className=' text-md text-white dark:text-black'>My Order</p>
-                                </Link>
-                            </div>
-                            {/* <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
-                                <Link className=' flex  gap-3' href={`/seller/overview`}>
-                                    <GoVersions className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                    <p className=' text-md text-white dark:text-black'>Seller Overview</p>
-                                </Link>
-                            </div> */}
-                            <div className=' mb-3 cursor-pointer'>
-                                <Link className=' flex items-center gap-3' href={`/auth/login`}>
-                                    <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                    <p className=' text-md text-white dark:text-black'>Logout</p>
-                                </Link>
-                            </div>
-                        </div>
+                            {
+                                subMenu &&
+                                // bg-gradient-to-r from-[#243631] to-[#6e7675] dark:bg-gradient-to-r dark:from-[#cfcfcf] dark:to-[#a8acab]
+                                <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all z-50'>
+                                    <div className='flex items-center justify-between mb-5'>
+                                        <p className='text-gray-200 dark:text-black'>Dark Mode:</p>
+                                        <button
+                                            onClick={handleToggle}
+                                            className={`w-14 h-6 cursor-pointer flex items-center rounded-full p-1 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}
+                                        >
+                                            <div
+                                                className={`w-4 h-4 bg-white rounded-full transition-all ${isDarkMode ? 'translate-x-8' : ''}`}
+                                            ></div>
+                                        </button>
+
+                                    </div>
+                                    <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
+                                        <Link className=' flex  gap-3' href={`/myprofile`}>
+                                            <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
+                                            <p className=' text-md text-white dark:text-black'>Manage My Account</p>
+                                        </Link>
+                                    </div>
+
+                                    {
+                                        user.user.role !== "BUYER" ?
+                                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
+                                                <Link className=' flex  gap-3' href={`/seller/overview`}>
+                                                    <GoVersions className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
+                                                    <p className=' text-md text-white dark:text-black'>Seller Overview</p>
+                                                </Link>
+                                            </div>
+                                            :
+                                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
+                                                <Link className=' flex  gap-3' href={`/myorder`}>
+                                                    <LuShoppingBag className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
+                                                    <p className=' text-md text-white dark:text-black'>My Order</p>
+                                                </Link>
+                                            </div>
+                                    }
+
+                                    <div className=' mb-3 cursor-pointer'>
+                                        {/* <Link  href={`/auth/login`}> */}
+                                        <div onClick={handleLogOut} className=' flex items-center gap-3'>
+                                            <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
+                                            <p className=' text-md text-white dark:text-black'>Logout</p>
+                                        </div>
+                                        {/* </Link> */}
+                                    </div>
+                                </div>
+                            }
+                        </>
                     }
+
                     <div className=' block lg:hidden'>
                         <RxHamburgerMenu onClick={showDrawer} size={25} className=' text-black ' />
                     </div>
