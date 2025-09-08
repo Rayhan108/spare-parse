@@ -12,6 +12,14 @@ const authApi = baseApi.injectEndpoints({
             }),
         }),
 
+        otpVerification: builder.mutation({
+            query: (data) => ({
+                url: '/auth/verify-signup-otp',
+                method: 'POST',
+                body: data,
+            }),
+        }),
+
         logIn: builder.mutation({
             query: (LogInData) => ({
                 url: '/auth/login',
@@ -72,4 +80,4 @@ const authApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useSignUpMutation,useLogInMutation, useForgetPasswordMutation, useVerifyEmailMutation, useResetAdminPasswordMutation, useChangeAdminPasswordMutation, useEditAdminProfileMutation, useGetAdminProfileQuery } = authApi;
+export const { useSignUpMutation, useOtpVerificationMutation, useLogInMutation, useForgetPasswordMutation, useVerifyEmailMutation, useResetAdminPasswordMutation, useChangeAdminPasswordMutation, useEditAdminProfileMutation, useGetAdminProfileQuery } = authApi;

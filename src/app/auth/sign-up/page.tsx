@@ -45,7 +45,7 @@ export default function SignUpForm(): JSX.Element {
                     placement: 'topRight',
                 });
 
-                router.push(`/auth/opt-verify`)
+                router.push(`/auth/opt-verify?email=${values.email}`)
 
             })
 
