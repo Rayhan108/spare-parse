@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import Image from 'next/image';
-import wheel1 from '../../../../../public/products/wheel1.svg';
-import wheel2 from '../../../../../public/products/wheel2.svg';
-import wheel3 from '../../../../../public/products/wheel3.svg';
-import wheel4 from '../../../../../public/products/wheel4.svg';
+// import wheel1 from '../../../../../public/products/wheel1.svg';
+// import wheel2 from '../../../../../public/products/wheel2.svg';
+// import wheel3 from '../../../../../public/products/wheel3.svg';
+// import wheel4 from '../../../../../public/products/wheel4.svg';
 import { Rate } from 'antd';
 import { FiMinus } from 'react-icons/fi';
 import { LuPlus } from 'react-icons/lu';
@@ -16,13 +16,18 @@ import Reviews from '@/components/Products/Review';
 import Description from '@/components/Products/Description';
 import Reference from '@/components/Products/Reference';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useGetSingleProductQuery } from '@/redux/features/products/productsApi';
+import { Imageurl } from '@/utils/Imageurl';
 
 
 const SingleProduct = () => {
-    const wheels = [wheel1, wheel2, wheel3, wheel4];
-    const sizes = ['17', '18', '19']; // Array of sizes
+    const params = useParams();
+    const { data } = useGetSingleProductQuery(params.id);
+    // const wheels = [wheel1, wheel2, wheel3, wheel4];
+    // const sizes = ['17', '18', '19']; // Array of sizes
     const [activeTab, setActiveTab] = useState("description")
-    const [selectedWheel, setSelectedWheel] = useState(wheel2);
+    const [selectedWheel, setSelectedWheel] = useState(`${Imageurl}/${data?.data?.images[0]}`);
     const [selectedSize, setSelectedSize] = useState<string | null>('17');
 
     const handleSelectWheel = (wheel: any) => {
@@ -33,20 +38,19 @@ const SingleProduct = () => {
         setSelectedSize(size);
     };
 
-
     return (
         <div>
             <div className="container mx-auto py-20 flex gap-8">
                 <div className='w-1/2 flex gap-5'>
                     <div className=' cursor-pointer flex flex-col gap-5 w-[20%]'>
-                        {wheels.map((wheel, index) => (
+                        {data?.data?.images?.map((image: any, index: number) => (
                             <div
                                 key={index}
-                                className={` `}
-                                onClick={() => handleSelectWheel(wheel)}
+                                className={``}
+                                onClick={() => handleSelectWheel(`${Imageurl}/${image}`)}
                             >
                                 <Image
-                                    src={wheel}
+                                    src={`${Imageurl}/${image}`}
                                     alt={`Wheel ${index + 1}`}
                                     width={500}
                                     height={500}
@@ -66,34 +70,36 @@ const SingleProduct = () => {
                     </div>
                 </div>
                 <div className=' w-1/2'>
-                    <h2 className=' text-2xl font-semibold'>MRF Car Wheel Tyre 17/250</h2>
+                    <h2 className=' text-2xl font-semibold'>{data?.data?.name}</h2>
                     <div className=' flex gap-3 items-center mt-3'>
                         <Rate disabled defaultValue={4} />
-                        <p className=' text-[#7f7f7f]'>(150 Reviews)</p>
+                        <p className=' text-[#7f7f7f]'>(150 Reviews static)</p>
                         <p className=' text-[#7f7f7f]'>|</p>
-                        <p className=' text-primary'>In Stock</p>
+                        <p className=' text-primary'>{data?.data?.stock}</p>
                     </div>
                     <div className=' py-4'>
-                        <h1 className=' text-5xl font-bold dark:text-white'>$292.00</h1>
+                        <h1 className=' text-5xl font-bold dark:text-white'>${data?.data?.price}</h1>
                     </div>
                     <div>
-                        <p className=' text-lg pb-4 border-b-2 dark:text-white border-[#7f7f7f]'>The MRF 17/250 tyre appears to refer to a motorcycle tyre with a 17-inch rim diameter and a 2.50-inch width. This size is commonly used on commuter motorcycles, particularly for front-wheel applications. </p>
+                        <p className=' text-lg pb-4 border-b-2 dark:text-white border-[#7f7f7f]'>
+                            {data?.data?.description?.length > 220 ? `${data?.data?.description.substring(0, 220)}...` : data?.data?.description}
+                        </p>
                     </div>
                     <div className=' text-2xl flex justify-between items-center mt-4'>
                         <div className=' flex gap-1 items-center dark:text-white'>
                             <h3>Brand:</h3>
-                            <h3>MRF</h3>
+                            <h3>{data?.data?.brandName}</h3>
                         </div>
                         <div className=' flex gap-1 items-center dark:text-white'>
-                            <h3>Colour:</h3>
-                            <h3>Black</h3>
+                            <h3>Color:</h3>
+                            <h3>{data?.data?.color}</h3>
                         </div>
                     </div>
                     <div className='flex justify-between items-center mt-6'>
                         <div className=' flex items-center '>
                             <h3 className=' text-2xl dark:text-white '>Size: </h3>
                             <div className='flex gap-3 items-center ml-3'>
-                                {sizes.map((size) => (
+                                {data?.data?.size?.map((size:any) => (
                                     <button
                                         key={size}
                                         className={`border py-[6px] rounded-md px-2 cursor-pointer ${selectedSize === size ? 'bg-primary text-white' : 'bg-white'
@@ -142,7 +148,6 @@ const SingleProduct = () => {
             </div>
 
 
-
             <div className=" container mx-auto">
                 {/* Custom Tabs */}
                 <div className="w-full">
@@ -178,7 +183,7 @@ const SingleProduct = () => {
 
                     {/* Description Tab Content */}
                     {activeTab === "description" && (
-                        <Description></Description>
+                        <Description description={data?.data?.description}></Description>
                     )}
 
                     {/* Reviews Tab Content */}
@@ -187,7 +192,7 @@ const SingleProduct = () => {
 
                     )}
                     {activeTab === "reference" && (
-                        <Reference></Reference>
+                        <Reference oe={data?.data?.oe} crn={data?.data?.crm}></Reference>
 
                     )}
                 </div>

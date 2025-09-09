@@ -1,10 +1,12 @@
-import Image from "next/image";
-import product from '../../../public/product_bg.png'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import Image from "next/image";
+// import product from '../../../public/product_bg.png'
 
-const Description = () => {
+const Description = ({description}:any) => {
     return (
         <div className="p-6 mb-10 dark:text-white">
-            <div className="grid md:grid-cols-2 gap-8">
+            {description}
+            {/* <div className="grid md:grid-cols-2 gap-8">
                 <div>
                     <h2 className="text-lg font-semibold mb-4">Product Description</h2>
                     <p className="text-gray-700 mb-6 dark:text-[#c0c0c0]">
@@ -50,7 +52,7 @@ const Description = () => {
                         className="rounded-md w-full"
                     />
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
