@@ -1,0 +1,1 @@
+export const Imageurl = `http://10.10.20.72:5005`

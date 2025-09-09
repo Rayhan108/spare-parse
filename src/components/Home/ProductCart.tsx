@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Rate } from 'antd';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import Link from 'next/link';
+import { Imageurl } from '@/utils/Imageurl';
 
 interface ProductCartProps {
   image: any;
@@ -17,7 +18,7 @@ const ProductCart = ({ image, title, price, rating, reviews }: ProductCartProps)
     <div className='relative'>
       <Link href="/product/777777">
         <Image
-          src={image}
+          src={`${Imageurl}/${image}`}
           height={500}
           width={500}
           alt={title}
