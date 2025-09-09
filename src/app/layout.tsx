@@ -35,8 +35,8 @@ export default function RootLayout({
           monica-id="ofpnmcalabcbjgholdjcjblkibolbppb"
           monica-version="7.9.1"
           cz-shortcut-listen="true"
-          data-new-gr-c-s-check-loaded="14.1238.0"
           data-gr-ext-installed=""
+          data-new-gr-c-s-check-loaded="14.1252.0"
         >
           <ReduxProviders>
             {children}

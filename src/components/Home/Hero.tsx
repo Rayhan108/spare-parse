@@ -49,7 +49,9 @@ const Hero = () => {
                         </div>
                         <div>
                             <div className=' flex gap-1 items-center mt-8 xl:mt-12'>
-                                <button className=' text-white border-b-2 py-2 border-white text-lg cursor-pointer'>Shop Now</button>
+                                <Link href={`/product`}>
+                                    <button className=' text-white border-b-2 py-2 border-white text-lg cursor-pointer'>Shop Now</button>
+                                </Link>
                                 <IoArrowForward size={25} className=' text-white' />
                             </div>
                         </div>

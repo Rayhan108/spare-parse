@@ -17,14 +17,15 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import MobileMenu from './MobileMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/redux/features/auth/authSlice';
+import Cookies from "js-cookie";
+
 
 const Header = () => {
     const user = useSelector((state: any) => state.logInUser)
-    console.log(user.user);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [subMenu, setSubMenu] = useState(false);
     const dispatch = useDispatch();
-
+    const token = Cookies.get('hatem-ecommerce-token')
     useEffect(() => {
         const storedMode = localStorage.getItem('darkMode');
         console.log(storedMode);
@@ -66,6 +67,7 @@ const Header = () => {
 
     const handleLogOut = () => {
         dispatch(logout());
+        Cookies.remove("hatem-ecommerce-token");
         window.location.replace('/auth/login')
     };
 
@@ -93,43 +95,44 @@ const Header = () => {
                         <Link href='/contact' className=' text-lg dark:text-white'>Contact</Link>
                         <Link href='/about' className=' text-lg dark:text-white'>About</Link>
                         {/* <Link href='/seller/myproduct' className=' text-lg dark:text-white'>My Product</Link> */}
-                        <Link href='/auth/login' className=' text-lg dark:text-white'>Log In</Link>
+                        {
+                            !token &&
+                            <Link href='/auth/login' className=' text-lg dark:text-white'>Log In</Link>
+                        }
                     </div>
-                    {
-                        user.user &&
+                    <div className=' hidden w-[380px] lg:flex items-center justify-between gap-4'>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    "Input": {
+                                        "activeBorderColor": "rgba(22,119,255,0)",
+                                        "hoverBorderColor": "rgba(64,150,255,0)",
+                                        "colorBorder": "rgba(217,217,217,0)",
+                                        "colorPrimaryHover": "rgba(64,150,255,0)",
+                                        "colorPrimaryActive": "rgba(9,89,217,0)",
+                                        "controlHeight": 36,
+                                    }
+                                },
+                            }}
+                        >
+                            <Input style={{ backgroundColor: '#f0f0f0' }} suffix={<FiSearch className=" text-black w-6 h-6" />} className=' w-[280px]' placeholder='What are you looking for?' type="text" />
+                        </ConfigProvider>
+
                         <>
-
-                            <div className=' hidden w-[380px] lg:flex items-center justify-between gap-4'>
-                                <ConfigProvider
-                                    theme={{
-                                        components: {
-                                            "Input": {
-                                                "activeBorderColor": "rgba(22,119,255,0)",
-                                                "hoverBorderColor": "rgba(64,150,255,0)",
-                                                "colorBorder": "rgba(217,217,217,0)",
-                                                "colorPrimaryHover": "rgba(64,150,255,0)",
-                                                "colorPrimaryActive": "rgba(9,89,217,0)",
-                                                "controlHeight": 36,
-                                            }
-                                        },
-                                    }}
-                                >
-                                    <Input style={{ backgroundColor: '#f0f0f0' }} suffix={<FiSearch className=" text-black w-6 h-6" />} className=' w-[280px]' placeholder='What are you looking for?' type="text" />
-                                </ConfigProvider>
-                                {
-                                    user.user.role === "BUYER" &&
-                                    <>
-                                        <Link href={`/wishlist`}><IoIosHeartEmpty className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
-                                        <Link href={`/cart`}><PiShoppingCartLight className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
-                                    </>
-                                }
-
+                            <Link href={`/wishlist`}><IoIosHeartEmpty className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
+                            <Link href={`/cart`}><PiShoppingCartLight className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
+                            {
+                                token &&
                                 <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-2 '>
                                     <GoPerson className='w-6 h-6 text-white cursor-pointer -mr-[1x]' />
                                 </div>
+                            }
+                        </>
+                    </div>
+                    {
+                        token &&
+                        <>
 
-
-                            </div>
                             {
                                 subMenu &&
                                 // bg-gradient-to-r from-[#243631] to-[#6e7675] dark:bg-gradient-to-r dark:from-[#cfcfcf] dark:to-[#a8acab]
@@ -154,7 +157,7 @@ const Header = () => {
                                     </div>
 
                                     {
-                                        user.user.role !== "BUYER" ?
+                                        user?.user?.role !== "BUYER" ?
                                             <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
                                                 <Link className=' flex  gap-3' href={`/seller/overview`}>
                                                     <GoVersions className='w-6 h-6 text-white cursor-pointer dark:text-black ' />

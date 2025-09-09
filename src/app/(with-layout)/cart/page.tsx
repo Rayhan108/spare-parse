@@ -98,9 +98,11 @@ const Cart = () => {
                             </div>
 
                             <div className="mt-6">
-                                <button className="w-full cursor-pointer bg-primary text-white font-medium py-2.5 rounded">
-                                    Proceed to checkout
-                                </button>
+                                <Link href={`/checkout`}>
+                                    <button className="w-full cursor-pointer bg-primary text-white font-medium py-2.5 rounded">
+                                        Proceed to checkout
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
