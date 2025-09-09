@@ -7,10 +7,6 @@ import { IoArrowForward } from "react-icons/io5";
 import image from '../../../public/slide-image.png';
 
 const Hero = () => {
-    const onChange = (currentSlide: number) => {
-        console.log(currentSlide);
-    };
-    console.log(onChange);
 
     return (
         <div className="container mx-auto flex flex-col-reverse md:flex-row">

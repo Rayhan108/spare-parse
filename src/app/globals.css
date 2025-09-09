@@ -58,3 +58,10 @@
     font-size: 1.2rem; 
   }
 }
+
+
+/* upload */
+
+.ant-upload.ant-upload-select {
+    width: 100%;
+}

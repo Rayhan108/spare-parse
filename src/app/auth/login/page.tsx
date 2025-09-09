@@ -52,6 +52,9 @@ export default function LogInForm(): JSX.Element {
                 if (data?.data?.role === "BUYER") {
                     router.push(`/`)
                 }
+                if (data?.data?.role === "SELLER") {
+                    router.push(`/`)
+                }
             })
             .catch((error) => {
                 api.open({

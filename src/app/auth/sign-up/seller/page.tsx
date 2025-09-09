@@ -1,11 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-import { JSX } from "react"
-import { Form, Input } from "antd"
+import { JSX, useState } from "react"
+import { ConfigProvider, Form, Input, notification } from "antd"
 import { FaFacebook } from "react-icons/fa"
 import type React from "react"
 import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
-
+// import type { UploadProps } from 'antd';
+import { Button, Upload } from 'antd';
+import { MdOutlineFileUpload } from "react-icons/md"
+import { useSignUpMutation } from "@/redux/features/auth/authApi"
+import { useRouter } from "next/navigation"
 
 interface SignUpFormValues {
     fullName: string
@@ -16,12 +21,66 @@ interface SignUpFormValues {
 
 export default function SellerSignUp(): JSX.Element {
     const [form] = Form.useForm<SignUpFormValues>()
-    const onFinish = (values: SignUpFormValues): void => {
-        console.log("Success:", values)
-    }
+    const [api, contextHolder] = notification.useNotification();
+    const [SignUp, { isLoading }] = useSignUpMutation();
+    const router = useRouter();
+    const [businessCertificate, setBusinessCertificate] = useState(null);
+    const [NISCopy, setNISCopy] = useState(null);
+
+
+    const onFinish = (values: SignUpFormValues) => {
+        const signData = {
+            fullName: values.fullName,
+            email: values.email,
+            phoneNumber: values.phoneNumber,
+            role: "SELLER",
+            password: values.password,
+            isSocialLogin: false
+        }
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(signData))
+        if (businessCertificate) {
+            formData.append('businessCertificate', businessCertificate)
+        }
+        if (NISCopy) {
+            formData.append('nisCopy', NISCopy)
+        }
+
+        SignUp(formData).unwrap()
+            .then((data) => {
+                console.log(data);
+                api.open({
+                    type: 'success',
+                    message: 'Sign Up',
+                    description: 'Sign Up successfully!',
+                    placement: 'topRight',
+                });
+
+                router.push(`/auth/opt-verify?email=${values.email}`)
+
+            })
+
+            .catch((error) => {
+                api.open({
+                    type: 'error',
+                    message: error?.data?.message,
+                    description: 'Sign Up failed. Please try again.',
+                    placement: 'topRight',
+                });
+            })
+    };
+
+    const handleBusinessCertificateUpload = (e: any) => {
+        setBusinessCertificate(e.file.originFileObj);
+    };
+
+    const handleNISCopyUpload = (e: any) => {
+        setNISCopy(e.file.originFileObj);
+    };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+            {contextHolder}
             <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14  py-10 rounded-lg">
                 <div className="text-center mb-6">
                     <h1 className="text-2xl font-semibold">SIGN UP AS A SELLER</h1>
@@ -66,11 +125,75 @@ export default function SellerSignUp(): JSX.Element {
                         />
                     </Form.Item>
 
+                    <Form.Item
+                        label="Business Certificate"
+                        name="businessCertificate"
+                        rules={[{ required: true, message: "Please upload your business certificate!" }]}
+                    >
+                        <Upload
+                            onChange={handleBusinessCertificateUpload}
+                            className="w-full"
+                        >
+                            <ConfigProvider
+                                theme={{
+                                    components: {
+                                        Button: {
+                                            colorText: "#f56100",
+                                            colorPrimary: "#f56100",
+                                            "defaultActiveBorderColor": "rgb(245,97,0)",
+                                            "defaultActiveColor": "rgb(245,97,0)",
+                                            "defaultHoverBorderColor": "rgb(245,97,0)",
+                                            "defaultHoverColor": "rgb(245,97,0)",
+                                            "groupBorderColor": "rgb(245,97,0)",
+                                            "colorBorder": "rgb(245,97,0)"
+                                        },
+                                    },
+                                }}
+                            >
+                                <Button block icon={<MdOutlineFileUpload />}>Upload</Button>
+                            </ConfigProvider>
+
+                        </Upload>
+
+                    </Form.Item>
+
+                    <Form.Item
+                        label="NIS Copy"
+                        name="nisCopy"
+                        rules={[{ required: true, message: "Please upload your nis copy!" }]}
+                    >
+                        <Upload
+                            onChange={handleNISCopyUpload}
+                            className="w-full"
+                        >
+                            <ConfigProvider
+                                theme={{
+                                    components: {
+                                        Button: {
+                                            colorText: "#f56100",
+                                            colorPrimary: "#f56100",
+                                            "defaultActiveBorderColor": "rgb(245,97,0)",
+                                            "defaultActiveColor": "rgb(245,97,0)",
+                                            "defaultHoverBorderColor": "rgb(245,97,0)",
+                                            "defaultHoverColor": "rgb(245,97,0)",
+                                            "groupBorderColor": "rgb(245,97,0)",
+                                            "colorBorder": "rgb(245,97,0)"
+                                        },
+                                    },
+                                }}
+                            >
+                                <Button block icon={<MdOutlineFileUpload />}>Upload</Button>
+                            </ConfigProvider>
+
+                        </Upload>
+
+                    </Form.Item>
+
                     <Form.Item className="mt-6">
                         <button
                             className=" bg-primary  w-full py-2 rounded-md cursor-pointer text-white"
                         >
-                            SIGN UP
+                            {isLoading ? "Loading..." : "SIGN UP"}
                         </button>
                     </Form.Item>
                 </Form>
