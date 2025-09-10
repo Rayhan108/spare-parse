@@ -73,9 +73,9 @@ const Checkout = () => {
                             autoComplete="off"
                         >
                             <Form.Item<FieldType>
-                                label={<p className="dark:text-white">First Name</p>}
+                                label={<p className="dark:text-white">Name</p>}
                                 name="name"
-                                rules={[{ required: true, message: 'Please input your user name!' }]}
+                                rules={[{ required: true, message: 'Please input your name!' }]}
                             >
                                 <Input />
                             </Form.Item>
