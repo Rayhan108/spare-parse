@@ -52,10 +52,10 @@ const ExploreProducts = () => {
                         data?.data?.data?.map((product: any) => (
                             <ProductCart
                                 key={product?._id}
+                                product={product}
                                 id={product?._id}
                                 image={product?.images[0]}
                                 title={product?.name}
-                                price={product?.price}
                                 rating={5}
                                 reviews={100}
                             />

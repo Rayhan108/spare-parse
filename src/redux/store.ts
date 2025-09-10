@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import { baseApi } from './api/baseApi';
 import { authSlice } from './features/auth/authSlice';
 import { cartSlice } from './features/cart/cartSlice';
+import { wishlistSlice } from './features/wishlist/wishlistSlice';
 
 
 const persistConfig = {
@@ -16,6 +17,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     logInUser: authSlice.reducer,
     cart: cartSlice.reducer,
+    wishlist: wishlistSlice.reducer,
     [baseApi.reducerPath]: baseApi.reducer,
 });
 

@@ -1,31 +1,38 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
-import productImage from '../../../public/products/wheel1.svg'
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { Imageurl } from "@/utils/Imageurl";
+import { useDispatch } from "react-redux";
+import { deleteFromWishlist } from "@/redux/features/wishlist/wishlistSlice";
+import { addToCart } from "@/redux/features/cart/cartSlice";
 
-const ListedProductCart = () => {
-    const title = "Gucci duffle bag"
-    const price = 960
-    const originalPrice = 1160
-    const discountPercentage = 35
-    const imageSrc = productImage
+const ListedProductCart = ({ product }: any) => {
+    const title = product?.name;
+    const discount = product?.discount ? product.discount / 100 : 0;  // If no discount, treat it as 0
+    const price = product?.price - (product?.price * discount);
+    const originalPrice = product?.price;
+    const discountPercentage = discount > 0 ? product?.discount : 0;
+    const imageSrc = `${Imageurl}/${product?.images[0]}`;
+
+    const dispatch = useDispatch();
 
     const handleAddToCart = () => {
-        console.log("Added to cart")
-    }
-
-    const handleRemove = () => {
-        console.log("Removed")
+        dispatch(addToCart(product))
+        dispatch(deleteFromWishlist(product))
     }
 
     return (
         <div className=" overflow-hidden rounded">
             <div className="relative bg-[#f2fcf6] px-4 py-8">
-                <div className="absolute left-4 top-3 rounded text-md bg-orange-500 px-4 py-1 text-white">
-                    -{discountPercentage}%
-                </div>
+                {
+                    product?.discount &&
+                    <div className="absolute left-4 top-3 rounded text-md bg-orange-500 px-2 shadow py-1 text-white">
+                        -{discountPercentage}%
+                    </div>
+                }
                 <button
-                    onClick={handleRemove}
+                    onClick={() => dispatch(deleteFromWishlist(product))}
                     className="absolute right-2 top-2 "
                     aria-label="Remove item"
                 >
@@ -51,8 +58,16 @@ const ListedProductCart = () => {
             <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h3>
                 <div className="mt-1 flex items-center">
-                    <span className="text-xl font-bold text-orange-500">${price}</span>
-                    <span className="ml-2 text-gray-500 line-through">${originalPrice}</span>
+                    {
+                        product?.discount ?
+                            <>
+                                <span className="text-xl font-bold text-orange-500">${price}</span>
+                                <span className="ml-2 text-gray-500 line-through">${originalPrice}</span>
+                            </>
+                            :
+                            <span className="text-xl font-bold text-orange-500">${price}</span>
+                    }
+
                 </div>
             </div>
         </div>

@@ -23,7 +23,8 @@ import Cookies from "js-cookie";
 const Header = () => {
     const user = useSelector((state: any) => state.logInUser)
     const products = useSelector((state: any) => state.cart)
-    console.log(products.products);
+    const wishlist = useSelector((state: any) => state.wishlist)
+
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [subMenu, setSubMenu] = useState(false);
     const dispatch = useDispatch();
@@ -121,7 +122,16 @@ const Header = () => {
                         </ConfigProvider>
 
                         <>
-                            <Link href={`/wishlist`}><IoIosHeartEmpty className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
+                            <div className="relative">
+                                <Link href={`/wishlist`}><IoIosHeartEmpty className=' w-8 h-8 cursor-pointer dark:text-white' /></Link>
+
+                                {wishlist.products.length > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
+                                        {wishlist.products.length}
+                                    </span>
+                                )}
+                            </div>
+
                             <div className="relative">
                                 <Link href={`/cart`}>
                                     <PiShoppingCartLight className="w-8 h-8 cursor-pointer dark:text-white" />
@@ -136,8 +146,8 @@ const Header = () => {
 
                             {
                                 token &&
-                                <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-2 '>
-                                    <GoPerson className='w-6 h-6 text-white cursor-pointer -mr-[1x]' />
+                                <div onClick={() => setSubMenu(!subMenu)} className=' bg-[#df5800] flex items-center justify-center rounded-full p-2 mb-0.5'>
+                                    <GoPerson className='w-6 h-6 text-white cursor-pointer ' />
                                 </div>
                             }
                         </>
