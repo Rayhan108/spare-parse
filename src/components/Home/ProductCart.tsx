@@ -56,7 +56,7 @@ const ProductCart = ({ product, id, image, title, rating, reviews }: ProductCart
               :
               <span className="text-xl font-bold text-orange-500">${price}</span>
           }
-          <Rate disabled defaultValue={rating} />
+          <Rate disabled allowHalf defaultValue={rating} />
           <p className='dark:text-white'>({reviews})</p>
         </div>
       </div>

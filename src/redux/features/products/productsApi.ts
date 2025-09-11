@@ -22,6 +22,20 @@ const productsApi = baseApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        // SignUp: builder.mutation({
+        //     query: (LogInData) => ({
+        //         url: '/auth/signup',
+        //         method: 'POST',
+        //         body: LogInData,
+        //     }),
+        // }),
+        getReviewOfProducts: builder.query({
+            query: ({id, params}) => ({
+                url: `/reviews/product/${id}`,
+                method: 'GET',
+                params,
+            }),
+        }),
 
     }),
 });
@@ -29,4 +43,5 @@ const productsApi = baseApi.injectEndpoints({
 export const {
     useGetAllProductsQuery,
     useGetSingleProductQuery,
+    useGetReviewOfProductsQuery,
 } = productsApi;

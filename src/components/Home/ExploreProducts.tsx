@@ -56,8 +56,8 @@ const ExploreProducts = () => {
                                 id={product?._id}
                                 image={product?.images[0]}
                                 title={product?.name}
-                                rating={5}
-                                reviews={100}
+                                rating={product?.avgRating}
+                                reviews={product?.totalReviews}
                             />
                         ))
                 }

@@ -100,8 +100,8 @@ const SingleProduct = () => {
                         <div className=' lg:w-1/2'>
                             <h2 className=' text-xl md:text-2xl font-semibold'>{data?.data?.name}</h2>
                             <div className=' flex gap-1 md:gap-3 items-center mt-3'>
-                                <Rate disabled defaultValue={4} />
-                                <p className=' text-[#7f7f7f]'>(150 Reviews static)</p>
+                                <Rate disabled allowHalf defaultValue={data?.data?.avgRating} />
+                                <p className=' text-[#7f7f7f]'>({data?.data?.totalReviews} Reviews static)</p>
                                 <p className=' text-[#7f7f7f]'>|</p>
                                 <p className=' text-primary'>{data?.data?.stock}</p>
                             </div>
@@ -218,7 +218,7 @@ const SingleProduct = () => {
 
                     {/* Reviews Tab Content */}
                     {activeTab === "reviews" && (
-                        <Reviews></Reviews>
+                        <Reviews avgReview={data?.data?.avgRating} id={data?.data?._id}></Reviews>
                     )}
 
                     {activeTab === "reference" && (
