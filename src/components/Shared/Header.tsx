@@ -152,62 +152,70 @@ const Header = () => {
                             }
                         </>
                     </div>
-                    {
-                        token &&
-                        <>
+                    {token && subMenu && (
+                        <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all z-50'>
 
-                            {
-                                subMenu &&
-                                // bg-gradient-to-r from-[#243631] to-[#6e7675] dark:bg-gradient-to-r dark:from-[#cfcfcf] dark:to-[#a8acab]
-                                <div className='absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl transition-all z-50'>
-                                    <div className='flex items-center justify-between mb-5'>
-                                        <p className='text-gray-200 dark:text-black'>Dark Mode:</p>
-                                        <button
-                                            onClick={handleToggle}
-                                            className={`w-14 h-6 cursor-pointer flex items-center rounded-full p-1 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}
-                                        >
-                                            <div
-                                                className={`w-4 h-4 bg-white rounded-full transition-all ${isDarkMode ? 'translate-x-8' : ''}`}
-                                            ></div>
-                                        </button>
+                            {/* Dark Mode Toggle */}
+                            <div className='flex items-center justify-between mb-5'>
+                                <p className='text-gray-200 dark:text-black'>Dark Mode:</p>
+                                <button
+                                    onClick={handleToggle}
+                                    className={`w-14 h-6 cursor-pointer flex items-center rounded-full p-1 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}
+                                >
+                                    <div className={`w-4 h-4 bg-white rounded-full transition-all ${isDarkMode ? 'translate-x-8' : ''}`}></div>
+                                </button>
+                            </div>
 
+                            {/* Manage My Account */}
+                            <div className='flex items-center gap-3 mb-4 cursor-pointer'>
+                                <Link className='flex gap-3' href={`/myprofile`}>
+                                    <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black' />
+                                    <p className='text-md text-white dark:text-black'>Manage My Account</p>
+                                </Link>
+                            </div>
+
+                            {/* Switch Role */}
+                            <div className='flex items-center gap-3 mb-4 cursor-pointer'>
+                                {user?.user?.role === "BUYER" ? (
+                                    <div onClick={() => window.location.replace('/seller/overview')} className='flex gap-3'>
+                                        <GoVersions className='w-6 h-6 text-white cursor-pointer dark:text-black' />
+                                        <p className='text-md text-white dark:text-black'>Switch to Seller</p>
                                     </div>
-                                    <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
-                                        <Link className=' flex  gap-3' href={`/myprofile`}>
-                                            <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                            <p className=' text-md text-white dark:text-black'>Manage My Account</p>
-                                        </Link>
+                                ) : (
+                                    <div onClick={() => window.location.replace('/myorder')} className='flex gap-3'>
+                                        <LuShoppingBag className='w-6 h-6 text-white cursor-pointer dark:text-black' />
+                                        <p className='text-md text-white dark:text-black'>Switch to Buyer</p>
                                     </div>
+                                )}
+                            </div>
 
-                                    {
-                                        user?.user?.role !== "BUYER" ?
-                                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
-                                                <Link className=' flex  gap-3' href={`/seller/overview`}>
-                                                    <GoVersions className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                                    <p className=' text-md text-white dark:text-black'>Seller Overview</p>
-                                                </Link>
-                                            </div>
-                                            :
-                                            <div className=' flex items-center gap-3 mb-4 cursor-pointer'>
-                                                <Link className=' flex  gap-3' href={`/myorder`}>
-                                                    <LuShoppingBag className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                                    <p className=' text-md text-white dark:text-black'>My Order</p>
-                                                </Link>
-                                            </div>
-                                    }
-
-                                    <div className=' mb-3 cursor-pointer'>
-                                        {/* <Link  href={`/auth/login`}> */}
-                                        <div onClick={handleLogOut} className=' flex items-center gap-3'>
-                                            <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black ' />
-                                            <p className=' text-md text-white dark:text-black'>Logout</p>
-                                        </div>
-                                        {/* </Link> */}
-                                    </div>
+                            {/* Seller Overview / My Order depending on role */}
+                            {user?.user?.role !== "BUYER" ? (
+                                <div className='flex items-center gap-3 mb-4 cursor-pointer'>
+                                    <Link className='flex gap-3' href={`/seller/overview`}>
+                                        <GoVersions className='w-6 h-6 text-white cursor-pointer dark:text-black' />
+                                        <p className='text-md text-white dark:text-black'>Seller Overview</p>
+                                    </Link>
                                 </div>
-                            }
-                        </>
-                    }
+                            ) : (
+                                <div className='flex items-center gap-3 mb-4 cursor-pointer'>
+                                    <Link className='flex gap-3' href={`/myorder`}>
+                                        <LuShoppingBag className='w-6 h-6 text-white cursor-pointer dark:text-black' />
+                                        <p className='text-md text-white dark:text-black'>My Order</p>
+                                    </Link>
+                                </div>
+                            )}
+
+                            {/* Logout */}
+                            <div className='mb-3 cursor-pointer'>
+                                <div onClick={handleLogOut} className='flex items-center gap-3'>
+                                    <GoPerson className='w-6 h-6 text-white cursor-pointer dark:text-black' />
+                                    <p className='text-md text-white dark:text-black'>Logout</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
 
                     <div className=' block lg:hidden'>
                         <RxHamburgerMenu onClick={showDrawer} size={25} className=' text-black ' />

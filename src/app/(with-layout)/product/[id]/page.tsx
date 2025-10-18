@@ -1,233 +1,214 @@
-"use client"
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
-import Image from 'next/image';
-// import wheel1 from '../../../../../public/products/wheel1.svg';
-// import wheel2 from '../../../../../public/products/wheel2.svg';
-// import wheel3 from '../../../../../public/products/wheel3.svg';
-// import wheel4 from '../../../../../public/products/wheel4.svg';
-import { notification, Rate } from 'antd';
-// import { FiMinus } from 'react-icons/fi';
-// import { LuPlus } from 'react-icons/lu';
-import { IoIosHeartEmpty } from 'react-icons/io';
-import { PiTruck } from 'react-icons/pi';
-import { TfiReload } from 'react-icons/tfi';
-import Reviews from '@/components/Products/Review';
-import Description from '@/components/Products/Description';
-import Reference from '@/components/Products/Reference';
-// import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useGetSingleProductQuery } from '@/redux/features/products/productsApi';
-import { Imageurl } from '@/utils/Imageurl';
-import SingleProductSkeleton from '@/utils/SingleProductSkeleton';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '@/redux/features/cart/cartSlice';
+"use client";
 
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import { Package, Truck, Info, Check, RotateCcw } from "lucide-react";
+import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
+import Image from "next/image";
+import ReferencesTab from "./Tabs/ReferencesTab";
+import VehiclesTab from "./Tabs/VehiclesTab";
+import AlternativesTab from "./Tabs/AlternativesTab";
 
-const SingleProduct = () => {
-    const params = useParams();
-    const { data, isLoading } = useGetSingleProductQuery(params.id);
-    const [api, contextHolder] = notification.useNotification();
-    // const wheels = [wheel1, wheel2, wheel3, wheel4];
-    // const sizes = ['17', '18', '19']; // Array of sizes
-    const [activeTab, setActiveTab] = useState("description")
-    const [selectedWheel, setSelectedWheel] = useState(`${Imageurl}/${data?.data?.images[0]}`);
-    const [selectedSize, setSelectedSize] = useState<string | null>('');
+type Tab = "references" | "vehicles" | "alternatives";
 
-    const dispatch = useDispatch();
+interface NumberItem {
+  value: string;
+  isLink: boolean;
+}
 
-    const handleSelectWheel = (wheel: any) => {
-        setSelectedWheel(wheel);
-    };
+interface ReferenceItem {
+  manufacturer: string;
+  numbers: NumberItem[];
+}
 
-    const handleSelectSize = (size: string) => {
-        setSelectedSize(size);
-    };
+export default function SingleProduct() {
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading, isError } = useGetSingleProductQuery(id);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<Tab>("references");
 
-    const handleAddToCart = (data: any) => {
-        if (!selectedSize) {
-            api.open({
-                type: 'error',
-                message: 'Please select a size',
-                placement: 'top',
-            });
-            console.log('select color');
-            return;
-        }
-        const productToAdd = {
-            ...data,
-            size: selectedSize,
-        };
-        dispatch(addToCart(productToAdd))
-    }
-
+  if (isLoading) {
     return (
-        <div>
-            {contextHolder}
-            {
-                isLoading ?
-                    <SingleProductSkeleton></SingleProductSkeleton>
-                    :
-                    <div className="px-3 md:container mx-auto py-10 md:py-20 lg:flex gap-8">
-                        <div className='lg:w-1/2 flex gap-5'>
-                            <div className=' cursor-pointer flex flex-col gap-5 w-[35%] md:w-[30%] xl:w-[20%]'>
-                                {data?.data?.images?.map((image: any, index: number) => (
-                                    <div
-                                        key={index}
-                                        className={``}
-                                        onClick={() => handleSelectWheel(`${Imageurl}/${image}`)}
-                                    >
-                                        <Image
-                                            src={`${Imageurl}/${image}`}
-                                            alt={`Wheel ${index + 1}`}
-                                            width={500}
-                                            height={500}
-                                            className=' p-8  bg-[#f2fcf6]'
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                            <div className=' w-[80%] bg-[#f2fcf6] flex items-center justify-center'>
-                                <Image
-                                    src={selectedWheel}
-                                    alt={`Wheel`}
-                                    width={500}
-                                    height={500}
-                                    className=' p-8'
-                                />
-                            </div>
-                        </div>
-                        <div className=' lg:w-1/2'>
-                            <h2 className=' text-xl md:text-2xl font-semibold'>{data?.data?.name}</h2>
-                            <div className=' flex gap-1 md:gap-3 items-center mt-3'>
-                                <Rate disabled allowHalf defaultValue={data?.data?.avgRating} />
-                                <p className=' text-[#7f7f7f]'>({data?.data?.totalReviews} Reviews static)</p>
-                                <p className=' text-[#7f7f7f]'>|</p>
-                                <p className=' text-primary'>{data?.data?.stock}</p>
-                            </div>
-                            <div className=' py-4'>
-                                <h1 className=' text-4xl md:text-5xl font-bold dark:text-white'>${data?.data?.price}</h1>
-                            </div>
-                            <div>
-                                <p className=' text-lg pb-4 border-b-2 dark:text-white border-[#7f7f7f]'>
-                                    {data?.data?.description?.length > 220 ? `${data?.data?.description.substring(0, 220)}...` : data?.data?.description}
-                                </p>
-                            </div>
-                            <div className=' text-2xl flex justify-between items-center mt-4'>
-                                <div className=' flex gap-1 items-center dark:text-white'>
-                                    <h3>Brand:</h3>
-                                    <h3>{data?.data?.brandName}</h3>
-                                </div>
-                                <div className=' flex gap-1 items-center dark:text-white'>
-                                    <h3>Color:</h3>
-                                    <h3>{data?.data?.color}</h3>
-                                </div>
-                            </div>
-                            <div className='flex justify-between items-center mt-6'>
-                                <div className=' flex items-center '>
-                                    <h3 className=' text-2xl dark:text-white '>Size: </h3>
-                                    <div className='flex gap-3 items-center ml-3'>
-                                        {data?.data?.size?.map((size: any) => (
-                                            <button
-                                                key={size}
-                                                className={`border py-[6px] rounded-md px-2 cursor-pointer ${selectedSize === size ? 'bg-primary text-white' : 'bg-white'
-                                                    }`}
-                                                onClick={() => handleSelectSize(size)}
-                                            >
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                {/* <div className=' flex items-center'>
-                                    <button className=' py-[10px] rounded-l-md  px-2 border dark:border-white cursor-pointer hover:bg-primary hover:text-white dark:text-white'><FiMinus /></button>
-                                    <button className=' py-[6px] border-t border-y px-6  dark:text-white'>2</button>
-                                    <button className=' py-[10px] rounded-r-md  px-2 border dark:border-white cursor-pointer hover:bg-primary hover:text-white dark:text-white'><LuPlus /></button>
-                                </div> */}
-                            </div>
-                            <div className='mt-6 md:flex justify-between items-center'>
-                                <div className=' flex gap-4'>
-                                    {/* <Link href={`/cart`}> */}
-                                    <button onClick={() => handleAddToCart(data?.data)} className='border-2 border-primary dark:border-white w-full md:w-auto md:px-14 py-2 text-lg rounded text-primary font-semibold cursor-pointer'>Add to Cart</button>
-                                    {/* </Link> */}
-                                    <button className=' text-white bg-primary w-full md:w-auto md:px-14 py-2 text-lg rounded cursor-pointer  dark:text-white'>Buy Now</button>
-                                </div>
-                                <div className='mt-5 md:mt-0'>
-                                    <button className=' cursor-pointer'>
-                                        <IoIosHeartEmpty className=' border px-[7px] py-[4px] rounded w-10 h-10 dark:text-white dark:border-white' />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className=' border mt-8 rounded-md dark:border-white'>
-                                <div className=' py-5 px-6 flex items-center gap-5 text-lg border-b dark:border-white dark:text-white'>
-                                    <PiTruck size={30} className=' dark:text-white' />
-                                    <div>
-                                        <p className=' font-semibold dark:text-white'>$50 off standard delivery in your area.</p>
-                                        <p className=' dark:text-white'>Enter your postal code for Delivery Availability</p>
-                                    </div>
-                                </div>
-                                <div className=' py-5 px-6 flex items-center gap-5 text-lg'>
-                                    <TfiReload size={30} className=' dark:text-white ' />
-                                    <div>
-                                        <p className=' font-semibold dark:text-white'>Return Delivery</p>
-                                        <p className=' dark:text-white'>Free 30 Days Delivery Returns. Details</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            }
-
-            <div className=" container mx-auto">
-                {/* Custom Tabs */}
-                <div className="w-full">
-                    <div className="flex border-b dark:border-white">
-                        <div className="w-full flex">
-                            <button
-                                onClick={() => setActiveTab("reference")}
-                                className={`flex-1 py-3 text-center dark:text-white ${activeTab === "reference"
-                                    ? "border-b-2 border-black font-medium"
-                                    : "text-gray-500 hover:text-gray-700 "
-                                    } cursor-pointer`}
-                            >
-                                Reference
-                            </button>
-                            <button
-                                onClick={() => setActiveTab("description")}
-                                className={`flex-1 py-3 text-center dark:text-white ${activeTab === "description"
-                                    ? "border-b-2 border-black font-medium"
-                                    : "text-gray-500 hover:text-gray-700"
-                                    } cursor-pointer`}
-                            >
-                                Description
-                            </button>
-                            <button
-                                onClick={() => setActiveTab("reviews")}
-                                className={`flex-1 py-3 text-center dark:text-white ${activeTab === "reviews" ? "border-b-2 border-black font-medium" : "text-gray-500 hover:text-gray-700"
-                                    } cursor-pointer`}
-                            >
-                                Reviews(48)
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Description Tab Content */}
-                    {activeTab === "description" && (
-                        <Description description={data?.data?.description}></Description>
-                    )}
-
-                    {/* Reviews Tab Content */}
-                    {activeTab === "reviews" && (
-                        <Reviews avgReview={data?.data?.avgRating} id={data?.data?._id}></Reviews>
-                    )}
-
-                    {activeTab === "reference" && (
-                        <Reference oe={data?.data?.oe} crn={data?.data?.crm}></Reference>
-                    )}
-                </div>
-            </div>
-        </div>
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-black">
+        <p className="text-lg font-medium text-gray-900 dark:text-white">
+          Loading product details...
+        </p>
+      </div>
     );
-};
+  }
 
-export default SingleProduct;
+  if (isError || !data?.data) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-black">
+        <p className="text-lg text-red-600 dark:text-red-400">
+          Failed to load product details.
+        </p>
+      </div>
+    );
+  }
+
+  const product = data.data;
+
+  // Prepare references
+  const referenceItems: ReferenceItem[] = [];
+  if (product.references?.length) {
+    referenceItems.push({
+      manufacturer: "OE Numbers",
+      numbers: product.references.map((ref: any) => ({
+        value: ref.number,
+        isLink: true,
+      })),
+    });
+  }
+  if (product.crossReferences?.length) {
+    referenceItems.push({
+      manufacturer: "Cross Reference Numbers",
+      numbers: product.crossReferences.map((ref: any) => ({
+        value: ref.number,
+        isLink: false,
+      })),
+    });
+  }
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white py-8 p-6 lg:p-0 mb-6">
+      <div className="mx-auto container">
+        {/* Header */}
+        <div className="mb-6 flex items-center gap-3 md:mb-8">
+          <div className="flex h-8 w-8 items-center justify-center rounded bg-red-600 md:h-10 md:w-10">
+            <svg
+              viewBox="0 0 24 24"
+              fill="white"
+              className="h-5 w-5 md:h-6 md:w-6"
+            >
+              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+            </svg>
+          </div>
+          <h1 className="text-xl font-semibold md:text-2xl">{product.productName}</h1>
+        </div>
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[minmax(300px,400px)_1fr] xl:grid-cols-[400px_1fr_350px]">
+          {/* Product Image */}
+          <div className="flex items-start justify-center rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 md:p-6">
+            <Image
+              src={product.productImages?.[0] || "/placeholder.png"}
+              alt={product.productName}
+              width={400}
+              height={400}
+              unoptimized
+              className="w-full max-w-[350px] object-contain"
+            />
+          </div>
+
+          {/* Specs & Shipping */}
+          <div className="space-y-4">
+            {/* Specifications */}
+            <div className="border rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <div className="flex items-center gap-2 text-base font-medium md:text-lg border-b border-gray-300 dark:border-gray-700 p-4">
+                <Package className="h-4 w-4 md:h-5 md:w-5 text-gray-500 dark:text-gray-300" />
+                Specifications
+              </div>
+              <div className="p-4">
+                {product.sections?.flatMap((section: any, sectionIndex: number) =>
+                  section.fields.map((field: any, fieldIndex: number) => (
+                    <div
+                      key={`${sectionIndex}-${fieldIndex}`}
+                      className="flex flex-col gap-1 border-b border-gray-300 dark:border-gray-700 py-2 last:border-0 sm:flex-row sm:justify-between"
+                    >
+                      <span className="text-sm text-gray-500 dark:text-gray-300">{field.fieldName}</span>
+                      <span className="text-sm font-medium">{field.valueString ?? field.valueInt ?? field.valueFloat ?? "-"}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Shipping Details */}
+            <div className="border rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <div className="flex items-center gap-2 text-base font-medium md:text-lg p-4">
+                <Truck className="h-4 w-4 md:h-5 md:w-5 text-gray-500 dark:text-gray-300" />
+                Shipping Details
+              </div>
+              <div className="p-4">
+                {product.shippings?.map((ship: any, i: number) => (
+                  <div
+                    key={i}
+                    className="flex flex-col gap-1 border-b border-gray-300 dark:border-gray-700 py-2 last:border-0 sm:flex-row sm:justify-between"
+                  >
+                    <span className="text-sm text-gray-500 dark:text-gray-300">
+                      {ship.countryName} ({ship.carrier})
+                    </span>
+                    <span className="text-sm font-medium">
+                      ${ship.cost} — {ship.deliveryMin}-{ship.deliveryMax} days
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Price & Cart */}
+          <div className="lg:col-span-2 xl:col-span-1">
+            <div className="sticky top-4 border rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 md:p-6 space-y-4">
+              <div className="space-y-2">
+                <div className="text-3xl font-bold md:text-4xl">${product.price}</div>
+                <div className="flex items-center gap-1 text-xs md:text-sm text-gray-500 dark:text-gray-300">
+                  <span>Price excludes VAT</span>
+                  <Info className="h-3 w-3 md:h-4 md:w-4" />
+                </div>
+              </div>
+
+              <div className="space-y-2 border-y border-gray-300 dark:border-gray-700 py-4">
+                <div className="flex items-center gap-2 text-sm text-green-600">
+                  <Check className="h-4 w-4" />
+                  <span className="font-medium">Dispatch on next business day</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300">
+                  <RotateCcw className="h-4 w-4" />
+                  <span>Easy returns</span>
+                </div>
+              </div>
+
+              {/* Quantity & Add to Cart */}
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min={1}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value) || 1)}
+                  className="w-20 rounded border border-gray-300 dark:border-gray-700 px-2 text-center bg-white dark:bg-gray-800 text-black dark:text-white"
+                />
+                <button className="flex-1 py-2 flex items-center justify-center gap-2 rounded bg-blue-600 hover:bg-blue-700 text-white">
+                  Add To Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-4 mb-6 mt-6">
+          {["references", "vehicles", "alternatives"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as Tab)}
+              className={`pb-3 text-sm font-medium ${
+                activeTab === tab
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500 dark:text-gray-300"
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === "references" && <ReferencesTab referenceItems={referenceItems} />}
+        {activeTab === "vehicles" && <VehiclesTab fitVehicles={product.fitVehicles || []} />}
+        {activeTab === "alternatives" && <AlternativesTab similarProducts={product.similarProducts || []} />}
+      </div>
+    </div>
+  );
+}

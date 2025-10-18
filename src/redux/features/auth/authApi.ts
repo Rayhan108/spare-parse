@@ -6,7 +6,7 @@ const authApi = baseApi.injectEndpoints({
 
         SignUp: builder.mutation({
             query: (LogInData) => ({
-                url: '/auth/signup',
+                url: '/users/register',
                 method: 'POST',
                 body: LogInData,
             }),
@@ -14,15 +14,23 @@ const authApi = baseApi.injectEndpoints({
 
         otpVerification: builder.mutation({
             query: (data) => ({
-                url: '/auth/verify-signup-otp',
-                method: 'POST',
+                url: '/users/verify-otp',
+                method: 'PUT',
+                body: data,
+            }),
+        }),
+
+         resendOtpVerification: builder.mutation({
+            query: (data) => ({
+                url: '/users/verify-otp',
+                method: 'PUT',
                 body: data,
             }),
         }),
 
         logIn: builder.mutation({
             query: (LogInData) => ({
-                url: '/auth/signin',
+                url: '/auth/login',
                 method: 'POST',
                 body: LogInData,
             }),
@@ -38,7 +46,7 @@ const authApi = baseApi.injectEndpoints({
 
         verifyEmail: builder.mutation({
             query: (data) => ({
-                url: '/auth/verify-otp',
+                url: '/users/verify-otp',
                 method: 'POST',
                 body: data,
             }),
@@ -62,11 +70,10 @@ const authApi = baseApi.injectEndpoints({
 
         editAdminProfile: builder.mutation({
             query: (data) => ({
-                url: '/auth/edit-profile',
-                method: 'PATCH',
+                url: '/users/update-profile', // correct endpoint
+                method: 'PUT',
                 body: data,
             }),
-
         }),
 
         getAdminProfile: builder.query({
@@ -80,4 +87,4 @@ const authApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useSignUpMutation, useOtpVerificationMutation, useLogInMutation, useForgetPasswordMutation, useVerifyEmailMutation, useResetAdminPasswordMutation, useChangeAdminPasswordMutation, useEditAdminProfileMutation, useGetAdminProfileQuery } = authApi;
+export const { useSignUpMutation, useOtpVerificationMutation, useLogInMutation, useForgetPasswordMutation, useVerifyEmailMutation, useResetAdminPasswordMutation, useChangeAdminPasswordMutation, useEditAdminProfileMutation, useGetAdminProfileQuery, useResendOtpVerificationMutation } = authApi;
