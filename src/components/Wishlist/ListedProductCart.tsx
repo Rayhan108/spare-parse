@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useDispatch } from "react-redux";
-import { addToCart } from "@/redux/features/cart/cartSlice";
+// import { useDispatch } from "react-redux";
+// import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useDeleteWishlistItemMutation } from "@/redux/features/wishlist/wishlistApi";
 
 // ------------------- Product type -------------------
@@ -21,7 +21,7 @@ interface ListedProductCartProps {
 }
 
 const ListedProductCart = ({ product }: ListedProductCartProps) => {
-  const dispatch = useDispatch();
+//   const dispatch = useDispatch();
   const [deleteWishlistItem, { isLoading }] = useDeleteWishlistItemMutation();
 
   // Title and pricing
@@ -38,10 +38,10 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
       : "/placeholder.svg";
 
   // ------------------- Handlers -------------------
-  const handleAddToCart = async () => {
-    dispatch(addToCart(product));
-    await handleRemoveWishlist();
-  };
+//   const handleAddToCart = async () => {
+//     dispatch(addToCart(product));
+//     await handleRemoveWishlist();
+//   };
 
   const handleRemoveWishlist = async () => {
     try {
@@ -89,7 +89,7 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
       </div>
 
       <button
-        onClick={handleAddToCart}
+        // onClick={handleAddToCart}
         className="flex gap-2 w-full items-center justify-center bg-primary py-3 text-white rounded-b cursor-pointer"
       >
         <HiOutlineShoppingCart size={25} />

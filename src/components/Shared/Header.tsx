@@ -279,10 +279,11 @@ import MobileMenu from "./MobileMenu";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useGetCartQuery } from "@/redux/features/cart/cartApi";
 import { useGetWishlistQuery } from "@/redux/features/wishlist/wishlistApi";
-
+import { RootState } from "@/redux/store";
 const Header = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.logInUser?.user);
+  const user = useSelector((state: RootState) => state.logInUser?.user);
+  console.log("user in header:", user);
   const token = Cookies.get("hatem-ecommerce-token");
 
   // ------------------- Dark Mode -------------------

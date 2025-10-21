@@ -1,219 +1,122 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
-import { Breadcrumb, Checkbox, ConfigProvider } from 'antd';
-import type { FormProps } from 'antd';
-import { Form, Input } from 'antd';
-import Image from 'next/image';
-import Link from 'next/link';
-// import productImage from '../../../../public/products/monitor.png'
-import { useSelector } from 'react-redux';
-import { Imageurl } from '@/utils/Imageurl';
+"use client";
 
-const Checkout = () => {
-    const products = useSelector((state: any) => state.cart)
-    console.log(products.products);
-    type FieldType = {
-        name?: string;
-        street?: string;
-        apartment?: string;
-        city?: string;
-        phone?: string;
-        email?: string;
-        save?: boolean;
-    };
+import { Breadcrumb, Checkbox, ConfigProvider, Form, Input, message } from "antd";
+import Image from "next/image";
+import Link from "next/link";
+import { useGetCheckoutQuery } from "@/redux/features/checkout/checkoutApi";
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        console.log('Success:', values);
-    };
+const CheckoutPage = () => {
+  const { data, isLoading, isError } = useGetCheckoutQuery();
+  const checkouts = data?.data || [];
 
-    return (
-        <div className=' container px-3 md:px-0 mx-auto py-16'>
-            <Breadcrumb
-                items={[
-                    {
-                        title: <Link href={`/`}><p className="dark:text-white">Home</p></Link>,
-                    },
-                    {
-                        title: <Link className="dark:text-white" href={`/cart`}><p className="dark:text-white">Cart</p></Link>,
-                    },
-                    {
-                        title: <Link className="dark:text-white" href={`/checkout`}><p className="dark:text-white">Checkout</p></Link>,
-                    },
-                ]}
-            />
-            <div className=' flex flex-col lg:flex-row items-center justify-between gap-20'>
-                <div className=' w-full sm:w-[450px] mt-8'>
-                    <h1 className=' text-3xl md:text-4xl font-semibold mb-5 dark:text-white'>Billing Details</h1>
-                    <ConfigProvider
-                        theme={{
-                            components: {
-                                Input: {
-                                    "borderRadius": 2,
-                                    "colorBorder": "rgb(245,245,245)",
-                                    "activeBg": "rgb(245,245,245)",
-                                    "activeBorderColor": "rgb(245,245,245)",
-                                    "hoverBorderColor": "rgb(245,245,245)",
-                                    "colorPrimaryActive": "rgb(245,245,245)",
-                                    "colorPrimaryHover": "rgb(245,245,245)",
-                                    "colorBgContainer": "rgb(245,245,245)",
-                                    "controlHeight": 40,
-                                },
-                                "Checkbox": {
-                                    "colorPrimary": "rgb(223,88,0)",
-                                    "colorPrimaryBorder": "rgb(223,88,0)",
-                                    "colorPrimaryHover": "rgb(223,88,0)"
-                                }
-                            },
-                        }}
-                    >
-                        <Form
-                            name="checkout"
-                            layout="vertical"
-                            onFinish={onFinish}
-                            autoComplete="off"
-                        >
-                            <Form.Item<FieldType>
-                                label={<p className="dark:text-white">Name</p>}
-                                name="name"
-                                rules={[{ required: true, message: 'Please input your name!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
+  type FieldType = {
+    name?: string;
+    street?: string;
+    apartment?: string;
+    city?: string;
+    phone?: string;
+    email?: string;
+    save?: boolean;
+  };
 
-                            <Form.Item<FieldType>
-                                label={<p className="dark:text-white">Street Address</p>}
-                                name="street"
-                                rules={[{ required: true, message: 'Please input your street address!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
+  const onFinish = (values: FieldType) => {
+    message.success("Billing info submitted!");
+    console.log("Billing Info:", values);
+  };
 
-                            <Form.Item<FieldType>
-                                label={<p className="dark:text-white">Apartment, floor, etc. (optional)</p>}
-                                name="apartment"
-                                rules={[{ required: true, message: 'Please input your apartment, floor, etc!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
+  if (isLoading) return <p className="text-center py-16">Loading checkout data...</p>;
+  if (isError) return <p className="text-center py-16 text-red-500">Failed to load checkout data</p>;
+  if (checkouts.length === 0) return <p className="text-center py-16 text-gray-500 dark:text-gray-300">No checkouts found</p>;
 
-                            <Form.Item<FieldType>
-                                label={<p className="dark:text-white">Town/City</p>}
-                                name="city"
-                                rules={[{ required: true, message: 'Please input your town/city!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
+  return (
+    <div className="container mx-auto px-3 md:px-0 py-16">
+      <Breadcrumb
+        items={[
+          { title: <Link href="/"><p className="dark:text-white">Home</p></Link> },
+          { title: <Link href="/cart"><p className="dark:text-white">Cart</p></Link> },
+          { title: <p className="dark:text-white">Checkout</p> },
+        ]}
+      />
 
-                            <Form.Item<FieldType>
-                                label={<p className="dark:text-white">Phone Number</p>}
-                                name="phone"
-                                rules={[{ required: true, message: 'Please input your number!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item<FieldType>
-                                label={<p className="dark:text-white">Email Address</p>}
-                                name="email"
-                                rules={[{ required: true, message: 'Please input your email!' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item<FieldType> name="save" valuePropName="checked" >
-                                <Checkbox>
-                                    <span className="dark:text-white">
-                                        Save this information for faster check-out next time
-                                    </span>
-                                </Checkbox>
-                            </Form.Item>
-
-                        </Form>
-                    </ConfigProvider>
-                </div>
-
-                <div className="w-full sm:w-[440px] mx-auto p-6">
-                    <div className="space-y-6">
-                        {/* Cart Items */}
-                        <div className="space-y-4">
-                            {
-                                products.products.map((product:any) => {
-                                    return (
-                                        <div key={product._id} className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <Image src={`${Imageurl}/${product.images[0]}`} alt="LCD Monitor" width={48} height={48} className="object-contain" />
-                                                <span className="font-medium dark:text-white">{product.name}</span>
-                                            </div>
-                                            <span className="font-medium dark:text-white">${product.price} X {product.quantity}</span>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-
-                        {/* Summary */}
-                        <div className="space-y-3">
-                            <div className="flex justify-between py-3">
-                                <span className="font-medium dark:text-white">Subtotal:</span>
-                                <span className="font-medium dark:text-white">${products?.total}</span>
-                            </div>
-
-                            <div className="flex justify-between py-3 border-t border-gray-500">
-                                <span className="font-medium dark:text-white">Shipping:</span>
-                                <span className="font-medium dark:text-white">Free</span>
-                            </div>
-
-                            <div className="flex justify-between py-3 border-t border-gray-500">
-                                <span className="font-medium dark:text-white">Total:</span>
-                                <span className="font-medium dark:text-white">${products?.total}</span>
-                            </div>
-                        </div>
-
-                        {/* Payment Methods */}
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        id="onlinePayment"
-                                        value="onlinePayment"
-                                        className="w-4 h-4 accent-black dark:accent-white border-black dark:border-white focus:ring-0"
-                                    />
-                                    <label htmlFor="onlinePayment" className="cursor-pointer dark:text-white">
-                                        Online Payment
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="radio"
-                                    name="payment"
-                                    id="cash"
-                                    value="cash"
-                                    defaultChecked
-                                    className="w-4 h-4 accent-black dark:accent-white border-black dark:border-white focus:ring-0 dark:text-white"
-                                />
-                                <label htmlFor="cash" className="cursor-pointer dark:text-white">
-                                    Cash on delivery
-                                </label>
-                            </div>
-                        </div>
-
-                        {/* Place Order Button */}
-                        <button
-                            type="button"
-                            className="w-full bg-primary cursor-pointer text-white py-3 rounded font-medium transition-colors"
-                        >
-                            Place Order
-                        </button>
-                    </div>
-                </div>
-
-            </div>
+      <div className="flex flex-col lg:flex-row items-start justify-between gap-20 mt-8">
+        {/* Billing Form */}
+        <div className="w-full sm:w-[450px]">
+          <h1 className="text-3xl md:text-4xl font-semibold mb-5 dark:text-white">Billing Details</h1>
+          <ConfigProvider
+            theme={{
+              components: {
+                Input: { controlHeight: 40, borderRadius: 2, colorBgContainer: "rgb(245,245,245)" },
+                Checkbox: { colorPrimary: "rgb(223,88,0)" },
+              },
+            }}
+          >
+            <Form layout="vertical" onFinish={onFinish} autoComplete="off">
+              <Form.Item<FieldType> label="Name" name="name" rules={[{ required: true, message: "Please input your name!" }]}><Input /></Form.Item>
+              <Form.Item<FieldType> label="Street Address" name="street" rules={[{ required: true, message: "Please input your street address!" }]}><Input /></Form.Item>
+              <Form.Item<FieldType> label="Apartment, floor, etc." name="apartment"><Input /></Form.Item>
+              <Form.Item<FieldType> label="Town/City" name="city" rules={[{ required: true, message: "Please input your town/city!" }]}><Input /></Form.Item>
+              <Form.Item<FieldType> label="Phone Number" name="phone" rules={[{ required: true, message: "Please input your number!" }]}><Input /></Form.Item>
+              <Form.Item<FieldType> label="Email Address" name="email" rules={[{ required: true, message: "Please input your email!" }]}><Input /></Form.Item>
+              <Form.Item<FieldType> name="save" valuePropName="checked"><Checkbox>Save this information for faster check-out next time</Checkbox></Form.Item>
+            </Form>
+          </ConfigProvider>
         </div>
-    );
+
+        {/* Order Summary */}
+        <div className="w-full sm:w-[440px] p-6 space-y-6">
+          {checkouts.map((checkout) => (
+            <div key={checkout.id} className="border p-4 rounded-lg dark:border-gray-600 space-y-4">
+              {checkout.items.map((item) => (
+                <div key={item.id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={item.product.productImages[0]}
+                      alt={item.product.productName}
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
+                    <span className="font-medium dark:text-white">{item.product.productName}</span>
+                  </div>
+                  <span className="font-medium dark:text-white">${item.product.price} × {item.quantity}</span>
+                </div>
+              ))}
+
+              {/* Summary */}
+              <div className="border-t pt-3 space-y-2">
+                <div className="flex justify-between">
+                  <span className="font-medium dark:text-white">Subtotal:</span>
+                  <span className="font-medium dark:text-white">${checkout.totalAmount}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium dark:text-white">Shipping:</span>
+                  <span className="font-medium dark:text-white">Free</span>
+                </div>
+                <div className="flex justify-between border-t pt-2">
+                  <span className="font-medium dark:text-white">Total:</span>
+                  <span className="font-medium dark:text-white">${checkout.totalAmount}</span>
+                </div>
+              </div>
+
+              {/* Payment */}
+              <div className="space-y-2 mt-2">
+                <div className="flex items-center space-x-2">
+                  <input type="radio" name={`payment-${checkout.id}`} id={`online-${checkout.id}`} value="online" className="w-4 h-4 accent-black dark:accent-white" />
+                  <label htmlFor={`online-${checkout.id}`} className="dark:text-white cursor-pointer">Online Payment</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input type="radio" name={`payment-${checkout.id}`} id={`cash-${checkout.id}`} value="cash" defaultChecked className="w-4 h-4 accent-black dark:accent-white" />
+                  <label htmlFor={`cash-${checkout.id}`} className="dark:text-white cursor-pointer">Cash on delivery</label>
+                </div>
+              </div>
+
+              <button className="w-full bg-primary text-white py-3 rounded font-medium mt-2">Place Order</button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default Checkout;
+export default CheckoutPage;
