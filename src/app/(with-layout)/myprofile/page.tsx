@@ -74,7 +74,7 @@ const AccountDetails = () => {
         <div>
           <div className="mb-5">
             <p>Current Password</p>
-            <p>********</p>
+            <p>*********</p>
           </div>
         </div>
         <div>
