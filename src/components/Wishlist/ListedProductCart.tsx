@@ -6,6 +6,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 // import { useDispatch } from "react-redux";
 // import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useDeleteWishlistItemMutation } from "@/redux/features/wishlist/wishlistApi";
+import { notification } from "antd";
 
 // ------------------- Product type -------------------
 export interface Product {
@@ -30,6 +31,7 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
   const price = product.price - product.price * discount;
   const originalPrice = product.price;
   const discountPercentage = product.discount || 0;
+   const [api, contextHolder] = notification.useNotification();
 
   // Image
   const imageSrc =
@@ -45,11 +47,21 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
 
   const handleRemoveWishlist = async () => {
     try {
-      // Use product.id, not wishlist ID
       await deleteWishlistItem(product.id).unwrap();
+      api.open({
+        type: "success",
+        message: "Wishlist",
+        description: "Item removed from wishlist successfully!",
+        placement: "topRight",
+      });
     } catch (error) {
       console.error("Failed to remove wishlist item:", error);
-      alert("Could not remove the item from wishlist. Please try again.");
+      api.open({
+        type: "error",
+        message: "Wishlist Error",
+        description: "Could not remove the item. Please try again.",
+        placement: "topRight",
+      });
     }
   };
 
@@ -62,6 +74,8 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
             -{discountPercentage}%
           </div>
         )}
+
+        {contextHolder}
 
         <button
           onClick={handleRemoveWishlist}

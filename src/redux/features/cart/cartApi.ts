@@ -33,7 +33,7 @@ interface Product {
   price: number;
   discount: number;
   stock: number;
-  productImages: string[];
+  productImages?: string[];
   isVisible: boolean;
   createdAt: string;
   seller: Seller;
@@ -50,6 +50,7 @@ export interface CartItem {
   createdAt: string;
   updatedAt: string;
   product: Product;
+  quantity: number;
 }
 
 // 🧩 Meta information (pagination)

@@ -210,10 +210,12 @@ import AlternativesTab from "./Tabs/AlternativesTab";
 import ShippingRates from "./Tabs/ShippingRates";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
-import { toast } from "react-toastify";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+// import { toast } from "react-toastify";
+// import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { Package, Info, Check, RotateCcw } from "lucide-react";
 import SingleProductSkeleton from "@/utils/SingleProductSkeleton";
+import Cookies from "js-cookie";
+import { notification } from "antd";
 
 type Tab = "references" | "vehicles" | "alternatives";
 
@@ -275,33 +277,60 @@ export default function SingleProduct() {
   const [quantity, setQuantity] = useState<number>(1);
   const [activeTab, setActiveTab] = useState<Tab>("references");
   const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
-
+const [api, contextHolder] = notification.useNotification();
   if (isLoading) return <SingleProductSkeleton />;
   if (isError || !data?.data) return <p>Failed to load product details.</p>;
 
   const product: Product = data.data;
 
-  const handleAddToCart = async () => {
-    try {
-      const payload: AddToCartRequest = { productId: product.id };
-      const response = await addToCart(payload).unwrap();
-      toast.success(response.message);
-    } catch (err) {
-      if ('status' in (err as FetchBaseQueryError)) {
-        const fetchError = err as FetchBaseQueryError;
-        const message =
-          'data' in fetchError && fetchError.data && typeof fetchError.data === 'object' && 'message' in fetchError.data
-            ? (fetchError.data as { message: string }).message
-            : 'Failed to add product to cart';
-        toast.error(message);
-      } else {
-        toast.error('Failed to add product to cart');
-      }
-      console.error("Add to cart failed:", err);
-    }
-  };
 
-  // Map references
+
+
+
+  const handleAddToCart = async () => {
+  try {
+    // ✅ Check if user is logged in
+    const token = Cookies.get("hatem-ecommerce-token");
+    if (!token) {
+      api.open({
+        type: "warning",
+        message: "Login Required",
+        description: "Please log in to add products to your cart.",
+        placement: "topRight",
+      });
+      return;
+    }
+    
+
+    const payload: AddToCartRequest = { productId: product.id };
+    const response = await addToCart(payload).unwrap();
+
+    api.open({
+      type: "success",
+      message: "Cart",
+      description: response.message || "Product added to cart successfully!",
+      placement: "topRight",
+    });
+  } catch (err: unknown) {
+    let errorMessage = "Failed to add product to cart";
+
+    if (err && typeof err === "object" && "data" in err) {
+      const fetchError = err as { data?: { message?: string } };
+      errorMessage = fetchError.data?.message || errorMessage;
+    } else if (err instanceof Error) {
+      errorMessage = err.message;
+    }
+
+    api.open({
+      type: "error",
+      message: "Cart Error",
+      description: errorMessage,
+      placement: "topRight",
+    });
+
+    console.error("Add to cart failed:", err);
+  }
+};
   const referenceItems = product.references?.length
     ? [
       {
@@ -414,7 +443,9 @@ export default function SingleProduct() {
                   onChange={(e) => setQuantity(Number(e.target.value) || 1)}
                   className="w-20 rounded border border-gray-300 dark:border-gray-700 px-2 text-center bg-white dark:bg-gray-800 text-black dark:text-white"
                 />
+                 {contextHolder}
                 <button
+
                   onClick={handleAddToCart}
                   disabled={isAdding}
                   className="flex-1 py-2 flex items-center justify-center gap-2 rounded bg-primary text-white"

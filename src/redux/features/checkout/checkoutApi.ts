@@ -18,10 +18,22 @@ export interface CheckoutItem {
     productName: string;
     price: number;
     discount: number;
+    productImages: string[];
   };
 }
 
 // 🧩 Checkout data
+// export interface CheckoutData {
+//   id: string;
+//   userId: string;
+//   totalAmount: number;
+//   status: string;
+//   createdAt: string;
+//   updatedAt: string;
+//   items: CheckoutItem[];
+//   length: number;
+// }\
+
 export interface CheckoutData {
   id: string;
   userId: string;
@@ -31,6 +43,9 @@ export interface CheckoutData {
   updatedAt: string;
   items: CheckoutItem[];
 }
+
+// API returns: CheckoutData[]
+
 
 // 🧩 Full API response
 export interface CheckoutResponse {

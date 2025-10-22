@@ -3,21 +3,24 @@
 import { Breadcrumb, Checkbox, ConfigProvider, Form, Input, message } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetCheckoutQuery } from "@/redux/features/checkout/checkoutApi";
+import { useGetCheckoutQuery, CheckoutData, CheckoutItem } from "@/redux/features/checkout/checkoutApi";
+
+type FieldType = {
+  name?: string;
+  street?: string;
+  apartment?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  save?: boolean;
+};
 
 const CheckoutPage = () => {
   const { data, isLoading, isError } = useGetCheckoutQuery();
-  const checkouts = data?.data || [];
 
-  type FieldType = {
-    name?: string;
-    street?: string;
-    apartment?: string;
-    city?: string;
-    phone?: string;
-    email?: string;
-    save?: boolean;
-  };
+  // ✅ Use the imported CheckoutData type
+const checkouts: CheckoutData[] = Array.isArray(data?.data) ? data.data : data?.data ? [data.data] : [];
+
 
   const onFinish = (values: FieldType) => {
     message.success("Billing info submitted!");
@@ -66,7 +69,7 @@ const CheckoutPage = () => {
         <div className="w-full sm:w-[440px] p-6 space-y-6">
           {checkouts.map((checkout) => (
             <div key={checkout.id} className="border p-4 rounded-lg dark:border-gray-600 space-y-4">
-              {checkout.items.map((item) => (
+              {checkout.items.map((item: CheckoutItem) => (
                 <div key={item.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Image
