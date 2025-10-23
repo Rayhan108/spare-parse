@@ -12,6 +12,7 @@ import {
     useGetEnginesByModelQuery,
     useGetCarBrandsQuery,
 } from "@/redux/features/carBrand/carBrandApi";
+import { useRouter } from "next/navigation";
 
 // -------------------- Types --------------------
 interface Brand {
@@ -82,8 +83,9 @@ const SelectYourVehicle = () => {
 
     // Year options hardcoded 1976 → current year
     const currentYear = new Date().getFullYear();
+
     const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
-        const y = String(1976 + i);
+        const y = String(currentYear - i);
         return { value: y, label: y };
     });
 
@@ -184,6 +186,15 @@ const SelectYourVehicle = () => {
         currentPage * pageSize
     );
 
+
+const router = useRouter();
+
+const handleClick = (engineId: string) => {
+    // Navigate to /vehicle with query parameter
+    router.push(`/vehicle?engineId=${engineId}`);
+};
+
+
     return (
         <div className="container mx-auto py-8 md:py-16">
             {/* Vehicle selectors */}
@@ -266,6 +277,7 @@ const SelectYourVehicle = () => {
                     ) : paginatedProducts.length > 0 ? (
                         paginatedProducts.map(product => (
                             <div
+                             onClick={() => handleClick(product.id)}
                                 key={product.id}
                                 className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                             >

@@ -10,36 +10,40 @@ import our_story from "../../../../public/our_story.png";
 import delivery from "../../../../public/service/delivery.svg";
 import customer_service from "../../../../public/service/customer_service.svg";
 import money_back from "../../../../public/service/money_back.svg";
-import person1 from "../../../../public/about/person1.png";
-import person2 from "../../../../public/about/person2.png";
-import person3 from "../../../../public/about/person3.png";
 
-import { useGetAboutUsQuery } from "@/redux/features/aboutUs/aboutUsApi"; // ✅ import the API hook
+import { useGetAboutUsQuery } from "@/redux/features/aboutUs/aboutUsApi";
+import { useGetFoundingTeamsQuery } from "@/redux/features/foundingTeam/foundingTeam";
+
 
 const About = () => {
-  // ✅ Fetch data from API
+  // Fetch About Us data
   const { data, isLoading, isError } = useGetAboutUsQuery();
-
   const about = data?.data;
 
-  if (isLoading)
+  // Fetch Founding Team data
+  const { data: teamData, isLoading: isTeamLoading, isError: isTeamError } = useGetFoundingTeamsQuery();
+
+
+  const teamMembers = teamData?.data || [];
+
+  if (isLoading || isTeamLoading)
     return (
       <div className="flex justify-center items-center h-96">
         <Spin size="large" />
       </div>
     );
 
-  if (isError)
+  if (isError || isTeamError)
     return (
       <div className="flex justify-center items-center h-96">
-        <p className="text-red-500 text-lg">Failed to load About Us content.</p>
+        <p className="text-red-500 text-lg">Failed to load content.</p>
       </div>
     );
 
   return (
     <div className="relative px-3 md:px-0">
       <div className="container mx-auto py-16">
-        {/* ✅ Breadcrumb */}
+        {/* Breadcrumb */}
         <Breadcrumb
           items={[
             {
@@ -59,21 +63,19 @@ const About = () => {
           ]}
         />
 
-        {/* ✅ Our Story Section */}
-        <div className="flex dark:text-white">
+        {/* Our Story Section */}
+        <div className="flex dark:text-white items-start">
           <div className="md:w-1/2 h-[400px] 2xl:h-[700px] flex flex-col justify-center">
-            <h2 className="text-5xl font-bold">
-              {about?.heading || "Our Story"}
-            </h2>
+            <h2 className="text-5xl font-bold">{about?.heading || "Our Story"}</h2>
             <p className="mt-5 text-lg">
               {about?.content ||
                 "At Sparedoc, we're transforming the way you shop for car parts. As a trusted e-commerce platform, we offer a wide selection of genuine and aftermarket auto components, accessories, and tools."}
             </p>
           </div>
-          <div>
+          <div className="relative">
             <Image
               src={our_story}
-              className="hidden lg:block absolute right-0 top-34 w-[450px] 2xl:w-[750px]"
+              className="hidden lg:block w-[450px] 2xl:w-[750px]"
               height={500}
               width={500}
               alt="our story"
@@ -81,36 +83,32 @@ const About = () => {
           </div>
         </div>
 
-        {/* ✅ Team Section */}
+        {/* Founding Team Section */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-14 dark:text-white">
-          {[person1, person2, person3].map((img, idx) => {
-            const members = [
-              { name: "Tom Cruise", title: "Founder & Chairman" },
-              { name: "Emma Watson", title: "Manager" },
-              { name: "Will Smith", title: "Sales Man" },
-            ];
-            return (
-              <div key={idx}>
-                <Image src={img} alt="team member" width={500} height={500} />
-                <div className="mt-4">
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl mb-2">
-                    {members[idx].name}
-                  </h2>
-                  <p className="text-md md:text-lg lg:text-xl mb-3">
-                    {members[idx].title}
-                  </p>
-                  <div className="flex gap-4 items-center">
-                    <FaXTwitter size={25} />
-                    <FaInstagram size={25} />
-                    <RiLinkedinLine size={25} />
-                  </div>
+          {teamMembers.map((member) => (
+            <div key={member.id}>
+              <Image
+                src={member.image}
+                alt={member.name}
+                width={500}
+                height={500}
+              />
+              <div className="mt-4">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl mb-2">{member.name}</h2>
+                <p className="text-md md:text-lg lg:text-xl mb-3">{member.role}</p>
+                <div className="flex gap-4 items-center">
+                  {member.twitter && <FaXTwitter size={25} />}
+                  {member.instagram && <FaInstagram size={25} />}
+                  {member.linkedin && <RiLinkedinLine size={25} />}
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
-        {/* ✅ Service Section */}
+
+        {/* Service Section */}
         <div className="px-3 xl:px-0 xl:w-[1100px] mx-auto py-16 md:py-20 dark:text-white">
           <div className="flex flex-col md:flex-row gap-16 md:gap-0 justify-between">
             <div className="flex flex-col justify-center items-center">
