@@ -1,251 +1,14 @@
 
-
-// // import { baseApi } from "../../api/baseApi";
-
-// // const authApi = baseApi.injectEndpoints({
-// //     endpoints: (builder) => ({
-
-// //         // ✅ Sign up (register)
-// //         SignUp: builder.mutation({
-// //             query: (LogInData) => ({
-// //                 url: '/users/register',
-// //                 method: 'POST',
-// //                 body: LogInData,
-// //             }),
-// //         }),
-
-// //         // ✅ Verify OTP
-// //         otpVerification: builder.mutation({
-// //             query: (data) => ({
-// //                 url: '/users/verify-otp',
-// //                 method: 'PUT',
-// //                 body: data,
-// //             }),
-// //         }),
-
-// //         // ✅ Resend OTP (corrected)
-// //         resendOtp: builder.mutation({
-// //             query: (data) => ({
-// //                 url: '/users/resend-verification-email',
-// //                 method: 'POST',
-// //                 body: data,
-// //             }),
-// //         }),
-
-// //         // ✅ Login
-// //         logIn: builder.mutation({
-// //             query: (LogInData) => ({
-// //                 url: '/auth/login',
-// //                 method: 'POST',
-// //                 body: LogInData,
-// //             }),
-// //         }),
-
-// //         // ✅ Forget password
-// //         forgetPassword: builder.mutation({
-// //             query: (email) => ({
-// //                 url: '/auth/forgot-password',
-// //                 method: 'POST',
-// //                 body: email,
-// //             }),
-// //         }),
-
-// //         // ✅ Verify email (optional, same as OTP verification)
-// //         verifyEmail: builder.mutation({
-// //             query: (data) => ({
-// //                 url: '/users/verify-otp',
-// //                 method: 'POST',
-// //                 body: data,
-// //             }),
-// //         }),
-
-// //         // ✅ Reset password (admin)
-// //         resetAdminPassword: builder.mutation({
-// //             query: ({ email, data }) => ({
-// //                 url: `/auth/reset-password?email=${email}`,
-// //                 method: 'POST',
-// //                 body: data,
-// //             }),
-// //         }),
-
-// //         // ✅ Change password (admin)
-// //         changeAdminPassword: builder.mutation({
-// //             query: (data) => ({
-// //                 url: '/auth/change-password',
-// //                 method: 'PATCH',
-// //                 body: data,
-// //             }),
-// //         }),
-
-// //         // ✅ Edit profile
-// //         editAdminProfile: builder.mutation({
-// //             query: (data) => ({
-// //                 url: '/users/update-profile',
-// //                 method: 'PUT',
-// //                 body: data,
-// //             }),
-// //         }),
-
-// //         // ✅ Get profile
-// //         getAdminProfile: builder.query({
-// //             query: () => ({
-// //                 url: `/auth/profile`,
-// //                 method: 'GET',
-// //             }),
-// //         }),
-
-// //         // ✅ Update user role (if needed)
-// //         updateUserRole: builder.query({
-// //             query: () => ({
-// //                 url: `/auth/profile`,
-// //                 method: 'GET',
-// //             }),
-// //         }),
-// //     }),
-// // });
-
-// // export const {
-// //     useSignUpMutation,
-// //     useOtpVerificationMutation,
-// //     useResendOtpMutation,
-// //     useLogInMutation,
-// //     useForgetPasswordMutation,
-// //     useVerifyEmailMutation,
-// //     useResetAdminPasswordMutation,
-// //     useChangeAdminPasswordMutation,
-// //     useEditAdminProfileMutation,
-// //     useGetAdminProfileQuery,
-// // } = authApi;
-
-
-
-
-
-// import { baseApi } from "../../api/baseApi";
-
-// interface ChangePasswordRequest {
-//   oldPassword: string;
-//   newPassword: string;
-// }
-
-// interface ChangePasswordResponse {
-//   success: boolean;
-//   statusCode: number;
-//   message: string;
-// }
-
-// export const authApi = baseApi.injectEndpoints({
-//   endpoints: (builder) => ({
-//     // ✅ Sign up (register)
-//     SignUp: builder.mutation({
-//       query: (LogInData) => ({
-//         url: '/users/register',
-//         method: 'POST',
-//         body: LogInData,
-//       }),
-//     }),
-
-//     // ✅ Verify OTP
-//     otpVerification: builder.mutation({
-//       query: (data) => ({
-//         url: '/users/verify-otp',
-//         method: 'PUT',
-//         body: data,
-//       }),
-//     }),
-
-//     // ✅ Resend OTP
-//     resendOtp: builder.mutation({
-//       query: (data) => ({
-//         url: '/users/resend-verification-email',
-//         method: 'POST',
-//         body: data,
-//       }),
-//     }),
-
-//     // ✅ Login
-//     logIn: builder.mutation({
-//       query: (LogInData) => ({
-//         url: '/auth/login',
-//         method: 'POST',
-//         body: LogInData,
-//       }),
-//     }),
-
-//     // ✅ Forget password
-//     forgetPassword: builder.mutation({
-//       query: (email) => ({
-//         url: '/auth/forgot-password',
-//         method: 'POST',
-//         body: email,
-//       }),
-//     }),
-
-//     // ✅ Reset admin password
-//     resetAdminPassword: builder.mutation({
-//       query: ({ email, data }) => ({
-//         url: `/auth/reset-password?email=${email}`,
-//         method: 'POST',
-//         body: data,
-//       }),
-//     }),
-
-//     // ✅ Change admin password
-//     changeAdminPassword: builder.mutation({
-//       query: (data) => ({
-//         url: '/auth/change-password',
-//         method: 'PATCH',
-//         body: data,
-//       }),
-//     }),
-
-//     // ✅ Edit profile
-//     editAdminProfile: builder.mutation({
-//       query: (data) => ({
-//         url: '/users/update-profile',
-//         method: 'PUT',
-//         body: data,
-//       }),
-//     }),
-
-//     // ✅ Get profile
-//     getAdminProfile: builder.query({
-//       query: () => ({
-//         url: '/auth/profile',
-//         method: 'GET',
-//       }),
-//     }),
-
-//     // ✅ Change user password (POST /users/change-password)
-//     changePassword: builder.mutation<ChangePasswordResponse, ChangePasswordRequest>({
-//       query: (body) => ({
-//         url: '/users/change-password',
-//         method: 'PUT',
-//         body,
-//       }),
-//     }),
-//   }),
-// });
-
-// export const {
-//   useSignUpMutation,
-//   useOtpVerificationMutation,
-//   useResendOtpMutation,
-//   useLogInMutation,
-//   useForgetPasswordMutation,
-//   useResetAdminPasswordMutation,
-//   useChangeAdminPasswordMutation,
-//   useEditAdminProfileMutation,
-//   useGetAdminProfileQuery,
-//   useChangePasswordMutation, // ✅ export the new change password hook
-// } = authApi;
-
-
 import { baseApi } from "../../api/baseApi";
 
+// ------------------------
+// Types
+// ------------------------
+
+// Change password (logged-in user)
 interface ChangePasswordRequest {
-  oldPassword: string;
-  newPassword: string;
+  oldPassword?: string;
+  newPassword?: string;
 }
 
 interface ChangePasswordResponse {
@@ -254,7 +17,7 @@ interface ChangePasswordResponse {
   message: string;
 }
 
-// Forgot password request & response types
+// Forgot password request & response
 interface ForgotPasswordRequest {
   email: string;
 }
@@ -269,18 +32,65 @@ interface ForgotPasswordResponse {
   };
 }
 
+// OTP verification for forgot password
+interface OtpVerificationForgotRequest {
+  email: string;
+  otp: number;
+  otpToken: string;
+}
+
+interface OtpVerificationForgotResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    otpToken: string; // token to allow updating password
+  };
+}
+
+// Update password after OTP verification
+interface UpdatePasswordRequest {
+  email: string;
+  password: string;
+  otpToken: string; // required token after verifying OTP
+}
+
+interface UpdatePasswordResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    message: string;
+  };
+}
+
+// ------------------------
+// API
+// ------------------------
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // ✅ Sign up (register)
+    // ------------------------
+    // Signup & Login
+    // ------------------------
     SignUp: builder.mutation({
-      query: (LogInData) => ({
+      query: (data) => ({
         url: '/users/register',
         method: 'POST',
-        body: LogInData,
+        body: data,
       }),
     }),
 
-    // ✅ Verify OTP
+    logIn: builder.mutation({
+      query: (data) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+
+    // ------------------------
+    // OTP
+    // ------------------------
     otpVerification: builder.mutation({
       query: (data) => ({
         url: '/users/verify-otp',
@@ -289,7 +99,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ✅ Resend OTP
+    otpVerificationforgotpassword: builder.mutation<OtpVerificationForgotResponse, OtpVerificationForgotRequest>({
+      query: (data) => ({
+        url: '/users/verify-otp-forgot-password',
+        method: 'PUT',
+        body: data,
+      }),
+    }),
+
     resendOtp: builder.mutation({
       query: (data) => ({
         url: '/users/resend-verification-email',
@@ -298,16 +115,18 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ✅ Login
-    logIn: builder.mutation({
-      query: (LogInData) => ({
-        url: '/auth/login',
+    
+    resendOtpForgotPassword: builder.mutation({
+      query: (data) => ({
+        url: '/users/resend-otp',
         method: 'POST',
-        body: LogInData,
+        body: data,
       }),
     }),
 
-    // ✅ Forgot password
+    // ------------------------
+    // Forgot password
+    // ------------------------
     forgetPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordRequest>({
       query: (body) => ({
         url: '/users/forgot-password',
@@ -316,7 +135,28 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ✅ Reset admin password
+    // ------------------------
+    // Password change/update
+    // ------------------------
+    changePassword: builder.mutation<ChangePasswordResponse, ChangePasswordRequest>({
+      query: (body) => ({
+        url: '/users/change-password',
+        method: 'PUT',
+        body,
+      }),
+    }),
+
+    updatePassword: builder.mutation<UpdatePasswordResponse, UpdatePasswordRequest>({
+      query: (body) => ({
+        url: '/users/update-password',
+        method: 'PUT',
+        body,
+      }),
+    }),
+
+    // ------------------------
+    // Admin endpoints (optional)
+    // ------------------------
     resetAdminPassword: builder.mutation({
       query: ({ email, data }) => ({
         url: `/auth/reset-password?email=${email}`,
@@ -325,7 +165,6 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ✅ Change admin password
     changeAdminPassword: builder.mutation({
       query: (data) => ({
         url: '/auth/change-password',
@@ -334,7 +173,6 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ✅ Edit profile
     editAdminProfile: builder.mutation({
       query: (data) => ({
         url: '/users/update-profile',
@@ -343,34 +181,30 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ✅ Get profile
     getAdminProfile: builder.query({
       query: () => ({
         url: '/auth/profile',
         method: 'GET',
       }),
     }),
-
-    // ✅ Change user password (POST /users/change-password)
-    changePassword: builder.mutation<ChangePasswordResponse, ChangePasswordRequest>({
-      query: (body) => ({
-        url: '/users/change-password',
-        method: 'PUT',
-        body,
-      }),
-    }),
   }),
 });
 
+// ------------------------
+// Export hooks
+// ------------------------
 export const {
   useSignUpMutation,
-  useOtpVerificationMutation,
-  useResendOtpMutation,
   useLogInMutation,
-  useForgetPasswordMutation,      // ✅ Added forgot password hook
+  useOtpVerificationMutation,
+  useOtpVerificationforgotpasswordMutation,
+  useResendOtpMutation,
+  useResendOtpForgotPasswordMutation,
+  useForgetPasswordMutation,
+  useChangePasswordMutation,
+  useUpdatePasswordMutation,
   useResetAdminPasswordMutation,
   useChangeAdminPasswordMutation,
   useEditAdminProfileMutation,
   useGetAdminProfileQuery,
-  useChangePasswordMutation,
 } = authApi;
