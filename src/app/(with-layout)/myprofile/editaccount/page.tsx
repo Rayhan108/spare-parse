@@ -64,9 +64,9 @@ const EditAccount = () => {
   const user = userData.data;
 
   return (
-    <div className="space-y-8 bg-black dark:bg-black p-6 rounded-md">
+    <div className="space-y-8 bg-white  dark:bg-black p-6 rounded-md">
       {contextHolder}
-      <h2 className="text-xl font-medium text-white">Edit Account</h2>
+      <h2 className="text-xl font-medium dark:text-white">Edit Account</h2>
 
       <Form<EditFormValues>
         form={form}
@@ -77,7 +77,7 @@ const EditAccount = () => {
       >
         {/* Full Name */}
         <Form.Item
-          label={<span className="text-white">Full Name</span>}
+          label={<span className="dark:text-white">Full Name</span>}
           name="fullName"
           rules={[{ required: true, message: "Please input your name!" }]}
         >
@@ -88,7 +88,7 @@ const EditAccount = () => {
         </Form.Item>
 
         {/* Email */}
-        <Form.Item label={<span className="text-white">Email</span>}>
+        <Form.Item label={<span className="dark:text-white">Email</span>}>
           <Input
             value={user.email}
             // //disabled
@@ -98,7 +98,7 @@ const EditAccount = () => {
 
         {/* Phone Number */}
         <Form.Item
-          label={<span className="text-white">Phone Number</span>}
+          label={<span className="dark:text-white">Phone Number</span>}
           name="phoneNumber"
           rules={[
             { required: true, message: "Please input your phone number!" },
@@ -112,29 +112,29 @@ const EditAccount = () => {
         </Form.Item>
 
         {/* Address (optional, //disabled) */}
-        <h3 className="text-lg font-medium mt-4 text-white">Address (optional)</h3>
-        <Form.Item label={<span className="text-white">Street</span>} name="street">
+        <h3 className="text-lg font-medium mt-4 dark:text-white">Address (optional)</h3>
+        <Form.Item label={<span className="dark:text-white">Street</span>} name="street">
           <Input
             className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
             // //disabled
             placeholder="Street"
           />
         </Form.Item>
-        <Form.Item label={<span className="text-white">City</span>} name="city">
+        <Form.Item label={<span className="dark:text-white">City</span>} name="city">
           <Input
             className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
             //disabled
             placeholder="City"
           />
         </Form.Item>
-        <Form.Item label={<span className="text-white">State</span>} name="state">
+        <Form.Item label={<span className="dark:text-white">State</span>} name="state">
           <Input
             className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
             //disabled
             placeholder="State"
           />
         </Form.Item>
-        <Form.Item label={<span className="text-white">ZIP Code</span>} name="zip">
+        <Form.Item label={<span className="dark:text-white">ZIP Code</span>} name="zip">
           <Input
             className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
             //disabled

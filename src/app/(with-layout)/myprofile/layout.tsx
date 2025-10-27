@@ -124,7 +124,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
           <Avatar
             size={140}
             src={profilePicUrl}
-            className="dark:border-2 dark:border-primary shadow-xl"
+            className="dark:border-2 !dark:border-primary shadow-xl"
           />
           {isUploading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
