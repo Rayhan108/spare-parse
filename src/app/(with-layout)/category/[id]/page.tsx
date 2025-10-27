@@ -14,6 +14,7 @@ import { useGetProductsByCategoryQuery } from "@/redux/features/categories/categ
 import { useParams } from "next/navigation";
 import { Swiper as SwiperClass } from 'swiper';
 import ProductSkeleton from "@/utils/ProductSkeleton";
+import Link from "next/link";
 
 const Category = () => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -44,7 +45,11 @@ const Category = () => {
             <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold mt-4">off Voucher</h1>
           </div>
           <div className=' flex gap-1 items-center mt-8 xl:mt-12'>
-            <button className=' text-white border-b-2 py-2 border-white text-lg cursor-pointer'>Shop Now</button>
+            <Link href="/product">
+              <button className="text-white border-b-2 py-2 border-white text-lg cursor-pointer">
+                Shop Now
+              </button>
+            </Link>
             <IoArrowForward size={25} className=' text-white' />
           </div>
         </div>
