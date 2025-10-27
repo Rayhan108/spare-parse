@@ -13,9 +13,10 @@ import { MdOutlineArrowBackIosNew, MdOutlineArrowForwardIos } from "react-icons/
 import { useGetProductsByCategoryQuery } from "@/redux/features/categories/categoriesApi";
 import { useParams } from "next/navigation";
 import { Swiper as SwiperClass } from 'swiper';
+import ProductSkeleton from "@/utils/ProductSkeleton";
 
 const Category = () => {
-const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
   const [select, setSelect] = useState<string | null>(null);
 
   const params = useParams();
@@ -97,7 +98,11 @@ const [swiper, setSwiper] = useState<SwiperClass | null>(null);
           <h2 className="text-2xl md:text-3xl lg:text-5xl dark:text-white">Explore Our Products</h2>
         </div>
         {prodLoading ? (
-          <p className="text-gray-400">Loading products...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(8)].map((_, index) => (
+              <ProductSkeleton key={index} />
+            ))}
+          </div>
         ) : products.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
             {products.map((product) => (
