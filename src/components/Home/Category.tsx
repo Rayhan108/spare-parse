@@ -12,6 +12,7 @@ import {
   useGetProductsByCategoryQuery,
   Category,
 } from "@/redux/features/categories/categoriesApi";
+import ProductSkeleton from "@/utils/ProductSkeleton";
 
 
 const CategoryComponent = () => {
@@ -75,9 +76,8 @@ const CategoryComponent = () => {
           <SwiperSlide key={item.id}>
             <div
               onClick={() => setSelectedCategoryId(item.id)}
-              className={`${
-                item.id === selectedCategoryId ? "bg-primary" : ""
-              } border flex flex-col items-center justify-center h-[170px] rounded cursor-pointer transition dark:border-gray-100`}
+              className={`${item.id === selectedCategoryId ? "bg-primary" : ""
+                } border flex flex-col items-center justify-center h-[170px] rounded cursor-pointer transition dark:border-gray-100`}
             >
               <Image
                 src={item.iconUrl}
@@ -116,7 +116,11 @@ const CategoryComponent = () => {
           </h3> */}
 
           {prodLoading ? (
-            <p className="text-gray-400">Loading products...</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ProductSkeleton />
+              <ProductSkeleton />
+              <ProductSkeleton />
+            </div>
           ) : products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {products.map((product) => (
