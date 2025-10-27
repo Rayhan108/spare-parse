@@ -230,7 +230,7 @@ const Header = () => {
 
           {/* Mobile Menu Icon */}
           <div className="block lg:hidden">
-            <RxHamburgerMenu onClick={showDrawer} size={25} className="text-black" />
+            <RxHamburgerMenu onClick={showDrawer} size={25} className="text-black dark:text-white" />
           </div>
 
           {/* Submenu */}
