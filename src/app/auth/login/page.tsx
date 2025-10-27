@@ -13,6 +13,10 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { requestForToken } from "@/utils/firebase";
 
+// -------------------------
+// Types
+// -------------------------
+
 interface LogInFormValues {
   email: string;
   password: string;
@@ -24,7 +28,24 @@ interface GoogleUser {
   picture: string;
 }
 
+interface AuthResponseData {
+  data?: {
+    _id?: string;
+    id?: string;
+    fullName?: string;
+    name?: string;
+    email?: string;
+    role?: string;
+    roles?: string[];
+    image?: string;
+    accessToken?: string;
+    refreshToken?: string;
+  };
+}
 
+// -------------------------
+// Component
+// -------------------------
 
 export default function LogInForm(): JSX.Element {
   const [api, contextHolder] = notification.useNotification();
@@ -41,17 +62,20 @@ export default function LogInForm(): JSX.Element {
     if (token && user) router.push("/");
   }, [router]);
 
-  const handleAuthSuccess = (data: any) => {
+  // ✅ Common Auth Success Handler
+  const handleAuthSuccess = (data: AuthResponseData): void => {
+    if (!data?.data) return;
+
     const userData = {
-      _id: data?.data?._id || data?.data?.id,
-      fullName: data?.data?.fullName || data?.data?.name,
-      email: data?.data?.email,
-      role: data?.data?.role || data?.data?.roles?.[0],
-      image: data?.data?.image,
+      _id: data.data._id || data.data.id || "",
+      fullName: data.data.fullName || data.data.name || "",
+      email: data.data.email || "",
+      role: data.data.role || data.data.roles?.[0] || "",
+      image: data.data.image || "",
     };
 
-    const accessToken = data?.data?.accessToken;
-    const refreshToken = data?.data?.refreshToken;
+    const accessToken = data.data.accessToken || "";
+    const refreshToken = data.data.refreshToken || "";
 
     dispatch(setUser({ user: userData, accessToken, refreshToken }));
     Cookies.set("hatem-ecommerce-token", accessToken, { expires: 7 });
@@ -59,53 +83,34 @@ export default function LogInForm(): JSX.Element {
     localStorage.setItem("hatem-ecommerce-user", JSON.stringify(userData));
   };
 
-  // const onFinish = (values: LogInFormValues) => {
-  //   logIn(values)
-  //     .unwrap()
-  //     .then(handleAuthSuccess)
-  //     .catch((error) =>
-  //       api.open({
-  //         type: "error",
-  //         message: error?.data?.message || "Login failed. Try again.",
-  //         placement: "topRight",
-  //       })
-  //     );
-  // };
-
-  const onFinish = async (values: LogInFormValues) => {
+  // ✅ Manual Login Handler
+  const onFinish = async (values: LogInFormValues): Promise<void> => {
     try {
       const data = await logIn(values).unwrap();
-
-      // ✅ Store user + tokens
       handleAuthSuccess(data);
 
-      // ✅ Show success toast
       api.success({
         message: "Login Successful",
         description: "You are logged in successfully!",
         placement: "topRight",
       });
 
-      // ✅ Redirect after short delay
       setTimeout(() => router.push("/"), 800);
     } catch (error) {
-  api.error({
-    message: "Google login failed",
-    description:
-      (error as { data?: { message?: string }; message?: string })?.data?.message ||
-      (error as Error)?.message ||
-      "Something went wrong.",
-  });
-}
-
+      const err = error as { data?: { message?: string }; message?: string };
+      api.error({
+        message: "Login Failed",
+        description: err.data?.message || err.message || "Something went wrong.",
+      });
+    }
   };
 
-
-  const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
+  // ✅ Google Login Handler
+  const handleGoogleLogin = async (credentialResponse: CredentialResponse): Promise<void> => {
     try {
       if (!credentialResponse.credential) return;
 
-      const decoded: GoogleUser = jwtDecode(credentialResponse.credential);
+      const decoded = jwtDecode<GoogleUser>(credentialResponse.credential);
 
       let fcmToken = await requestForToken();
       if (!fcmToken) {
@@ -118,20 +123,17 @@ export default function LogInForm(): JSX.Element {
 
       console.log("📲 Using FCM token:", fcmToken);
 
-
       const payload = {
         email: decoded.email,
-        fcmToken: fcmToken,      // ✅ matches backend
-        plateForm: "GOOGLE",     // ✅ matches backend’s spelling
+        fcmToken,
+        plateForm: "GOOGLE",
         image: decoded.picture,
         fullName: decoded.name,
         phoneNumber: "",
         address: "",
       };
 
-
       console.log("🚀 Social Login Payload:", payload);
-
 
       const data = await socialLogin(payload).unwrap();
       handleAuthSuccess(data);
@@ -141,19 +143,21 @@ export default function LogInForm(): JSX.Element {
         description: "You are logged in successfully!",
       });
 
-      router.push("/");
+      setTimeout(() => {
+        router.push("/");
+      }, 600);
     } catch (error) {
+      const err = error as { data?: { message?: string }; message?: string };
       api.error({
         message: "Google login failed",
-        description:
-          (error as { data?: { message?: string }; message?: string })?.data?.message ||
-          (error as Error)?.message ||
-          "Something went wrong.",
+        description: err.data?.message || err.message || "Something went wrong.",
       });
     }
-
   };
 
+  // -------------------------
+  // JSX
+  // -------------------------
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
       {contextHolder}
@@ -215,5 +219,4 @@ export default function LogInForm(): JSX.Element {
     </div>
   );
 }
-
 

@@ -334,8 +334,8 @@ interface UpdatePasswordResponse {
 // ✅ New: Social login types
 interface SocialLoginRequest {
   email: string;
-  fcMToken: string; // Google credential token
-  plateForm: "GOOGLE" | "FACEBOOK" | "APPLE";
+  fcmToken: string; // Google credential token
+  plateForm:string;
   image?: string;
   fullName?: string;
   phoneNumber?: string;

@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // ------------------- User type -------------------
 export interface User {
   email: string;
-  role: "BUYER" | "SELLER" | "ADMIN";
+  role: string;
 }
 
 // ------------------- Auth state -------------------
