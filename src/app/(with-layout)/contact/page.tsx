@@ -233,14 +233,26 @@ const Contact = () => {
         placement: "topRight",
       });
 
-    } catch (err) {
+    } catch (err: unknown) {
+      let description = "Could not submit your message. Please try again.";
+
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "data" in err &&
+        typeof (err as { data: { message?: string } }).data.message === "string"
+      ) {
+        description = (err as { data: { message: string } }).data.message;
+      }
+
       api.open({
         type: "error",
         message: "Failed",
-        description: "Could not submit your message. Please try again.",
+        description,
         placement: "topRight",
       });
     }
+
   };
 
   if (isLoading)
