@@ -6,6 +6,7 @@ import { Input } from "antd";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetProductByEngineQuery } from "@/redux/features/products/productsApi";
+import VehicleProductsSkeleton from "@/utils/VehicleProductsSkeleton";
 
 // --- Types ---
 interface Product {
@@ -62,7 +63,7 @@ export default function VehicleProductsPage() {
       isError: boolean;
     };
 
-  if (isLoading) return <p className="text-center py-8">Loading...</p>;
+  if (isLoading) return <VehicleProductsSkeleton ></VehicleProductsSkeleton>;
   if (isError || !apiResponse?.data) return <p className="text-center py-8">Failed to load products.</p>;
 
   const { vehicle, categories } = apiResponse.data;

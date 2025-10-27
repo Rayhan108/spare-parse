@@ -8,10 +8,13 @@ import { useGetAllCategoriesQuery, Category } from "@/redux/features/categories/
 // Static Skeleton
 const HeroCategorySkeleton = () => (
  <>
-  <div className="h-8 w-full bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
-  <div className="h-8 w-full bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
-  <div className="h-8 w-full bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
-  <div className="h-8 w-full bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse"></div>
+  <div className="h-8 w-[90%] bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
+  <div className="h-8 w-[90%] bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
+  <div className="h-8 w-[90%] bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
+  <div className="h-8 w-[90%] bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
+  <div className="h-8 w-[90%] bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
+  <div className="h-8 w-[90%] bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
+  
 </>
 
 );
