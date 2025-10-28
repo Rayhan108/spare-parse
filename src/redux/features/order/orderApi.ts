@@ -8,6 +8,7 @@ export interface OrderItem {
   price: number;
   discount?: number;
   productImages: string[];
+  quantity: number;
 }
 
 // Shipping/Billing
