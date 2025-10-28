@@ -83,19 +83,6 @@ const Cart = () => {
         }
     };
 
-    // const handleDelete = async (cartItemId: string) => {
-    //     try {
-    //         await deleteCartItem(cartItemId).unwrap();
-    //         message.success("Item deleted from cart");
-    //     } catch (err: unknown) {
-    //         console.error("❌ Delete error:", err);
-    //         const errorMessage =
-    //             (err as { data?: { message?: string } })?.data?.message || "Failed to delete cart item";
-    //         message.error(errorMessage);
-    //     }
-    // };
-
-
     const handleDelete = async (cartItemId: string) => {
         try {
             await deleteCartItem(cartItemId).unwrap();

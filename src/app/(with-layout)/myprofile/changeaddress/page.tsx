@@ -1,24 +1,92 @@
 "use client";
-import Link from "next/link";
-import { Form, Input } from "antd";
+
+import { useEffect } from "react";
+import { Form, Input, message, Spin, Button } from "antd";
+import { useAddAddressMutation, useGetAddressesQuery, useUpdateAddressMutation } from "@/redux/features/address/addressApi";
+
+interface AddressFormValues {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+}
 
 const ChangeAddress = () => {
-    interface AddressFormValues {
-        street: string;
-        city: string;
-        state: string;
-        zip: string;
-    }
-
     const [form] = Form.useForm<AddressFormValues>();
 
-    const onFinish = (values: AddressFormValues): void => {
-        console.log("Success:", values);
+    // Get existing addresses
+    const { data: addressData, isLoading: loadingAddresses } = useGetAddressesQuery();
+    const [addAddress, { isLoading: adding }] = useAddAddressMutation();
+    const [updateAddress, { isLoading: updating }] = useUpdateAddressMutation();
+
+    // Prefill form with existing SHIPPING address
+    const shippingAddress = addressData?.data?.find((addr) => addr.type === "SHIPPING");
+
+    useEffect(() => {
+        if (shippingAddress) {
+            form.setFieldsValue({
+                street: shippingAddress.addressLine,
+                city: shippingAddress.city,
+                state: shippingAddress.state,
+                zip: shippingAddress.postalCode,
+            });
+        }
+    }, [shippingAddress, form]);
+    
+
+    const onFinish = async (values: AddressFormValues) => {
+
+        type AddressType = "SHIPPING" | "BILLING";
+        try {
+            const payload = {
+                addressLine: values.street,
+                city: values.city,
+                state: values.state,
+                postalCode: values.zip,
+                country: "USA",
+                 type: "SHIPPING" as AddressType,
+                // type: "SHIPPING",
+            };
+
+            if (shippingAddress) {
+                // PATCH existing shipping address
+                const res = await updateAddress({ id: shippingAddress.id, data: payload }).unwrap();
+                message.success(res.message || "Shipping address updated successfully!");
+            } else {
+                // POST new shipping address
+                const res = await addAddress(payload).unwrap();
+                message.success(res.message || "Shipping address added successfully!");
+            }
+        } catch (error: unknown) {
+            if (
+                typeof error === "object" &&
+                error !== null &&
+                "data" in error &&
+                typeof (error as { data: { message?: string } }).data.message === "string"
+            ) {
+                message.error((error as { data: { message: string } }).data.message);
+            } else {
+                message.error("Failed to update profile.");
+            }
+        }
     };
+
+
+
+
+
+
+
+
+
+
+    if (loadingAddresses) {
+        return <Spin tip="Loading address..." className="mt-10" />;
+    }
 
     return (
         <div className="space-y-8">
-            <h2 className="text-xl font-medium">Change Address</h2>
+            <h2 className="text-xl font-medium dark:text-white">Change Address</h2>
 
             <Form<AddressFormValues>
                 form={form}
@@ -63,11 +131,14 @@ const ChangeAddress = () => {
                 </Form.Item>
 
                 <Form.Item className="mt-6">
-                    <Link href="/">
-                        <button className="bg-primary w-full py-3 rounded-md cursor-pointer text-white">
-                            Update Address
-                        </button>
-                    </Link>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="w-full py-3"
+                        loading={adding || updating}
+                    >
+                        {shippingAddress ? "Update Address" : "Add Address"}
+                    </Button>
                 </Form.Item>
             </Form>
         </div>
