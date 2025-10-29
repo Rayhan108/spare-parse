@@ -115,7 +115,7 @@
 
 "use client"
 
-import { ConfigProvider, Input, Spin, notification } from "antd"
+import { ConfigProvider, Input, notification } from "antd"
 import Link from "next/link"
 import { AiOutlineSend } from "react-icons/ai"
 import { LuCopyright } from "react-icons/lu"
@@ -128,16 +128,16 @@ import { useGetContactUsInfoQuery } from "@/redux/features/contactUs/contactUsAp
 import { useSubscribeNewsletterMutation } from "@/redux/features/newsletter/newsletterApi"
 
 const Footer = () => {
-  const { data, isLoading, isError } = useGetContactUsInfoQuery()
+  const { data, isError } = useGetContactUsInfoQuery()
   const [email, setEmail] = useState<string>("")
   const [subscribeNewsletter, { isLoading: isSubscribing }] = useSubscribeNewsletterMutation()
   const [api, contextHolder] = notification.useNotification()
 
-  if (isLoading) return (
-    <div className="flex justify-center py-20">
-      <Spin size="large" />
-    </div>
-  )
+  // if (isLoading) return (
+  //   <div className="flex justify-center py-20">
+  //     <Spin size="large" />
+  //   </div>
+  // )
 
   if (isError || !data?.data) return <p className="text-center text-white py-10">Failed to load footer info</p>
 

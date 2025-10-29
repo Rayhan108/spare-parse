@@ -1,9 +1,7 @@
 "use client"
 import { JSX } from "react"
 import { Form, Input, notification } from "antd"
-import { FaFacebook } from "react-icons/fa"
 import type React from "react"
-import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSignUpMutation } from "@/redux/features/auth/authApi"
@@ -198,21 +196,7 @@ export default function SignUpForm(): JSX.Element {
                 </Form>
 
 
-                <div className="mt-4">
-                    <button
-                        className="w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md mb-4 cursor-pointer"
-                        onClick={() => console.log("Google sign up clicked")}
-                    >
-                        <FcGoogle size={25} className="mr-2" /> Sign up with Google
-                    </button>
-
-                    <button
-                        className="w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md cursor-pointer"
-                        onClick={() => console.log("Facebook sign up clicked")}
-                    >
-                        <FaFacebook size={25} className="mr-2 text-[#0689ff]" /> Sign up with Facebook
-                    </button>
-                </div>
+        
 
                 <div className="text-center mt-4 flex flex-col gap-1.5">
                     <span className="text-sm">
@@ -221,12 +205,12 @@ export default function SignUpForm(): JSX.Element {
                             Log in
                         </Link>
                     </span>
-                    <span className="text-sm">
+                    {/* <span className="text-sm">
                         Want to become a seller?
                         <Link href="/auth/sign-up/seller" className="text-primary ml-1">
                             Seller Sign Up
                         </Link>
-                    </span>
+                    </span> */}
                 </div>
             </div>
         </div>

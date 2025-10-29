@@ -203,7 +203,7 @@ const LastReviews: React.FC<LastReviewsProps> = ({ reviews }) => {
         </div>
         <div className="w-6 h-6 flex items-center justify-center">
           <Link href={'/seller/overview/reviews'}>
-            <MdOutlineArrowForwardIos className="cursor-pointer" size={24} />
+            <MdOutlineArrowForwardIos className="cursor-pointer dark:text-white" size={24} />
           </Link> 
         </div>
       </div>

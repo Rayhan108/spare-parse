@@ -188,8 +188,19 @@ const MyOrder = () => {
     setIsTrackModalOpen(true);
   };
 
-  if (isLoading) return <Spin size="large" className="mt-10" />;
-  if (isError) return <p className="text-red-500 mt-10">Failed to load orders.</p>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Spin size="large" />
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500">Failed to load orders.</p>
+      </div>
+    );
 
   return (
     <div className="container mx-auto px-4 md:px-0 py-16">

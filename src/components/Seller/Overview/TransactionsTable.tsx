@@ -18,8 +18,19 @@ export default function TransactionsTableAntd() {
   // Fetch data from API
   const { data, isLoading, error } = useGetSalesReportQuery();
 
-  if (isLoading) return <Spin className="mt-10 mx-auto" size="large" />;
-  if (error) return <div>Error loading transactions</div>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500">Failed to load orders.</p>
+      </div>
+    );
 
   // Map API response to table format
   const tableData: Transaction[] =

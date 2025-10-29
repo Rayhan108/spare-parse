@@ -172,14 +172,24 @@ const Header = () => {
           </Link>
 
           {/* Desktop Links */}
-          <div className="hidden lg:flex items-center justify-between gap-12">
-            <Link href="/" className="text-lg dark:text-white">Home</Link>
-            <Link href="/contact" className="text-lg dark:text-white">Contact</Link>
-            <Link href="/about" className="text-lg dark:text-white">About</Link>
+          {/* Desktop Links */}
+          <div className="hidden lg:flex items-center justify-between gap-12 text-black dark:text-white">
+            <Link href="/" className="text-lg hover:text-primary no-underline">
+              Home
+            </Link>
+            <Link href="/contact" className="text-lg hover:text-primary no-underline">
+              Contact
+            </Link>
+            <Link href="/about" className="text-lg hover:text-primary no-underline">
+              About
+            </Link>
             {!token && (
-              <Link href="/auth/login" className="text-lg dark:text-white">Log In</Link>
+              <Link href="/auth/login" className="text-lg hover:text-primary no-underline">
+                Log In
+              </Link>
             )}
           </div>
+
 
           {/* Search, Wishlist, Cart, User */}
           <div className="hidden w-[380px] lg:flex items-center justify-between gap-4">

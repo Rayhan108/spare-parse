@@ -12,15 +12,15 @@ export default function SingleProductSkeleton() {
         {/* Main Grid */}
         <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[minmax(300px,400px)_1fr] xl:grid-cols-[400px_1fr_350px]">
           {/* Product Image */}
-          <div className="flex items-start justify-center rounded-lg border p-4 md:p-6">
+          <div className="flex items-start justify-center rounded-lg border border-gray-200 p-4 md:p-6">
             <div className="w-full max-w-[350px] h-[350px] bg-gray-200 dark:bg-gray-700 rounded object-contain"></div>
           </div>
 
           {/* Specs */}
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="border rounded-lg">
-                <div className="flex items-center gap-2 font-medium border-b p-4">
+              <div key={i} className="border border-gray-200 rounded-lg">
+                <div className="flex items-center gap-2 font-medium border-b border-gray-200 p-4">
                   <div className="h-4 w-1/3 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </div>
                 <div className="px-4 space-y-2 py-2">

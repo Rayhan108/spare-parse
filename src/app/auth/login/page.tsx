@@ -2,7 +2,6 @@
 
 import { JSX, useEffect } from "react";
 import { Form, Input, notification } from "antd";
-import { FaFacebook } from "react-icons/fa";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -204,9 +203,7 @@ export default function LogInForm(): JSX.Element {
         {/* Social Login */}
         <div className="mt-4 space-y-3">
           <GoogleLogin onSuccess={handleGoogleLogin} onError={() => console.log("Google login failed")} />
-          <button className="w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md cursor-pointer">
-            <FaFacebook size={25} className="mr-2 text-[#0689ff]" /> Log In with Facebook
-          </button>
+
         </div>
 
         <p className="text-center mt-4 text-sm">

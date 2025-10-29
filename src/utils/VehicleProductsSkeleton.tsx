@@ -31,7 +31,7 @@ const VehicleProductsSkeleton = () => {
                 {Array.from({ length: 8 }).map((_, idx) => (
                   <div
                     key={idx}
-                    className="border dark:border-gray-700 rounded-lg p-3 flex flex-col bg-white dark:bg-gray-900 animate-pulse"
+                    className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 flex flex-col bg-white dark:bg-gray-900 animate-pulse"
                   >
                     <div className="w-full aspect-[4/3] bg-gray-300 dark:bg-gray-700 rounded mb-2"></div>
                     <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded mb-1"></div>

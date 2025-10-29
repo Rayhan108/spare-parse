@@ -91,13 +91,26 @@ const CategoryComponent = () => {
           </SwiperSlide>
         ))}
 
-        {catLoading && (
+        {/* {catLoading && (
           <SwiperSlide>
             <div className="border flex flex-col items-center justify-center h-[170px] rounded opacity-60">
               <p className="text-gray-400 text-sm">Loading...</p>
             </div>
           </SwiperSlide>
-        )}
+        )} */}
+
+
+        {catLoading &&
+          Array.from({ length: 6 }).map((_, index) => (
+            <SwiperSlide key={index}>
+              <div className="border flex flex-col items-center justify-center h-[170px] rounded animate-pulse bg-gray-200 dark:bg-gray-700">
+                <div className="h-24 w-24 bg-gray-300 rounded mb-2"></div>
+                <div className="h-4 w-3/4 bg-gray-300 rounded mb-1"></div>
+                <div className="h-3 w-1/2 bg-gray-300 rounded"></div>
+              </div>
+            </SwiperSlide>
+          ))}
+
 
         {catError && (
           <SwiperSlide>
@@ -116,7 +129,8 @@ const CategoryComponent = () => {
           </h3> */}
 
           {prodLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <ProductSkeleton />
               <ProductSkeleton />
               <ProductSkeleton />
               <ProductSkeleton />

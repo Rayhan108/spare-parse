@@ -259,7 +259,7 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
   return (
     <div
       onClick={handleCardClick}
-      className="overflow-hidden rounded border border-gray-200 hover:shadow-lg transition cursor-pointer"
+      className="overflow-hidden rounded border border-white hover:shadow-lg transition cursor-pointer"
     >
       <div className="relative bg-[#f2fcf6] px-4 py-8">
         {discount > 0 && (
@@ -299,18 +299,18 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
       </div>
 
       <button
-        onClick={handleAddToCart}
+        // onClick={showEditModal}
         className="flex gap-2 w-full items-center justify-center bg-primary py-3 text-white rounded-b cursor-pointer"
       >
-        <HiOutlineShoppingCart size={25} />
-        Add To Cart
+
+        Product details
       </button>
 
       <div className="p-4">
         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
           {name}
         </h3>
-        <p className="text-gray-500 mt-1 text-sm">{description}</p>
+        {/* <p className="text-gray-500 mt-1 text-sm">{description}</p> */}
         <div className="mt-1 flex items-center">
           <span className="text-xl font-bold text-orange-500">
             ${discountedPrice.toFixed(2)}
