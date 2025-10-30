@@ -1,49 +1,79 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { Form, Input, Select, Upload, Spin, Modal, message } from "antd";
-import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
-
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { SlCloudUpload } from "react-icons/sl";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 import Heading from "@tiptap/extension-heading";
-import TipTapMenu from "./TipTapMenu";
 import Image from "next/image";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { SlCloudUpload } from "react-icons/sl";
+
+import TipTapMenu from "./TipTapMenu";
 import { useUpdateProductMutation } from "@/redux/features/seller/product/productApi";
+import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 
+// Types
 interface EditProductModalProps {
-  isModalOpen: boolean;
-  handleOk: () => void;
-  handleCancel: () => void;
-  productId: string;
+    isModalOpen: boolean;
+    handleOk: () => void;
+    handleCancel: () => void;
+    productId: string;
 }
 
-// Form values
 interface ProductFormValues {
-  productName?: string;
-  price?: number | string;
-  discount?: number | string;
-  stock?: number | string;
-  description?: string;
+    productName?: string;
+    price?: number | string;
+    discount?: number | string;
+    stock?: number | string;
+    description?: string;
 }
 
-// API Product type
-interface Product {
-  _id: string;
-  productName: string;
-  price: number;
-  discount: number;
-  stock: number;
-  description: string;
-  isVisible: boolean;
-  categoryId: string;
-  brandId: string;
-  // Add any other fields returned by your API
+interface SellerProduct {
+    id: string;
+    sellerId: string;
+    categoryId: string;
+    brandId: string;
+    productName: string;
+    description: string;
+    price: number;
+    discount: number;
+    stock: number;
+    productImages: string[];
+    isVisible: boolean;
+    totalRating?: number;
+    avgRating?: number;
+    totalSold?: number;
+    //   sections?: any[];
+    //   references?: any[];
+    //   shippings?: any[];
+    //   fitVehicles?: any[];
+    createdAt: string;
+    updatedAt: string;
+    seller?: {
+        userId: string;
+        companyName: string;
+        logo: string | null;
+    };
+    category?: {
+        id: string;
+        name: string;
+    };
+    brand?: {
+        id: string;
+        brandName: string;
+        brandImage: string | null;
+    };
+    similarProducts?: {
+        id: string;
+        companyName: string;
+        productName: string;
+        image: string;
+        price: number;
+        inStock: boolean;
+    }[];
 }
 
 const { TextArea } = Input;
@@ -54,9 +84,10 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     handleCancel,
     productId,
 }) => {
-    const [form] = Form.useForm();
-    const [nextComponent, setNextComponent] = useState("details");
+    const [form] = Form.useForm<ProductFormValues>();
+    const [nextComponent, setNextComponent] = useState<"details" | "description">("details");
     const [profilePic, setProfilePic] = useState<File | null>(null);
+
     const profilePicUrl = profilePic ? URL.createObjectURL(profilePic) : null;
 
     const { data, isLoading, isError } = useGetSingleProductQuery(productId);
@@ -95,53 +126,47 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
         }
     }, [data, form, editor]);
 
-    const handleProfilePicUpload = (e: any) => setProfilePic(e.file);
+    // const handleProfilePicUpload = (e: any) => setProfilePic(e.file);
+
+    const handleSubmit = async () => {
+        try {
+            const values = await form.validateFields();
+            if (!data?.data) return message.error("Product data not loaded.");
+
+            // const product: SellerProduct = data.data;
+            const product = data.data as SellerProduct;
 
 
+            const bodyData = {
+                productName: values.productName ?? product.productName,
+                price: values.price ?? product.price,
+                discount: values.discount ?? product.discount,
+                stock: values.stock ?? product.stock,
+                description: editor?.getHTML() || product.description,
+                isVisible: product.isVisible,
+                categoryId: product.categoryId,
+                brandId: product.brandId,
+            };
 
+            const formData = new FormData();
+            formData.append("bodyData", JSON.stringify(bodyData));
 
-const handleSubmit = async () => {
-  try {
-    const values = await form.validateFields();
+            if (profilePic) {
+                formData.append("productImages", profilePic);
+            }
 
-    if (!data?.data) return message.error("Product data not loaded.");
-
-    const product = data.data;
-
-    // Only include fields you want to send, skip nulls
-    const bodyData: any = {
-      productName: values.productName ?? product.productName,
-      price: values.price ?? product.price,
-      discount: values.discount ?? product.discount,
-      stock: values.stock ?? product.stock,
-      description: editor?.getHTML() || product.description,
-      isVisible: product.isVisible,
-      categoryId: product.categoryId,
-      brandId: product.brandId,
-      // Add more mandatory fields as needed
+            await updateProduct({ productId, formData }).unwrap();
+            message.success("Product updated successfully!");
+            handleOk();
+        } catch (error) {
+            console.error(error);
+            message.error("Failed to update product");
+        }
     };
 
-    const formData = new FormData();
-    formData.append("bodyData", JSON.stringify(bodyData));
-
-    if (profilePic) {
-      formData.append("productImages", profilePic);
-    }
-
-    await updateProduct({ productId, formData }).unwrap();
-    message.success("Product updated successfully!");
-    handleOk();
-  } catch (err: any) {
-    console.error(err);
-    message.error(err?.data?.message || "Failed to update product");
-  }
-};
-
-    
-    
     return (
         <Modal
-            closable={{ "aria-label": "Custom Close Button" }}
+            closable
             className="w-full md:w-[800px]"
             footer={false}
             width={1000}
@@ -229,28 +254,64 @@ const handleSubmit = async () => {
                                 <EditorContent editor={editor} />
                             </div>
                         </div>
+                        {/* <div className="mb-5">
+              <h2 className="text-xl">Product Images</h2>
+              <div className="h-30 flex items-center justify-center rounded-2xl border border-dashed border-primary mt-4">
+                {profilePic ? (
+                  <Image
+                    src={profilePicUrl || ""}
+                    width={500}
+                    height={500}
+                    alt="image"
+                    className="border-4 w-32"
+                  />
+                ) : (
+                  <Upload
+                    showUploadList={false}
+                    beforeUpload={() => false}
+                    onChange={handleProfilePicUpload}
+                  >
+                    <SlCloudUpload className="cursor-pointer" size={32} />
+                  </Upload>
+                )}
+              </div>
+            </div> */}
+
+
                         <div className="mb-5">
                             <h2 className="text-xl">Product Images</h2>
-                            <div className="h-30 flex items-center justify-center rounded-2xl border border-dashed border-primary mt-4">
+                            <div className="h-30 flex items-center justify-center rounded-2xl border border-dashed border-[#f56100] mt-4">
                                 {profilePic ? (
-                                    <Image
-                                        src={profilePicUrl || ""}
-                                        width={500}
-                                        height={500}
-                                        alt="image"
-                                        className="border-4 w-32"
-                                    />
+                                    <div className="relative">
+                                        <Image
+                                            src={profilePicUrl || ""}
+                                            width={500}
+                                            height={500}
+                                            alt="product image"
+                                            className="border-4 w-32"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setProfilePic(null)}
+                                            className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
                                 ) : (
                                     <Upload
                                         showUploadList={false}
-                                        beforeUpload={() => false}
-                                        onChange={handleProfilePicUpload}
+                                        beforeUpload={(file: File) => {
+                                            setProfilePic(file); // update state directly
+                                            return false; // prevent automatic upload
+                                        }}
                                     >
                                         <SlCloudUpload className="cursor-pointer" size={32} />
                                     </Upload>
                                 )}
                             </div>
                         </div>
+
                         <button
                             onClick={handleSubmit}
                             disabled={isUpdating}
