@@ -397,49 +397,80 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
 
 
 
+
   const handleSubmitProduct = async () => {
     try {
       setLoading(true);
-      const values = await form.validateFields();
-
-      const selectedCategoryId = values.category; // <- this will now have the selected category ID
-      console.log("Selected Category ID:", selectedCategoryId);
-
 
       const selectedBrandId = brandId;
+      const values = { ...formData, ...form.getFieldsValue() };
+      console.log("Form values:", values);
 
+      if (!values.productName) {
+        console.log("Please add product name");
+        return;
+      }
+
+      // 1️⃣ Build sections including typed-but-not-added fields
+      const updatedSections = sections.map((section, sIndex) => {
+        const updatedFields = [...section.fields];
+        const typedFieldName = form.getFieldValue(`field_name_${sIndex}`);
+        const typedFieldValue = form.getFieldValue(`field_value_${sIndex}`);
+        const typedFieldType = form.getFieldValue(`field_type_${sIndex}`);
+        if (typedFieldName && typedFieldValue !== undefined && typedFieldValue !== "") {
+          updatedFields.push({
+            fieldName: typedFieldName,
+            valueType: typedFieldType || "string",
+            ...(typedFieldType === "float"
+              ? { valueFloat: parseFloat(typedFieldValue) }
+              : { valueString: typedFieldValue }),
+          });
+        }
+
+        const updatedSubSections = section.subSections.map((subSection, subIndex) => {
+          const updatedSubFields = [...subSection.fields];
+          const typedSubName = form.getFieldValue(`subfield_name_${sIndex}_${subIndex}`);
+          const typedSubValue = form.getFieldValue(`subfield_value_${sIndex}_${subIndex}`);
+          const typedSubType = form.getFieldValue(`subfield_type_${sIndex}_${subIndex}`);
+          if (typedSubName && typedSubValue !== undefined && typedSubValue !== "") {
+            updatedSubFields.push({
+              fieldName: typedSubName,
+              valueType: typedSubType || "string",
+              ...(typedSubType === "float"
+                ? { valueFloat: parseFloat(typedSubValue) }
+                : { valueString: typedSubValue }),
+            });
+          }
+          return {
+            sectionName: subSection.sectionName,
+            fields: updatedSubFields,
+          };
+        });
+
+        return {
+          sectionName: section.sectionName,
+          fields: updatedFields,
+          subSections: updatedSubSections,
+        };
+      });
+
+      // 2️⃣ Build the full product data
       const productData = {
-        categoryId: values.category || "68ec9d7e5d5df4fdb737e5a5",
+        categoryId,
         brandId: selectedBrandId,
-        productName: values.productName || "demo1",
+        productName: values.productName,
         description: editor?.getHTML() || "",
         price: Number(values.price) || 30,
         discount: Number(values.discount) || 10,
         stock: Number(values.stock) || 10,
         isVisible: values.productAvailability === "inStock",
         fitVehicles: values.fitVehicles ? [values.fitVehicles] : [],
-        sections: sections.map((section) => ({
-          sectionName: section.sectionName,
-          fields: section.fields.map((field) => ({
-            fieldName: field.fieldName,
-            ...(field.valueType === "float"
-              ? { valueFloat: field.valueFloat }
-              : { valueString: field.valueString }),
-          })),
-          subSections: section.subSections.map((subSection) => ({
-            sectionName: subSection.sectionName,
-            fields: subSection.fields.map((field) => ({
-              fieldName: field.fieldName,
-              ...(field.valueType === "float"
-                ? { valueFloat: field.valueFloat }
-                : { valueString: field.valueString }),
-            })),
-          })),
-        })),
+        sections: updatedSections,
         references: oemReferences,
         shipping: shippingInfo,
       };
 
+      // 3️⃣ Prepare FormData
       const formDataToSend = new FormData();
       formDataToSend.append("bodyData", JSON.stringify(productData));
       if (profilePic) formDataToSend.append("productImages", profilePic);
@@ -447,10 +478,11 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
       console.log("Final payload before upload:");
       formDataToSend.forEach((v, k) => console.log(k, v));
 
+      // 4️⃣ Upload
       const result = await addProduct(formDataToSend).unwrap();
       message.success("✅ Product uploaded successfully!");
 
-      // Reset
+      // 5️⃣ Reset form
       form.resetFields();
       setOemReferences([]);
       setShippingInfo([]);
@@ -460,12 +492,12 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
       editor?.commands.clearContent();
       handleOk();
     } catch (error: any) {
+      console.error("Upload error:", error);
       message.error(error.message || "Error uploading product");
     } finally {
       setLoading(false);
     }
   };
-
 
 
 
@@ -628,7 +660,24 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                     disabled={!modelId}
                   />
                 </div>
+
+
+                <div className="flex items-center w-full">
+                  <span className="bg-[#f56100] py-[11px] px-4 text-white">4</span>
+                  <Select
+                    placeholder="Select Category"
+                    allowClear
+                    loading={isCategoriesLoading}
+                    options={categoriesData?.data.map(cat => ({ value: cat.id, label: cat.name }))}
+                    value={categoryId}
+                    onChange={setCategoryId}
+                  />
+                </div>
+
               </div>
+
+
+
 
 
               <div className=" mt-8">
@@ -756,7 +805,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                       ))}
                     </Select>
                   </Form.Item> */}
-
+                  {/* 
                   <Form.Item
                     label="Category"
                     name="category"
@@ -768,17 +817,17 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                       loading={isCategoriesLoading}
                       options={categoriesData?.data.map(cat => ({ value: cat.id, label: cat.name }))}
                     />
-                  </Form.Item>
+                  </Form.Item> */}
 
 
 
-                  <Form.Item label="Brand" name="brand" rules={[{ required: true, message: "Brand is required" }]}>
+                  {/* <Form.Item label="Brand" name="brand" rules={[{ required: true, message: "Brand is required" }]}>
                     <Select placeholder="Select Brand" allowClear>
                       <Option value="68eb81dbf3e7ce80d2119818">BMW</Option>
                       <Option value="brand2">Audi</Option>
                       <Option value="brand3">Mercedes</Option>
                     </Select>
-                  </Form.Item>
+                  </Form.Item> */}
 
                   <Form.Item label="Price" name="price" rules={[{ required: true, message: "Price is required" }]}>
                     <Input type="number" placeholder="Enter price" />
