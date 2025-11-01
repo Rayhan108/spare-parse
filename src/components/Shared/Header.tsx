@@ -152,7 +152,7 @@ const Header = () => {
     <header>
       {/* Top Banner */}
       <div className="bg-[#df5800] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0">
-        Summer Sale For All Parking Light And Free Express Delivery - OFF 50%!{" "}
+        Summer Sale For All Parking Light And Free Express Delivery {" "}
         <Link href={`/product`}>
           <span className="ml-2 font-semibold underline cursor-pointer">ShopNow</span>
         </Link>
