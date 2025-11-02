@@ -201,10 +201,19 @@ export default function LogInForm(): JSX.Element {
         </Form>
 
         {/* Social Login */}
-        <div className="mt-4 space-y-3">
-          <GoogleLogin onSuccess={handleGoogleLogin} onError={() => console.log("Google login failed")} />
 
+        <div className="w-full max-w-sm">
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => console.log("Google login failed")}
+            theme="outline"
+            width="100%"
+            text="signin_with"
+            shape="rectangular"
+          />
         </div>
+
+
 
         <p className="text-center mt-4 text-sm">
           Don’t have an account?{" "}

@@ -225,7 +225,7 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
     } catch (err) {
       api.error({
         message: "Error",
-        description: `Failed to delete item: ${err?.message || err}`,
+        description: `Failed to delete item: ${err}`,
         placement: "topRight",
       });
     }

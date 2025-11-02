@@ -112,35 +112,7 @@ const EditAccount = () => {
         </Form.Item>
 
         {/* Address (optional, //disabled) */}
-        <h3 className="text-lg font-medium mt-4 dark:text-white">Address (optional)</h3>
-        <Form.Item label={<span className="dark:text-white">Street</span>} name="street">
-          <Input
-            className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
-            // //disabled
-            placeholder="Street"
-          />
-        </Form.Item>
-        <Form.Item label={<span className="dark:text-white">City</span>} name="city">
-          <Input
-            className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
-            //disabled
-            placeholder="City"
-          />
-        </Form.Item>
-        <Form.Item label={<span className="dark:text-white">State</span>} name="state">
-          <Input
-            className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
-            //disabled
-            placeholder="State"
-          />
-        </Form.Item>
-        <Form.Item label={<span className="dark:text-white">ZIP Code</span>} name="zip">
-          <Input
-            className="h-12 bg-white text-black dark:bg-white dark:text-black !//disabled:bg-white !//disabled:text-black"
-            //disabled
-            placeholder="ZIP Code"
-          />
-        </Form.Item>
+ 
 
         {/* Submit Button */}
         <Form.Item className="mt-6">
