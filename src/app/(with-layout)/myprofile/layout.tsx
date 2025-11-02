@@ -12,6 +12,8 @@ import {
 import { useGetContactUsInfoQuery } from "@/redux/features/contactUs/contactUsApi";
 import ProfileLayoutSkeleton from "@/utils/ProfileLayoutSkeleton";
 
+
+
 interface CompanyInfo {
   phoneNumber: string;
   email: string;
@@ -48,7 +50,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
     null
   );
 
-  // Handle Profile Image Upload
+
   const handleProfilePicUpload = async (
     info: UploadChangeParam<UploadFile<File>>
   ) => {
@@ -77,7 +79,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
         error !== null &&
         "data" in error &&
         typeof (error as { data: { message?: string } }).data.message ===
-          "string"
+        "string"
       ) {
         message.error((error as { data: { message: string } }).data.message);
       } else {
@@ -86,7 +88,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
     }
   };
 
-  // Loading / Error Handling
+
   if (isUserLoading || isCompanyLoading) return <ProfileLayoutSkeleton />;
   if (isUserError || isCompanyError || !userData?.data || !companyData?.data)
     return <p>Failed to load profile.</p>;

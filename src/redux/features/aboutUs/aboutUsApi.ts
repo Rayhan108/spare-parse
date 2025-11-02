@@ -1,6 +1,6 @@
 import { baseApi } from "@/redux/api/baseApi";
 
-// ✅ Define the About Us data structure
+
 export interface AboutUsData {
     id: string;
     userId: string;
@@ -10,10 +10,8 @@ export interface AboutUsData {
     updatedAt: string;
 }
 
-// ✅ Inject endpoints
 export const aboutUsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        // ✅ GET — fetch About Us content
         getAboutUs: builder.query<
             { success: boolean; message: string; data: AboutUsData },
             void
@@ -26,5 +24,4 @@ export const aboutUsApi = baseApi.injectEndpoints({
     }),
 });
 
-// ✅ Export auto-generated hook
 export const { useGetAboutUsQuery } = aboutUsApi;

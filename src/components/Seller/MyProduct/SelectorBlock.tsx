@@ -9,7 +9,7 @@ import {
 } from "@/redux/features/carBrand/carBrandApi";
 import { useGetAllCategoriesQuery } from "@/redux/features/categories/categoriesApi";
 
-// Types
+
 interface Brand {
     brandId: string;
     brandName: string;
@@ -43,9 +43,7 @@ interface CarAndCategorySelectorProps {
 }
 
 const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelectChange }) => {
-    // const { Option } = Select;
 
-    // 🔹 States
     const [year, setYear] = useState<string>();
     const [brandId, setBrandId] = useState<string>();
     const [brandName, setBrandName] = useState<string>();
@@ -53,18 +51,13 @@ const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelec
     const [modelName, setModelName] = useState<string>();
     const [hp, setHp] = useState<string>();
     const [categoryId, setCategoryId] = useState<string>();
-
-    // 🔹 Categories Query
     const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 1, limit: 100 });
-
-    // 🔹 Generate year list (1976 → current)
     const currentYear = new Date().getFullYear();
     const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
         const y = String(currentYear - i);
         return { value: y, label: y };
     });
 
-    // 🔹 Fetch brands by year
     const { data: brandsData, isLoading: isBrandsLoading } = useGetBrandsByYearQuery(year!, { skip: !year });
     const brandOptions =
         (brandsData?.data as Brand[] | undefined)?.map((b) => ({
@@ -72,7 +65,6 @@ const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelec
             label: b.brandName,
         })) || [];
 
-    // 🔹 Fetch models by brand + year
     const { data: modelsData, isLoading: isModelsLoading } = useGetModelsByBrandQuery(
         { brandId: brandId!, year: year! },
         { skip: !brandId || !year }
@@ -83,7 +75,6 @@ const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelec
             label: m.modelName,
         })) || [];
 
-    // 🔹 Fetch engines by model
     const { data: enginesData, isLoading: isEnginesLoading } = useGetEnginesByModelQuery(modelId!, { skip: !modelId });
     const hpOptions =
         (enginesData?.data as Engine[] | undefined)?.map((e) => ({
@@ -91,7 +82,6 @@ const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelec
             label: `${e.hp} HP`,
         })) || [];
 
-    // 🔹 Reset dependent selections
     useEffect(() => {
         setBrandId(undefined);
         setBrandName(undefined);
@@ -110,7 +100,6 @@ const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelec
         setHp(undefined);
     }, [modelId]);
 
-    // 🔹 Pass selected values upward
     useEffect(() => {
         onSelectChange?.({
             year,

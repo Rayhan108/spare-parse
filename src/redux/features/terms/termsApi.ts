@@ -16,9 +16,8 @@ export interface TermsAndConditionsResponse {
 
 
 
-// redux/features/terms/termsApi.ts
+
 import { baseApi } from "@/redux/api/baseApi";
-// import { TermsAndConditionsResponse } from "@/types/termsAndConditions";
 
 export const termsAndConditionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

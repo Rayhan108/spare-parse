@@ -12,13 +12,9 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { SlCloudUpload } from "react-icons/sl";
 import TipTapMenu from "./TipTapMenu";
 import CarAndCategorySelector from "./SelectorBlock";
-
-
 import { useUpdateProductMutation } from "@/redux/features/seller/product/productApi";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 
-// import { Section, OEMReference, ShippingInfo } from "@/types/productTypes";
-// types/productTypes.ts
 
 export interface Field {
   fieldName: string;
@@ -35,7 +31,7 @@ export interface SubSection {
 export interface Section {
   sectionName: string;
   fields: Field[];
-  subSections?: SubSection[]; // optional
+  subSections?: SubSection[]; 
 }
 
 export interface OEMReference {
@@ -49,8 +45,8 @@ export interface ShippingInfo {
   countryName: string;
   carrier: string;
   cost: number;
-  deliveryMin?: number; // optional
-  deliveryMax?: number; // optional
+  deliveryMin?: number; 
+  deliveryMax?: number; 
   isDefault?: boolean;
 }
 
@@ -100,16 +96,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   const [discount, setDiscount] = useState<number | "">("");
   const [stock, setStock] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
-//   const [form] = Form.useForm();
-
-  // Shared product details
-
-  
-//   const [sections, setSections] = useState<Section[]>([]);
-//   const [oemReferences, setOemReferences] = useState<OEMReference[]>([]);
-//   const [shippingInfo, setShippingInfo] = useState<ShippingInfo[]>([]);
-
-  // Car & category selector
   const [selectedValues, setSelectedValues] = useState<{
     year?: string;
     brandId?: string;
@@ -119,14 +105,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     hp?: string;
     categoryId?: string;
   }>({});
-
   const profilePicUrl = profilePic ? URL.createObjectURL(profilePic) : null;
-
-  // API calls
   const { data, isLoading, isError } = useGetSingleProductQuery(productId);
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
-
-  // TipTap editor
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ bulletList: { HTMLAttributes: { class: "list-disc ml-2" } }, heading: false }),
@@ -140,7 +121,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     },
   });
 
-  // Prefill product data
   useEffect(() => {
     if (data?.data) {
       const product = {
@@ -158,8 +138,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   }, [data, editor]);
 
   const handleSelectChange = (values: typeof selectedValues) => setSelectedValues(values);
-
-  // Submit updated product
   const handleSubmit = async () => {
     if (!data?.data) return message.error("Product data not loaded.");
 
@@ -179,17 +157,12 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
         year: selectedValues.year || undefined,
         hp: selectedValues.hp || undefined,
         brandName: selectedValues.brandName || undefined,
-
         productName: productName || product.productName,
         price: price !== "" ? Number(price) : product.price,
         discount: discount !== "" ? Number(discount) : product.discount,
         stock: stock !== "" ? Number(stock) : product.stock,
         description: editor?.getHTML() || product.description,
         isVisible: product.isVisible,
-
-        // sections,
-        // references: oemReferences,
-        // shipping: shippingInfo,
       };
 
       const formData = new FormData();
@@ -197,11 +170,11 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
       if (profilePic) formData.append("productImages", profilePic);
 
       await updateProduct({ productId, formData }).unwrap();
-      message.success("✅ Product updated successfully!");
+      message.success(" Product updated successfully!");
       handleOk();
     } catch (err) {
       console.error(err);
-      message.error("❌ Failed to update product");
+      message.error("Failed to update product");
     } finally {
       setLoading(false);
     }
@@ -282,20 +255,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
             </div>
-
-
-{/*       
-            <ProductDetailsForm
-              form={form}
-              productId={productId}
-              sections={sections}
-              setSections={setSections}
-              oemReferences={oemReferences}
-              setOemReferences={setOemReferences}
-              shippingInfo={shippingInfo}
-              setShippingInfo={setShippingInfo}
-              brandId={selectedValues.brandId}
-            /> */}
 
             <button
               onClick={() => setNextComponent("description")}

@@ -16,9 +16,8 @@ import SingleProductSkeleton from "@/utils/SingleProductSkeleton";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
 
-// -------------------- TYPES --------------------
-type Tab = "references" | "vehicles" | "alternatives" | "reviews";
 
+type Tab = "references" | "vehicles" | "alternatives" | "reviews";
 interface Seller { userId: string; companyName: string; logo: string | null }
 interface Category { id: string; name: string }
 interface Brand { id: string; brandName: string; brandImage: string | null }
@@ -68,14 +67,8 @@ interface Product {
   averageRating?: number;
 }
 
-
-// API response type
-
-
-// Add to cart request
 interface AddToCartRequest { productId: string }
 
-// -------------------- COMPONENT --------------------
 export default function SingleProduct() {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useGetSingleProductQuery(id);
@@ -83,13 +76,10 @@ export default function SingleProduct() {
   const [activeTab, setActiveTab] = useState<Tab>("references");
   const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
   const [api, contextHolder] = notification.useNotification();
-
   if (isLoading) return <SingleProductSkeleton />;
   if (isError || !data?.data) return <p>Failed to load product details.</p>;
-
   const product: Product = data.data;
 
-  // -------------------- ADD TO CART --------------------
   const handleAddToCart = async () => {
     try {
       const token = Cookies.get("hatem-ecommerce-token");
@@ -132,7 +122,6 @@ export default function SingleProduct() {
     }
   };
 
-  // -------------------- REFERENCE ITEMS --------------------
   const referenceItems = product.references?.length
     ? [
       {
@@ -148,7 +137,7 @@ export default function SingleProduct() {
 
   const fitVehicles: FitVehicle[] = product.fitVehicles || [];
 
-  // -------------------- RENDER --------------------
+
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white py-8 p-6 lg:p-0 mb-6">
       {contextHolder}

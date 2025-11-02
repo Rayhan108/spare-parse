@@ -13,13 +13,11 @@ export default function ForgetPassword(): JSX.Element {
   const [api, contextHolder] = notification.useNotification();
   const router = useRouter();
   const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
-
   const onFinish = async (values: ForgetPasswordFormValues) => {
     try {
       const response = await forgetPassword({ email: values.email }).unwrap();
 
       if (response.success && response.data?.otpToken) {
-        // ✅ Save OTP token in localStorage
         localStorage.setItem("otpToken", response.data.otpToken);
 
         api.success({
@@ -28,7 +26,6 @@ export default function ForgetPassword(): JSX.Element {
           placement: "topRight",
         });
 
-        // Redirect to OTP verification page
         router.push(`/auth/otp-verify-forgotpassword?email=${values.email}`);
       } else {
         api.error({

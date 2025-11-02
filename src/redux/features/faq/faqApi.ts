@@ -12,8 +12,9 @@ export interface FaqResponse {
   message: string;
   data: FaqItem[];
 }
+
+
 import { baseApi } from "@/redux/api/baseApi";
-// import { FaqResponse } from "@/types/faq";
 
 export const faqApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

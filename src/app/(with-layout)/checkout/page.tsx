@@ -28,25 +28,23 @@ type FieldType = {
 };
 
 const CheckoutPage = () => {
+
   const router = useRouter();
   const { data, isLoading, isError } = useGetCheckoutQuery();
   const [createPaymentSession, { data: sessionData, isLoading: paymentLoading }] = useCreatePaymentSessionMutation();
   const [placeOrder, { isLoading: orderLoading }] = usePurchaseWithCODMutation();
-
   const { data: addressesData } = useGetAddressesQuery();
   const [addAddress] = useAddAddressMutation();
   const [updateAddress] = useUpdateAddressMutation();
   const [billingAddress, setBillingAddress] = useState<Address | null>(null);
-
   const [loading, setLoading] = useState(false);
-
   const checkouts: CheckoutData[] = Array.isArray(data?.data)
     ? data.data
     : data?.data
       ? [data.data]
       : [];
 
-  // ✅ Set existing billing address if available
+
   useEffect(() => {
     if (addressesData?.data?.length) {
       const billing = addressesData.data.find(addr => addr.type === "BILLING");
@@ -54,37 +52,24 @@ const CheckoutPage = () => {
     }
   }, [addressesData]);
 
-  // Redirect to Stripe after session is created
   useEffect(() => {
     if (sessionData?.data?.redirectUrl) {
       window.location.href = sessionData.data.redirectUrl;
     }
   }, [sessionData]);
 
-  // Handle save/update billing address
+
   const handleBillingAddressSave = async (values: FieldType) => {
     if (!values.save) return;
-
-    // const billingData = {
-    //   addressLine: values.street!,
-    //   city: values.city!,
-    //   state: "",
-    //   postalCode: "",
-    //   country: "",
-    //   type: "BILLING",
-    // };
-
     const billingData = {
       addressLine: values.street!,
       city: values.city!,
       state: "",
       postalCode: "",
       country: "",
-      type: "BILLING", // ✅ string literal
-    } as const; // all properties inferred as literal types
+      type: "BILLING", 
+    } as const; 
 
-
-    console.log("Billing Address Payload:", billingData);
 
     try {
       if (billingAddress) {
@@ -102,187 +87,35 @@ const CheckoutPage = () => {
     }
   };
 
-  // const onFinish = async (values: FieldType) => {
-  //   console.log("Form Values Submitted:", values);
-
-  //   const { name, street, apartment, city, phone, email, save } = values;
-  //   if (!name || !street || !city || !phone || !email) {
-  //     return message.error("Please fill in all required fields.");
-  //   }
-
-  //   const paymentInput = document.querySelector('input[name="payment"]:checked') as HTMLInputElement;
-  //   const paymentMethod = paymentInput?.value || "cash";
-  //   console.log("Selected Payment Method:", paymentMethod);
-
-  //   const cartItems = checkouts.flatMap((checkout) =>
-  //     checkout.items.map((item: CheckoutItem) => ({
-  //       productId: item.product.id,
-  //       quantity: item.quantity,
-  //       price: item.product.price,
-  //     }))
-  //   );
-
-  //   const totalAmount = checkouts.reduce((sum, checkout) => sum + checkout.totalAmount, 0);
-  //   const checkoutId = checkouts[0]?.id;
-
-  //   if (!checkoutId) {
-  //     message.error("Checkout ID not found. Please refresh and try again.");
-  //     return;
-  //   }
-
-  //   const orderData = {
-  //     name,
-  //     street,
-  //     apartment,
-  //     city,
-  //     phone,
-  //     email,
-  //     paymentMethod,
-  //     cartItems,
-  //     totalAmount,
-  //     saveForNextTime: save,
-  //   };
-
-  //   console.log("Order Data to send:", orderData, "Checkout ID:", checkoutId);
-
-  //   try {
-  //     setLoading(true);
-
-  //     // Save or update billing address
-  //     await handleBillingAddressSave(values);
-
-  //     if (paymentMethod === "online") {
-  //       const sessionRes = await createPaymentSession({ checkoutId }).unwrap();
-  //       console.log("Stripe Session Response:", sessionRes);
-
-  //       if (sessionRes?.data?.redirectUrl) {
-  //         await placeOrder(orderData).unwrap();
-  //         console.log("Order placed successfully before redirect to Stripe.");
-  //         window.location.href = sessionRes.data.redirectUrl;
-  //       } else {
-  //         message.error("Failed to create payment session.");
-  //       }
-  //     } else {
-  //       await placeOrder(orderData).unwrap();
-  //       console.log("Cash on Delivery Order Response: success");
-  //       message.success("Order placed successfully with Cash on Delivery!");
-  //       router.push("/order-success");
-  //     }
-  //   } catch (error) {
-  //     console.error("Checkout Error:", error);
-  //     message.error("Failed to process the order. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const onFinish = async (values: FieldType) => {
-  //   console.log("Form Values Submitted:", values);
-
-  //   const { name, street, apartment, city, phone, email, save } = values;
-  //   if (!name || !street || !city || !phone || !email) {
-  //     return message.error("Please fill in all required fields.");
-  //   }
-
-  //   const paymentInput = document.querySelector('input[name="payment"]:checked') as HTMLInputElement;
-  //   const paymentMethod = paymentInput?.value || "cash";
-  //   console.log("Selected Payment Method:", paymentMethod);
-
-  //   const cartItems = checkouts.flatMap((checkout) =>
-  //     checkout.items.map((item: CheckoutItem) => ({
-  //       productId: item.product.id, // ✅ Ensure productId is sent
-  //       // quantity: item.quantity,
-  //       // price: item.product.price,
-  //     }))
-  //   );
-
-  //   const totalAmount = checkouts.reduce((sum, checkout) => sum + checkout.totalAmount, 0);
-  //   const checkoutId = checkouts[0]?.id;
-
-  //   if (!checkoutId) {
-  //     message.error("Checkout ID not found. Please refresh and try again.");
-  //     return;
-  //   }
-
-  //   const orderData = {
-  //     checkoutId, // ✅ Include checkoutId for COD
-  //     name,
-  //     street,
-  //     apartment,
-  //     city,
-  //     phone,
-  //     email,
-  //     paymentMethod,
-  //     // cartItems,  // ✅ Include productId here
-  //     totalAmount,
-  //     saveForNextTime: save,
-  //   };
-
-  //   console.log("Order Data to send:", orderData, "Checkout ID:", checkoutId);
-
-  //   try {
-  //     setLoading(true);
-
-  //     // Save or update billing address
-  //     await handleBillingAddressSave(values);
-
-  //     if (paymentMethod === "online") {
-  //       const sessionRes = await createPaymentSession({ checkoutId }).unwrap();
-  //       console.log("Stripe Session Response:", sessionRes);
-
-  //       if (sessionRes?.data?.redirectUrl) {
-  //         await placeOrder(orderData).unwrap();
-  //         console.log("Order placed successfully before redirect to Stripe.");
-  //         window.location.href = sessionRes.data.redirectUrl;
-  //       } else {
-  //         message.error("Failed to create payment session.");
-  //       }
-  //     } else {
-  //       // ✅ Fix for Cash on Delivery: send productId and checkoutId
-  //       const codRes = await placeOrder(orderData).unwrap();
-  //       console.log("Cash on Delivery Order Response:", codRes);
-  //       message.success("Order placed successfully with Cash on Delivery!");
-  //       router.push("/order-success");
-  //     }
-  //   } catch (error) {
-  //     console.error("Checkout Error:", error);
-  //     message.error("Failed to process the order. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
 
   const onFinish = async (values: FieldType) => {
     console.log("Form Values Submitted:", values);
 
     const { name, street, apartment, city, phone, email, save } = values;
 
-    // ✅ Basic validation
+
     if (!name || !street || !city || !phone || !email) {
       return message.error("Please fill in all required fields.");
     }
 
-    // ✅ Determine selected payment method
+ 
     const paymentInput = document.querySelector(
       'input[name="payment"]:checked'
     ) as HTMLInputElement;
     const paymentMethod = paymentInput?.value || "cash";
     console.log("Selected Payment Method:", paymentMethod);
 
-    // ✅ Ensure checkout exists
     const checkoutId = checkouts[0]?.id;
     if (!checkoutId) {
       message.error("Checkout ID not found. Please refresh and try again.");
       return;
     }
 
-    // ✅ Map checkout items to array of string IDs
+
     const productIds: string[] = checkouts.flatMap((checkout) =>
       checkout.items.map((item: CheckoutItem) => item.product.id)
     );
 
-    // Prepare order data to match API signature
     const orderData = {
       checkoutId,
       productIds,
@@ -300,16 +133,14 @@ const CheckoutPage = () => {
     try {
       setLoading(true);
 
-      // ✅ Save or update billing address if user opted to
       await handleBillingAddressSave(values);
 
       if (paymentMethod === "online") {
-        // ✅ Create Stripe session
+
         const sessionRes = await createPaymentSession({ checkoutId }).unwrap();
         console.log("Stripe Session Response:", sessionRes);
 
         if (sessionRes?.data?.redirectUrl) {
-          // ✅ Place order before redirect
           await placeOrder(orderData).unwrap();
           console.log("Order placed successfully before redirect to Stripe.");
           window.location.href = sessionRes.data.redirectUrl;
@@ -317,7 +148,6 @@ const CheckoutPage = () => {
           message.error("Failed to create payment session.");
         }
       } else {
-        // ✅ Cash on Delivery
         const codRes = await placeOrder(orderData).unwrap();
         console.log("Cash on Delivery Order Response:", codRes);
         message.success("Order placed successfully with Cash on Delivery!");

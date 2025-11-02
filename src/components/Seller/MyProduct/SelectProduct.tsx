@@ -13,7 +13,6 @@ const SelectProduct = () => {
                 <div className="flex items-center w-full">
                     <span className="bg-[#f56100] py-[10px] px-4 text-white">1</span>
                     <Select
-                        // defaultValue="2025"
                         placeholder="Year"
                         className="w-full"
                         options={[

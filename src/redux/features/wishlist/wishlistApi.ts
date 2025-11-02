@@ -1,6 +1,6 @@
 import { baseApi } from "../../api/baseApi";
 
-// ------------------- Product type -------------------
+
 export interface Product {
   id: string;
   productName: string;
@@ -30,14 +30,14 @@ export interface Product {
   };
 }
 
-// ------------------- Wishlist Item type -------------------
+
 export interface WishlistItem {
-  id: string;         // wishlist item ID
+  id: string;         
   productId: string;
   product: Product;
 }
 
-// ------------------- API Response type -------------------
+
 interface WishlistApiResponse {
   success: boolean;
   statusCode: number;
@@ -52,7 +52,7 @@ interface WishlistApiResponse {
   }>;
 }
 
-// ------------------- Wishlist API -------------------
+
 export const wishlistApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get all wishlist items
@@ -77,7 +77,7 @@ export const wishlistApi = baseApi.injectEndpoints({
           : [{ type: "Wishlist", id: "LIST" }],
     }),
 
-    // Add a product to wishlist
+
     addToWishlist: builder.mutation<WishlistItem, { productId: string }>({
       query: ({ productId }) => ({
         url: "/favorite-products",
@@ -87,7 +87,7 @@ export const wishlistApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "Wishlist", id: "LIST" }],
     }),
 
-    // Delete a wishlist item
+
     deleteWishlistItem: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
         url: `/favorite-products/${id}`,

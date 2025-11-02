@@ -1,5 +1,4 @@
 "use client";
-
 import { Breadcrumb, ConfigProvider, Form, FormProps, Input, Spin, notification } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Link from "next/link";
@@ -18,11 +17,9 @@ type FieldType = {
 const Contact = () => {
   const { data, isLoading, isError } = useGetContactUsInfoQuery();
   const contact = data?.data;
-
   const [form] = Form.useForm<FieldType>();
   const [createSupport, { isLoading: isSubmitting }] = useCreateSupportMutation();
   const [api, contextHolder] = notification.useNotification();
-
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       if (!values.email || !values.phone || !values.message) return;
@@ -39,8 +36,6 @@ const Contact = () => {
         description: "Your message has been submitted successfully!",
         placement: "topRight",
       });
-
-      // ✅ Clear the form after success
       form.resetFields();
 
     } catch (err: unknown) {
@@ -78,6 +73,7 @@ const Contact = () => {
     );
 
   return (
+
     <div className="relative px-3 md:px-0">
       {contextHolder}
       <div className="container mx-auto py-16">
@@ -123,7 +119,7 @@ const Contact = () => {
               }}
             >
               <Form<FieldType>
-                form={form} // ✅ important for resetFields
+                form={form} 
                 layout="vertical"
                 onFinish={onFinish}
                 autoComplete="off"

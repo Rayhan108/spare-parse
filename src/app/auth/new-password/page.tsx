@@ -21,12 +21,10 @@ export default function UpdatePasswordForm(): JSX.Element {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email: string | null = searchParams.get("email");
-
   const [otpToken, setOtpToken] = useState<string | null>(null);
-
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
 
-  // Get OTP token from localStorage
+
   useEffect(() => {
     const token = localStorage.getItem("otpToken");
     setOtpToken(token);
@@ -86,7 +84,6 @@ export default function UpdatePasswordForm(): JSX.Element {
           placement: "topRight",
         });
 
-        // Remove OTP token after successful update
         localStorage.removeItem("otpToken");
 
         router.push("/auth/login");

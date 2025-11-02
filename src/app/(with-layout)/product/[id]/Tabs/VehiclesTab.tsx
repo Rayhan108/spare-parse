@@ -29,7 +29,6 @@ interface VehiclesTabProps {
 export default function VehiclesTab({ fitVehicles }: VehiclesTabProps) {
   const [expandedBrand, setExpandedBrand] = useState<Set<string>>(new Set());
   const [expandedModel, setExpandedModel] = useState<Set<string>>(new Set());
-
   const toggleBrand = (brand: string) => {
     const newSet = new Set(expandedBrand);
     if (newSet.has(brand)) newSet.delete(brand);
@@ -44,7 +43,7 @@ export default function VehiclesTab({ fitVehicles }: VehiclesTabProps) {
     setExpandedModel(newSet);
   };
 
-  // Group vehicles by brand
+
   const grouped: Record<string, FitVehicle[]> = {};
   fitVehicles.forEach((v) => {
     const brandName = v.engine.generation.model.brand.brandName || "Unknown";
@@ -52,7 +51,7 @@ export default function VehiclesTab({ fitVehicles }: VehiclesTabProps) {
     grouped[brandName].push(v);
   });
 
-  // Group vehicles by model within a brand
+
   const getModelGroups = (vehicles: FitVehicle[]) => {
     const modelGroups: Record<string, FitVehicle[]> = {};
     vehicles.forEach((v) => {

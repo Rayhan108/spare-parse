@@ -12,7 +12,7 @@ import {
 } from "@/redux/features/carBrand/carBrandApi";
 import { useRouter } from "next/navigation";
 
-// -------------------- Types --------------------
+
 interface Brand {
     brandId: string;
     brandName: string;
@@ -63,35 +63,25 @@ interface Product {
     yearRange: string;
 }
 
-// -------------------- Component --------------------
+
 const SelectYourVehicle = () => {
-    // Filters
+   
     const [year, setYear] = useState<string>();
     const [brandId, setBrandId] = useState<string>();
     const [brandName, setBrandName] = useState<string>();
     const [modelId, setModelId] = useState<string>();
     const [modelName, setModelName] = useState<string>();
     const [hp, setHp] = useState<string>();
-
-    // Pagination
     const [currentPage, setCurrentPage] = useState<number>(1);
     const pageSize = 8;
-
-    // Expanded card
-
-    // Year options hardcoded 1976 → current year
     const currentYear = new Date().getFullYear();
-
     const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
         const y = String(currentYear - i);
         return { value: y, label: y };
     });
-
-    // 1️⃣ Brands
     const {
         data: brandsData,
         isLoading: isBrandsLoading,
-        // isError: isBrandsError,
     } = useGetBrandsByYearQuery(year!, { skip: !year });
 
     const brandOptions =
@@ -100,11 +90,10 @@ const SelectYourVehicle = () => {
             label: b.brandName,
         })) || [];
 
-    // 2️⃣ Models
+
     const {
         data: modelsData,
         isLoading: isModelsLoading,
-        // isError: isModelsError,
     } = useGetModelsByBrandQuery(
         { brandId: brandId!, year: year! },
         { skip: !brandId || !year }
@@ -116,17 +105,15 @@ const SelectYourVehicle = () => {
             label: m.modelName,
         })) || [];
 
-    // 3️⃣ Engines
+
     const {
         data: enginesData,
         isLoading: isEnginesLoading,
-        // isError: isEnginesError,
     } = useGetEnginesByModelQuery(modelId!, { skip: !modelId });
 
     const hpOptions: { value: string; label: string }[] =
         enginesData?.data.map((e: Engine) => ({ value: String(e.hp), label: `${e.hp} HP` })) || [];
 
-    // 4️⃣ Final vehicle list
     const {
         data: vehiclesData,
         isLoading: isVehiclesLoading,
@@ -154,7 +141,6 @@ const SelectYourVehicle = () => {
             ).getFullYear()}`,
         })) || [];
 
-    // Reset dependent selections
     useEffect(() => {
         setBrandId(undefined);
         setBrandName(undefined);
@@ -177,8 +163,6 @@ const SelectYourVehicle = () => {
     }, [modelId]);
 
     useEffect(() => setCurrentPage(1), [hp]);
-
-    // Pagination
     const paginatedProducts = products.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
@@ -188,7 +172,7 @@ const SelectYourVehicle = () => {
 const router = useRouter();
 
 const handleClick = (engineId: string) => {
-    // Navigate to /vehicle with query parameter
+
     router.push(`/vehicle?engineId=${engineId}`);
 };
 
@@ -265,7 +249,7 @@ const handleClick = (engineId: string) => {
             </div>
 
             <div className="mt-10">
-                {/* <Tabs defaultActiveKey="1" items={[{ key: "1", label: "Car Model" }]} /> */}
+
 
                 <div className="mt-8 space-y-4">
                     {isVehiclesLoading ? (

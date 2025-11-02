@@ -14,13 +14,8 @@ import Image from "next/image"
 import { IoMdArrowRoundBack } from "react-icons/io"
 import { MdDelete } from "react-icons/md"
 import TipTapMenu from "./TipTapMenu"
-
-import { useAddProductMutation } from "@/redux/features/seller/product/productApi" // Adjust the import according to your project structure
-
-
-
+import { useAddProductMutation } from "@/redux/features/seller/product/productApi" 
 import { useEffect } from "react";
-
 import {
   useGetBrandsByYearQuery,
   useGetModelsByBrandQuery,
@@ -28,17 +23,6 @@ import {
 } from "@/redux/features/carBrand/carBrandApi";
 import { useGetAllCategoriesQuery } from "@/redux/features/categories/categoriesApi"
 import { useRouter } from "next/navigation"
-// import { UploadChangeParam, UploadFile } from "antd/es/upload"
-
-
-
-//category 
-// // adjust path
-// const { Option } = Select;
-// interface Brand {
-//   brandId: string;
-//   brandName: string;
-// }
 
 interface Model {
   modelId: string;
@@ -116,44 +100,32 @@ interface ProductFormFields {
   shippingDeliveryMin?: number
   shippingDeliveryMax?: number
   shippingIsDefault?: boolean
-  // for dynamic fields (section fields/subfields)
+
 }
 
 
 const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handleOk, handleCancel }) => {
-
-  //categroy 
-
   const {
     data: categoriesData,
     isLoading: isCategoriesLoading,
-    // isError: isCategoriesError,
   } = useGetAllCategoriesQuery({ page: 1, limit: 100 });
   console.log(categoriesData);
-
-
   const [year, setYear] = useState<string>();
   const [brandId, setBrandId] = useState<string>();
   const [brandName, setBrandName] = useState<string>();
   const [modelId, setModelId] = useState<string>();
   const [modelName, setModelName] = useState<string>();
   const [hp, setHp] = useState<string>();
-  // const [brandeID ,setBrandeId] = useState<string>();
-
-
   console.log("brand id ", brandId);
-
   console.log(brandName);
   console.log(modelName);
-
-  // Generate years (1976 → current)
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
     const y = String(currentYear - i);
     return { value: y, label: y };
   });
 
-  // 1️⃣ Fetch brands by selected year
+
   const { data: brandsData, isLoading: isBrandsLoading } = useGetBrandsByYearQuery(year!, {
     skip: !year,
   });
@@ -163,7 +135,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
       label: b.brandName,
     })) || [];
 
-  // 2️⃣ Fetch models by brand + year
+
   const { data: modelsData, isLoading: isModelsLoading } = useGetModelsByBrandQuery(
     { brandId: brandId!, year: year! },
     { skip: !brandId || !year }
@@ -174,7 +146,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
       label: m.modelName,
     })) || [];
 
-  // 3️⃣ Fetch engines by model
+
   const { data: enginesData, isLoading: isEnginesLoading } = useGetEnginesByModelQuery(modelId!, {
     skip: !modelId,
   });
@@ -184,27 +156,21 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
       label: `${e.hp} HP`,
     })) || [];
 
-  // Reset dependent fields
+
   useEffect(() => {
     setBrandId(undefined);
-    // setBrandName(undefined);
     setModelId(undefined);
-    // setModelName(undefined);
     setHp(undefined);
   }, [year]);
 
   useEffect(() => {
     setModelId(undefined);
-    // setModelName(undefined);
     setHp(undefined);
   }, [brandId]);
 
   useEffect(() => {
     setHp(undefined);
   }, [modelId]);
-
-
-
 
 
   const { Option } = Select
@@ -214,10 +180,8 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
   const [oemReferences, setOemReferences] = useState<OEMReference[]>([])
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo[]>([])
   const [sections, setSections] = useState<Section[]>([])
-  // const [formData, setFormData] = useState<any>({})
   const [addProduct] = useAddProductMutation();
   const [categoryId, setCategoryId] = useState<string>();
-
   const [formData, setFormData] = useState<ProductFormFields>({
     productName: "",
     productAvailability: "inStock",
@@ -279,17 +243,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
 
   const [profilePic, setProfilePic] = useState<File | null>(null)
   const profilePicUrl = profilePic ? URL.createObjectURL(profilePic) : null
-  // const handleProfilePicUpload = (file: File) => {
-  //   setProfilePic(file)
-  // }
 
-
-  // const handleProfilePicUpload = (info: UploadChangeParam<UploadFile>) => {
-  //   const file = info.file.originFileObj;
-  //   if (file) {
-  //     setProfilePic(file);
-  //   }
-  // };
 
   const handleAddOEMReference = () => {
     const refType = form.getFieldValue("refType")
@@ -426,7 +380,6 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
         return;
       }
 
-      // 1️⃣ Build sections including typed-but-not-added fields
       const updatedSections = sections.map((section, sIndex) => {
         const updatedFields = [...section.fields];
         const typedFieldName = form.getFieldValue(`field_name_${sIndex}`);
@@ -509,8 +462,8 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
 
       router.refresh();
       setTimeout(() => {
-        window.location.reload(); // Full page reload
-      }, 1000); // 1 second delay
+        window.location.reload(); 
+      }, 1000); 
     } catch (error) {
       console.error("Upload error:", error);
       message.error("Error uploading product");
@@ -776,11 +729,6 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                       <Form.Item name="refNumber" noStyle initialValue="">
                         <Input placeholder="Reference number" className="w-1/3" />
                       </Form.Item>
-                      {/* <Form.Item name="refBrandId" noStyle initialValue="">
-                        <Input placeholder="Brand ID (for OE)" className="w-1/4" />
-                      </Form.Item> */}
-
-
                       <Form.Item name="refBrandId" noStyle>
                         <Input
                           placeholder="Brand ID (auto-filled from Engine Power)"
@@ -912,20 +860,11 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                       </div>
                     </>
                   ) : (
-                    // <Upload
-                    //   showUploadList={false}
-                    //   beforeUpload={() => false}
-                    //   onChange={handleProfilePicUpload}
-                    //   className=""
-                    // >
-                    //   <SlCloudUpload className=" cursor-pointer" size={32} />
-                    // </Upload>
-
                     <Upload
                       showUploadList={false}
                       beforeUpload={(file: File) => {
-                        setProfilePic(file) // update state directly
-                        return false // prevent automatic upload
+                        setProfilePic(file) 
+                        return false 
                       }}
                     >
                       <SlCloudUpload className="cursor-pointer" size={32} />

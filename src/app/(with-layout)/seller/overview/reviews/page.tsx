@@ -12,14 +12,10 @@ const Reviews = () => {
   const { data, isLoading } = useGetMyProductReviewsQuery();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
   if (isLoading) return <Spin className="mt-20 mx-auto" />;
-
-  // ✅ Safely map reviews array
   const reviews = Array.isArray(data?.data?.data) ? data.data.data : [];
 
   return (
@@ -58,9 +54,7 @@ const Reviews = () => {
               key={index}
               className="flex gap-8 items-start sm:items-center py-3 border-b border-gray-100 last:border-b-0 px-2 sm:px-0"
             >
-              {/* Left side: user + product info */}
               <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start sm:items-center w-full">
-                {/* User info */}
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <div className="w-10 h-10 rounded-full overflow-hidden">
                     <Image
@@ -68,27 +62,9 @@ const Reviews = () => {
                       alt={review.customerName || "User"}
                       width={40}
                       height={40}
-                      className="object-cover w-[40px] h-[40px]" // ensure CSS matches props
+                      className="object-cover w-[40px] h-[40px]" 
                     />
 
-
-                    {/* {review.customerImage ? (
-                      <Image
-                        src={review.customerImage}
-                        alt={review.customerName || "User"}
-                        width={40}
-                        height={40}
-                        className="object-cover"
-                      />
-                    ) : (
-                      <Image
-                        src="https://via.placeholder.com/40"
-                        alt="Default User"
-                        width={40}
-                        height={40}
-                        className="object-cover"
-                      />
-                    )} */}
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800 dark:text-white">
@@ -114,26 +90,6 @@ const Reviews = () => {
                       height={48}
                       className="object-contain w-[48px] h-[48px]"
                     />
-
-
-                    {/* Product Image */}
-                    {/* {review.productImages?.[0] ? (
-                      <Image
-                        src={review.productImages[0]}
-                        alt={review.productName || "Product"}
-                        width={48}
-                        height={48}
-                        className="object-contain"
-                      />
-                    ) : (
-                      <Image
-                        src="https://via.placeholder.com/60"
-                        alt="Default Product"
-                        width={48}
-                        height={48}
-                        className="object-contain"
-                      />
-                    )} */}
                   </div>
                   <div className="min-w-0">
                     <p className="font-semibold text-gray-800 truncate dark:text-white">

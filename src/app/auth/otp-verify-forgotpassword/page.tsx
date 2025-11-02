@@ -25,7 +25,7 @@ export default function OtpVerify(): JSX.Element {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
-  // Ensure email exists
+
   if (!email) {
     console.error("Missing email in URL params");
   }
@@ -104,38 +104,6 @@ export default function OtpVerify(): JSX.Element {
       });
   };
 
-//   const handleResend = () => {
-//     if (!email) {
-//       api.error({
-//         message: "Missing Email",
-//         description: "Email not found in URL",
-//         placement: "topRight",
-//       });
-//       return;
-//     }
-
-//     resendOtp({ email })
-//       .unwrap()
-//       .then((response) => {
-//         api.success({
-//           message: "OTP Resent",
-//           description: "A new OTP has been sent to your email",
-//           placement: "topRight",
-//         });
-//         localStorage.setItem("otpToken", response?.data?.otpToken || "");
-//         setTimer(30);
-//       })
-//       .catch((error) => {
-//         api.error({
-//           message: getErrorMessage(error),
-//           description: "Please try again later",
-//           placement: "topRight",
-//         });
-//       });
-//   };
-
-
-
 const handleResend = () => {
   if (!email) {
     api.error({
@@ -154,17 +122,14 @@ const handleResend = () => {
         description: "A new OTP has been sent to your email",
         placement: "topRight",
       });
-
-      // Remove old token first (optional)
       localStorage.removeItem("otpToken");
 
-      // Set new OTP token
       if (response?.data?.otpToken) {
         localStorage.setItem("otpToken", response.data.otpToken);
-        setOtpToken(response.data.otpToken); // update state too
+        setOtpToken(response.data.otpToken); 
       }
 
-      setTimer(30); // restart countdown
+      setTimer(30);
     })
     .catch((error) => {
       api.error({

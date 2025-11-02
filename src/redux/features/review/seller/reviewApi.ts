@@ -1,6 +1,4 @@
 import { baseApi } from "../../../api/baseApi";
-
-// 🧾 TypeScript types
 export interface ProductReviewItem {
   id: string;
   rating: number;
@@ -16,21 +14,6 @@ export interface ProductReviewItem {
   productImages: string[];
   data:string;
 }
-
-// export interface ProductReviewsResponse {
-//   success: boolean;
-//   statusCode: number;
-//   message: string;
-//   data: ProductReviewItem[];
-//   meta: {
-//     page: number;
-//     limit: number;
-//     total: number;
-//     totalPages: number;
-//     hasNextPage: boolean;
-//     hasPrevPage: boolean;
-//   };
-// }
 
 
 export interface ProductReviewsResponse {
@@ -51,7 +34,7 @@ export interface ProductReviewsResponse {
 }
 
 
-// 🧩 API endpoint
+
 export const reviewApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getMyProductReviews: builder.query<ProductReviewsResponse, void>({

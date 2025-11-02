@@ -9,7 +9,7 @@ import Link from "next/link";
 import { message, Spin } from "antd";
 import { useState } from "react";
 
-// ------------------- Wishlist Item type -------------------
+
 export interface WishlistItem {
   id: string;
   product: Product;
@@ -19,7 +19,6 @@ const Wishlist = () => {
   const { data: wishlist, isLoading, isError } = useGetWishlistQuery();
   const [deleteWishlistItem] = useDeleteWishlistItemMutation();
   const [clearing, setClearing] = useState(false);
-
   const handleClearWishlist = async () => {
     if (!wishlist || wishlist.length === 0) return;
 

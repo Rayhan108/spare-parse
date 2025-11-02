@@ -15,7 +15,7 @@ import {
 
 import { useGetProductReviewsQuery } from "@/redux/features/services/reviewApi";
 
-// ------------------- Product type -------------------
+
 export interface Product {
   id: string;
   productName: string;
@@ -27,25 +27,23 @@ export interface Product {
   };
 }
 
-// ------------------- Wishlist item type -------------------
 export interface WishlistItem {
   id: string;
   product: Product;
 }
 
-// ------------------- Props -------------------
 interface ProductCartProps {
   product: Product;
 }
 
-// ------------------- Component -------------------
+
 const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
   const discountPercentage: number = product.discount ?? 0;
   const discount: number = discountPercentage / 100;
   const price: number = product.price - product.price * discount;
   const originalPrice: number = product.price;
 
-  // Wishlist hooks
+
   const { data: wishlist } = useGetWishlistQuery();
   const [addToWishlist] = useAddToWishlistMutation();
   const [deleteWishlistItem] = useDeleteWishlistItemMutation();
@@ -61,7 +59,6 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
       ? product.productImages[0]
       : "/no-image.png";
 
-  // ------------------- Handle wishlist toggle -------------------
   const handleWishlistToggle = async (): Promise<void> => {
     try {
       const token = Cookies.get("hatem-ecommerce-token");
@@ -103,13 +100,13 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
     }
   };
 
-  // ------------------- Fetch reviews -------------------
+
   const { data: reviewData } = useGetProductReviewsQuery(
     { productId: product.id },
     { skip: !product?.id }
   );
 
-  // Calculate average and total ratings from the array
+
   const reviews = reviewData?.data ?? [];
   const totalRatings = reviews.length;
   const averageRating =
@@ -123,7 +120,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
     console.log("Average rating:", averageRating);
   }, [reviews, averageRating]);
 
-  // ------------------- JSX -------------------
+
   return (
     <div className="relative">
       {contextHolder}
@@ -134,7 +131,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
         </div>
       )}
 
-      {/* Product Image */}
+
       <Link href={`/product/${product.id}`}>
         <Image
           src={imageUrl}
@@ -145,7 +142,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
         />
       </Link>
 
-      {/* Wishlist Icon */}
+
       <IoIosHeartEmpty
         onClick={handleWishlistToggle}
         className={`${isAdded ? "bg-primary text-white" : "bg-[#e6fbef]"

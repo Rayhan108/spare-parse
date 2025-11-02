@@ -43,17 +43,16 @@ interface VehicleProductsApiResponse {
   data: VehicleProductsData;
 }
 
-// --- Component ---
+
 export default function VehicleProductsPage() {
   const [brandFilter, setBrandFilter] = useState("");
   const searchParams = useSearchParams();
   const engineId = searchParams.get("engineId") || "";
-
   const router = useRouter();
 
-  // Handle product click
+
   const handleProductClick = (productId: string) => {
-    router.push(`/product/${productId}`); // adjust the path to your Single Product page route
+    router.push(`/product/${productId}`);
   };
 
   const { data: apiResponse, isLoading, isError } =

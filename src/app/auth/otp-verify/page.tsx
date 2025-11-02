@@ -16,13 +16,13 @@ export default function OtpVerify(): JSX.Element {
     const searchParams = useSearchParams();
     const email = searchParams.get("email");
 
-    // Get OTP token from localStorage
+
     useEffect(() => {
         const token = localStorage.getItem("otpToken");
         setOtpToken(token);
     }, []);
 
-    // Countdown timer for resend
+
     useEffect(() => {
         if (timer > 0) {
             const countdown = setTimeout(() => setTimer(timer - 1), 1000);

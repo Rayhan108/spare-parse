@@ -1,9 +1,5 @@
 import { baseApi } from "../../api/baseApi"
 
-// ========================
-// Types
-// ========================
-
 export interface Category {
   id: string
   userId: string
@@ -73,13 +69,10 @@ export interface ProductsResponse {
   data: Product[]
 }
 
-// ========================
-// API
-// ========================
+
 
 const categoriesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Get all categories
     getAllCategories: builder.query<CategoriesResponse, { page?: number; limit?: number } | void>({
       query: (params) => {
         const { page = 1, limit = 10 } = params || {}
@@ -90,8 +83,6 @@ const categoriesApi = baseApi.injectEndpoints({
       },
     }),
 
-
-    // Get products by category ID
     getProductsByCategory: builder.query<ProductsResponse, string>({
       query: (categoryId) => ({
         url: `/products/category-wise/${categoryId}`,
@@ -100,10 +91,6 @@ const categoriesApi = baseApi.injectEndpoints({
     }),
   }),
 })
-
-// ========================
-// Hooks
-// ========================
 
 export const {
   useGetAllCategoriesQuery,

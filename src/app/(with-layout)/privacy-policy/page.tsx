@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useGetPrivacyPolicyQuery } from "@/redux/features/privacyPolicy/privacyPolicyApi";
 
 const PrivacyPolicyPage = () => {
-  // Fetch Privacy Policy data
   const { data, isLoading, isError } = useGetPrivacyPolicyQuery();
   const policy = data?.data;
 

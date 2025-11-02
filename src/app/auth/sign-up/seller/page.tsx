@@ -6,7 +6,7 @@ import { FaFacebook } from "react-icons/fa"
 import type React from "react"
 import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
-// import type { UploadProps } from 'antd';
+
 import { Button, Upload } from 'antd';
 import { MdOutlineFileUpload } from "react-icons/md"
 import { useSignUpMutation } from "@/redux/features/auth/authApi"

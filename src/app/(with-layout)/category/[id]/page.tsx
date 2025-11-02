@@ -3,20 +3,14 @@ import { IoArrowForward } from "react-icons/io5";
 import image from '../../../../../public/slide-image.png'
 import ProductCart, { Product } from "@/components/Home/ProductCart";
 import 'swiper/css';
-
-// import { useState } from "react";
 import { useGetProductsByCategoryQuery } from "@/redux/features/categories/categoriesApi";
 import { useParams } from "next/navigation";
-// import { Swiper as SwiperClass } from 'swiper';
 import ProductSkeleton from "@/utils/ProductSkeleton";
 import Link from "next/link";
 
 const Category = () => {
-  // const [swiper, setSwiper] = useState<SwiperClass | null>(null);
-  // const [select, setSelect] = useState<string | null>(null);
-
   const params = useParams();
-  const categoryId = params?.id as string; // <-- get category id from the route
+  const categoryId = params?.id as string; 
   const { data: productData, isLoading: prodLoading } = useGetProductsByCategoryQuery(categoryId ?? "");
   const products: Product[] = productData?.data ?? [];
 

@@ -70,60 +70,6 @@ const ChangePassword: FC = () => {
         <div className="space-y-8">
             {contextHolder}
             <h2 className="text-xl font-medium">Change Password</h2>
-
-            {/* <Form<ChangePasswordFormValues>
-                form={form}
-                name="changePassword"
-                layout="vertical"
-                onFinish={onFinish}
-                autoComplete="off"
-            >
-                <Form.Item
-                    label={<p className="dark:text-white">Current Password</p>}
-                    name="currentPassword"
-                    rules={[{ required: true, message: "Please enter your current password!" }]}
-                >
-                    <Input.Password placeholder="Enter current password" className="h-12" />
-                </Form.Item>
-
-                <Form.Item
-                    label={<p className="dark:text-white">New Password</p>}
-                    name="newPassword"
-                    rules={[{ required: true, message: "Please enter your new password!" }]}
-                >
-                    <Input.Password placeholder="Enter new password" className="h-12" />
-                </Form.Item>
-
-                <Form.Item
-                    label={<p className="dark:text-white">Confirm New Password</p>}
-                    name="confirmNewPassword"
-                    dependencies={['newPassword']}
-                    rules={[
-                        { required: true, message: "Please confirm your new password!" },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (!value || getFieldValue('newPassword') === value) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject(new Error("Passwords do not match!"));
-                            },
-                        }),
-                    ]}
-                >
-                    <Input.Password placeholder="Confirm new password" className="h-12" />
-                </Form.Item>
-
-                <Form.Item className="mt-6">
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="bg-primary w-full py-3 rounded-md cursor-pointer text-white"
-                    >
-                        {isLoading ? "Processing..." : "Change Password"}
-                    </button>
-                </Form.Item>
-            </Form> */}
-
             <Form<ChangePasswordFormValues>
                 form={form}
                 name="changePassword"

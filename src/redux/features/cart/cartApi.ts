@@ -1,31 +1,31 @@
 import { baseApi } from "../../api/baseApi";
 
-// 🧩 Product brand info
+
 interface Brand {
   id: string;
   brandName: string;
   brandImage: string | null;
 }
 
-// 🧩 Product category info
+
 interface Category {
   id: string;
   name: string;
 }
 
-// 🧩 Product seller info
+
 interface Seller {
   userId: string;
   companyName: string;
   logo: string | null;
 }
 
-// 🧩 Product review count
+
 interface ProductCount {
   review: number;
 }
 
-// 🧩 Product details
+
 interface Product {
   id: string;
   productName: string;
@@ -42,7 +42,6 @@ interface Product {
   _count: ProductCount;
 }
 
-// 🧩 Each cart item
 export interface CartItem {
   id: string;
   cartId: string;
@@ -53,7 +52,7 @@ export interface CartItem {
   quantity: number;
 }
 
-// 🧩 Meta information (pagination)
+
 interface CartMeta {
   page: number;
   limit: number;
@@ -63,7 +62,7 @@ interface CartMeta {
   hasPrevPage: boolean;
 }
 
-// 🧩 Full GetCartResponse
+
 export interface GetCartResponse {
   success: boolean;
   statusCode: number;
@@ -72,7 +71,7 @@ export interface GetCartResponse {
   meta: CartMeta;
 }
 
-// 🧩 Add to Cart Request & Response
+
 export interface AddToCartRequest {
   productId: string;
 }
@@ -88,18 +87,17 @@ export interface AddToCartResponse {
   };
 }
 
-// 🧩 Delete Cart Item Response
+
 export interface DeleteCartItemResponse {
   success: boolean;
   statusCode: number;
   message: string;
-  data: CartItem; // The deleted cart item
+  data: CartItem; 
 }
 
-// 🧩 API Endpoints
+
 export const cartApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Add item to cart
     addToCart: builder.mutation<AddToCartResponse, AddToCartRequest>({
       query: (body) => ({
         url: "/carts",
@@ -109,7 +107,6 @@ export const cartApi = baseApi.injectEndpoints({
       invalidatesTags: ["Cart"],
     }),
 
-    // Get cart list
     getCart: builder.query<GetCartResponse, void>({
       query: () => ({
         url: "/carts",
@@ -118,7 +115,7 @@ export const cartApi = baseApi.injectEndpoints({
       providesTags: ["Cart"],
     }),
 
-    // Delete specific cart item
+
     deleteCartItem: builder.mutation<DeleteCartItemResponse, string>({
       query: (cartItemId) => ({
         url: `/carts/${cartItemId}`,
@@ -129,7 +126,7 @@ export const cartApi = baseApi.injectEndpoints({
   }),
 });
 
-// 🧩 Export hooks
+
 export const {
   useAddToCartMutation,
   useGetCartQuery,

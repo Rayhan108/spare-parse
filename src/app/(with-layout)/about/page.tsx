@@ -1,29 +1,22 @@
 "use client";
-
 import { Breadcrumb, Spin } from "antd";
 import Link from "next/link";
 import Image from "next/image";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { RiLinkedinLine } from "react-icons/ri";
-
 import our_story from "../../../../public/our_story.png";
 import delivery from "../../../../public/service/delivery.svg";
 import customer_service from "../../../../public/service/customer_service.svg";
 import money_back from "../../../../public/service/money_back.svg";
-
 import { useGetAboutUsQuery } from "@/redux/features/aboutUs/aboutUsApi";
 import { useGetFoundingTeamsQuery } from "@/redux/features/foundingTeam/foundingTeam";
 
 
 const About = () => {
-  // Fetch About Us data
+
   const { data, isLoading, isError } = useGetAboutUsQuery();
   const about = data?.data;
-
-  // Fetch Founding Team data
   const { data: teamData, isLoading: isTeamLoading, isError: isTeamError } = useGetFoundingTeamsQuery();
-
-
   const teamMembers = teamData?.data || [];
 
   if (isLoading || isTeamLoading)
@@ -43,7 +36,6 @@ const About = () => {
   return (
     <div className="relative px-3 md:px-0">
       <div className="container mx-auto py-16">
-        {/* Breadcrumb */}
         <Breadcrumb
           items={[
             {

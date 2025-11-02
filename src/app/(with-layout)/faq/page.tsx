@@ -3,7 +3,6 @@
 import { Breadcrumb, Collapse, Spin } from "antd";
 import Link from "next/link";
 import { useGetFaqsQuery } from "@/redux/features/faq/faqApi";
-
 const { Panel } = Collapse;
 
 const FaqPage = () => {

@@ -15,8 +15,6 @@ export interface SwitchRoleResponse {
 
 
 import { baseApi } from "@/redux/api/baseApi";
-// import { SwitchRoleRequest, SwitchRoleResponse } from "@/types/switchRole";
-
 export const switchRoleApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     switchUserRole: builder.mutation<SwitchRoleResponse, SwitchRoleRequest>({

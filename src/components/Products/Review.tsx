@@ -25,20 +25,12 @@ export default function Reviews({ avgReview, id }: ReviewsProps) {
   const [selectedRating, setSelectedRating] = useState<number>(0);
   const [form] = Form.useForm<AddReviewFormValues>();
   const [api, contextHolder] = notification.useNotification();
-
-  // Fetch reviews
   const { data, isLoading, isError, refetch } = useGetProductReviewsQuery({
     productId: id,
     rating: selectedRating,
   });
-
-  // POST review mutation
   const [postReview, { isLoading: isPosting }] = usePostReviewMutation();
-
-  // Safe reviews array
   const reviews: Review[] = useMemo(() => (Array.isArray(data?.data) ? data.data : []), [data?.data]);
-
-  // Dynamic average rating
   const totalRatings = reviews.length;
   const averageRating =
     totalRatings > 0
@@ -60,7 +52,7 @@ export default function Reviews({ avgReview, id }: ReviewsProps) {
       });
 
       form.resetFields();
-      refetch(); // refresh reviews
+      refetch(); 
     } catch (err: unknown) {
       let description = "Failed to submit your review.";
 

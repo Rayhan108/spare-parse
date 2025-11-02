@@ -1,7 +1,5 @@
 // redux/features/privacyPolicy/privacyPolicyApi.ts
 import { baseApi } from "@/redux/api/baseApi";
-
-// ✅ Define a type for the privacy policy
 export interface PrivacyPolicy {
   id: string;
   userId: string;
@@ -11,7 +9,7 @@ export interface PrivacyPolicy {
   updatedAt: string;
 }
 
-// ✅ Inject endpoints
+
 export const privacyPolicyApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPrivacyPolicy: builder.query<{ success: boolean; message: string; data: PrivacyPolicy }, void>({

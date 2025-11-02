@@ -1,6 +1,6 @@
 import { baseApi } from "../../../api/baseApi";
 
-// 🧾 Define types
+
 export interface OrderItem {
   id: string;
   productName: string;
@@ -59,7 +59,6 @@ export interface OrdersResponse {
   };
 }
 
-// 🧩 API setup (no providesTags)
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCurrentOrders: builder.query<OrdersResponse, void>({

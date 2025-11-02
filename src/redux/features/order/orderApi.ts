@@ -1,7 +1,7 @@
-// redux/features/order/orderApi.ts
+
 import { baseApi } from "../../api/baseApi";
 
-// Order Item
+
 export interface OrderItem {
   id: string;
   productName: string;
@@ -11,7 +11,6 @@ export interface OrderItem {
   quantity: number;
 }
 
-// Shipping/Billing
 export interface AddressType {
   id: string;
   addressLine: string;
@@ -22,7 +21,7 @@ export interface AddressType {
   type: "SHIPPING" | "BILLING";
 }
 
-// Order
+
 export interface Order {
   orderId: string;
   userId: string;

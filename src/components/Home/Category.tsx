@@ -2,7 +2,7 @@
 
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
-import type { Swiper as SwiperClass } from "swiper"; // <-- fix here
+import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -18,11 +18,7 @@ import ProductSkeleton from "@/utils/ProductSkeleton";
 const CategoryComponent = () => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-
-  // Fetch all categories
   const { data: categoryData, isLoading: catLoading, isError: catError } = useGetAllCategoriesQuery();
-
-  // Fetch products for selected category
   const { data: productData, isLoading: prodLoading } = useGetProductsByCategoryQuery(
     selectedCategoryId!,
     { skip: !selectedCategoryId }
@@ -91,14 +87,6 @@ const CategoryComponent = () => {
           </SwiperSlide>
         ))}
 
-        {/* {catLoading && (
-          <SwiperSlide>
-            <div className="border flex flex-col items-center justify-center h-[170px] rounded opacity-60">
-              <p className="text-gray-400 text-sm">Loading...</p>
-            </div>
-          </SwiperSlide>
-        )} */}
-
 
         {catLoading &&
           Array.from({ length: 6 }).map((_, index) => (
@@ -106,6 +94,7 @@ const CategoryComponent = () => {
               <div className="border border-gray-200 flex flex-col items-center justify-center h-[170px] rounded animate-pulse bg-gray-200 dark:bg-gray-700">
                 <div className="h-24 w-24 bg-gray-300 rounded mb-2"></div>
                 <div className="h-4 w-3/4 bg-gray-300 rounded mb-1"></div>
+
               </div>
             </SwiperSlide>
           ))}
@@ -123,9 +112,6 @@ const CategoryComponent = () => {
       {/* Products Section */}
       {selectedCategoryId && (
         <div className="mt-16">
-          {/* <h3 className="text-2xl font-semibold mb-6 dark:text-white">
-            Products in this Category
-          </h3> */}
 
           {prodLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

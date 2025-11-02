@@ -12,9 +12,6 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { requestForToken } from "@/utils/firebase";
 
-// -------------------------
-// Types
-// -------------------------
 
 interface LogInFormValues {
   email: string;
@@ -42,9 +39,6 @@ interface AuthResponseData {
   };
 }
 
-// -------------------------
-// Component
-// -------------------------
 
 export default function LogInForm(): JSX.Element {
   const [api, contextHolder] = notification.useNotification();
@@ -54,14 +48,12 @@ export default function LogInForm(): JSX.Element {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // ✅ Redirect if already logged in
   useEffect(() => {
     const token = Cookies.get("hatem-ecommerce-token");
     const user = localStorage.getItem("hatem-ecommerce-user");
     if (token && user) router.push("/");
   }, [router]);
 
-  // ✅ Common Auth Success Handler
   const handleAuthSuccess = (data: AuthResponseData): void => {
     if (!data?.data) return;
 
@@ -82,7 +74,7 @@ export default function LogInForm(): JSX.Element {
     localStorage.setItem("hatem-ecommerce-user", JSON.stringify(userData));
   };
 
-  // ✅ Manual Login Handler
+
   const onFinish = async (values: LogInFormValues): Promise<void> => {
     try {
       const data = await logIn(values).unwrap();
@@ -104,7 +96,7 @@ export default function LogInForm(): JSX.Element {
     }
   };
 
-  // ✅ Google Login Handler
+
   const handleGoogleLogin = async (credentialResponse: CredentialResponse): Promise<void> => {
     try {
       if (!credentialResponse.credential) return;
@@ -154,9 +146,6 @@ export default function LogInForm(): JSX.Element {
     }
   };
 
-  // -------------------------
-  // JSX
-  // -------------------------
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
       {contextHolder}

@@ -22,7 +22,6 @@ export default function ShippingRates({ shippings }: ShippingRatesProps) {
   const [shippingRates, setShippingRates] = useState<Shipping[]>([]);
 
   useEffect(() => {
-    // Set default country on mount
     const defaultCountry = shippings?.find((s) => s.isDefault)?.countryName || shippings?.[0]?.countryName || "";
     setSelectedCountry(defaultCountry);
   }, [shippings]);

@@ -44,7 +44,7 @@ const EditAccount = () => {
         placement: "topRight",
       });
       window.location.reload();
-    } catch{
+    } catch {
       api.open({
         type: "error",
         message: "Update Failed",
@@ -75,7 +75,6 @@ const EditAccount = () => {
         autoComplete="off"
         className="space-y-4"
       >
-        {/* Full Name */}
         <Form.Item
           label={<span className="dark:text-white">Full Name</span>}
           name="fullName"
@@ -87,16 +86,16 @@ const EditAccount = () => {
           />
         </Form.Item>
 
-        {/* Email */}
+
         <Form.Item label={<span className="dark:text-white">Email</span>}>
           <Input
             value={user.email}
-            // //disabled
+
             className="h-12 bg-white text-black dark:bg-white dark:text-black cursor-not-allowed !//disabled:bg-white !//disabled:text-black"
           />
         </Form.Item>
 
-        {/* Phone Number */}
+
         <Form.Item
           label={<span className="dark:text-white">Phone Number</span>}
           name="phoneNumber"
@@ -111,14 +110,13 @@ const EditAccount = () => {
           />
         </Form.Item>
 
-        {/* Address (optional, //disabled) */}
- 
 
-        {/* Submit Button */}
+
+
+
         <Form.Item className="mt-6">
           <button
             type="submit"
-            //disabled={isUpdating}
             className="bg-primary w-full py-3 rounded-md cursor-pointer text-white //disabled:text-white //disabled:bg-gray-500 //disabled:opacity-80"
           >
             {isUpdating ? "Updating..." : "Update Profile"}

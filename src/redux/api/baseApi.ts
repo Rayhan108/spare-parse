@@ -1,7 +1,5 @@
 
 import { createApi, fetchBaseQuery,} from "@reduxjs/toolkit/query/react";
-// import { message } from "antd";
-// import { setUser } from "../features/auth/authSlice";
 import type { RootState } from "../store";
 
 const baseQuery = fetchBaseQuery({
@@ -25,17 +23,6 @@ const baseQueryWithLogoutOnError = async (
   extraOptions: Parameters<typeof baseQuery>[2]
 ) => {
   const result = await baseQuery(args, api, extraOptions);
-
-  // if (result.error) {
-  //   const error = result.error as FetchBaseQueryError;
-  //   // if (error.status === 400) {
-  //   //   api.dispatch(setUser({ user: null, accessToken: null, refreshToken: null }));
-  //   //   localStorage.removeItem("persist:root");
-  //   //   message.error("Session expired. Please log in again.");
-  //   //   if (typeof window !== "undefined") window.location.href = "/auth/login";
-  //   // }
-  // }
-
   return result;
 };
 

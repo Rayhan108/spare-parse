@@ -1,4 +1,4 @@
-// types/foundingTeam.ts
+
 export interface FoundingTeamMember {
   id: string;
   userId: string;
@@ -27,11 +27,7 @@ export interface FoundingTeamResponse {
   };
 }
 
-
-
-// redux/features/foundingTeam/foundingTeamApi.ts
 import { baseApi } from "@/redux/api/baseApi";
-// import { FoundingTeamResponse } from "@/types/foundingTeam";
 
 export const foundingTeamApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

@@ -10,7 +10,7 @@ export interface Review {
   rating: number;
   comment: string;
   createdAt: string;
-  user?: User; // optional user info
+  user?: User;
 }
 
 export interface ReviewData {
@@ -19,19 +19,13 @@ export interface ReviewData {
   reviews: Review[];
 }
 
-// export interface GetProductReviewsResponse {
-//   success: boolean;
-//   statusCode: number;
-//   message: string;
-//   data: ReviewData;
-// }
 
 
 export interface GetProductReviewsResponse {
   success: boolean;
   statusCode: number;
   message: string;
-  data: Review[]; // <-- array directly
+  data: Review[]; 
   meta: {
     total: number;
     page: number;
@@ -43,7 +37,7 @@ export interface GetProductReviewsResponse {
 }
 
 
-// For POST review
+
 export interface PostReviewRequest {
   productId: string;
   rating: number;
@@ -54,15 +48,15 @@ export interface PostReviewResponse {
   success: boolean;
   statusCode: number;
   message: string;
-  data: Review; // the newly created review
+  data: Review; 
 }
 
 
-// types/review.ts
+
 
 export interface GetProductReviewsRequest {
   productId: string;
-  rating?: number; // optional, for filtering by rating
+  rating?: number;
 }
 
 

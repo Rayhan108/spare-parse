@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Define Product type
 export interface Product {
   _id: string;
   name: string;
@@ -8,7 +7,6 @@ export interface Product {
   quantity: number;
 }
 
-// Define Cart State type
 interface CartState {
   products: Product[];
   total: number;

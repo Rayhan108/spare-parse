@@ -4,7 +4,7 @@ export interface NumberItem {
 }
 
 export interface ReferenceItem {
-  manufacturer: string; // e.g., "OE Numbers" or "Cross Reference Numbers"
+  manufacturer: string; 
   numbers: NumberItem[];
 }
 
@@ -16,7 +16,7 @@ interface ReferenceNumbersProps {
 export function ReferenceNumbers({ title, items }: ReferenceNumbersProps) {
   return (
     <div className="overflow-hidden">
-      {/* Section title */}
+
       <div className="border-b border-border bg-muted/30 px-4 py-3 md:px-6">
         <h3 className="text-base font-semibold text-foreground">{title}</h3>
       </div>

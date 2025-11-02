@@ -4,7 +4,6 @@ import { useGetSalesReportQuery } from "@/redux/features/Sales/salesReportApi";
 import { Table, ConfigProvider, Spin } from "antd";
 import { LuCalendar } from "react-icons/lu";
 
-// TypeScript type for API response item
 interface Transaction {
   key: string;
   date: string;
@@ -15,7 +14,6 @@ interface Transaction {
 }
 
 export default function TransactionsTableAntd() {
-  // Fetch data from API
   const { data, isLoading, error } = useGetSalesReportQuery();
 
   if (isLoading)
@@ -32,7 +30,7 @@ export default function TransactionsTableAntd() {
       </div>
     );
 
-  // Map API response to table format
+
   const tableData: Transaction[] =
     data?.data.map((item,) => ({
       key: item.orderId,

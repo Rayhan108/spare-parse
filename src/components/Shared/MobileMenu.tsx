@@ -10,7 +10,6 @@ import { IoIosHeartEmpty } from "react-icons/io";
 import { LuShoppingBag } from "react-icons/lu";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { useRouter } from "next/navigation";
-
 import { RootState } from "@/redux/store";
 import { logout, setUser } from "@/redux/features/auth/authSlice";
 import { useGetCartQuery } from "@/redux/features/cart/cartApi";
@@ -25,15 +24,11 @@ interface MobileMenuProps {
 const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
-
   const user = useSelector((state: RootState) => state.logInUser?.user);
-
-  // Use correct token based on current role
   const token = user?.role === "BUYER"
     ? Cookies.get("hatem-ecommerce-token")
     : Cookies.get("hatem-seller-token");
 
-  // ---------------- Dark Mode ----------------
   const [isDarkMode, setIsDarkMode] = useState(false);
   useEffect(() => {
     const storedMode = localStorage.getItem("darkMode");
@@ -55,7 +50,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
     });
   };
 
-  // ---------------- Cart & Wishlist ----------------
+
   const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -64,7 +59,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
   const { data: wishlistData, isLoading: isWishlistLoading } = useGetWishlistQuery();
   const wishlistCount = wishlistData?.length || 0;
 
-  // ---------------- Logout ----------------
+
   const handleLogOut = () => {
     dispatch(logout());
     Cookies.remove("hatem-ecommerce-token");
@@ -76,7 +71,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
     onClose();
   };
 
-  // ---------------- Switch Role ----------------
+
   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
   const handleRoleSwitch = async () => {
@@ -92,7 +87,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
 
       const accessToken = res.data.accessToken;
 
-      // Remove old tokens
+ 
       if (newRole === "SELLER") {
         Cookies.remove("hatem-ecommerce-token");
         localStorage.removeItem("hatem-ecommerce-token");
@@ -101,7 +96,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
         localStorage.removeItem("hatem-seller-token");
       }
 
-      // Save new token
+
       if (newRole === "SELLER") {
         Cookies.set("hatem-seller-token", accessToken, { expires: 7 });
         localStorage.setItem("hatem-seller-token", accessToken);
@@ -110,7 +105,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
         localStorage.setItem("hatem-ecommerce-token", accessToken);
       }
 
-      // Update Redux
+  
       dispatch(setUser({
         user: { ...user, role: newRole },
         accessToken,

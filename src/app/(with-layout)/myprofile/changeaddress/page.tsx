@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect } from "react";
 import { Form, Input, Spin, notification } from "antd";
 import {
@@ -7,6 +6,8 @@ import {
   useGetAddressesQuery,
   useUpdateAddressMutation,
 } from "@/redux/features/address/addressApi";
+
+
 
 interface AddressFormValues {
   street: string;
@@ -18,13 +19,9 @@ interface AddressFormValues {
 const ChangeAddress = () => {
   const [form] = Form.useForm<AddressFormValues>();
   const [api, contextHolder] = notification.useNotification();
-
-  // Get existing addresses
   const { data: addressData, isLoading: loadingAddresses } = useGetAddressesQuery();
   const [addAddress, { isLoading: adding }] = useAddAddressMutation();
   const [updateAddress, { isLoading: updating }] = useUpdateAddressMutation();
-
-  // Prefill form with existing SHIPPING address
   const shippingAddress = addressData?.data?.find((addr) => addr.type === "SHIPPING");
 
   useEffect(() => {
@@ -37,46 +34,6 @@ const ChangeAddress = () => {
       });
     }
   }, [shippingAddress, form]);
-
-//   const onFinish = async (values: AddressFormValues) => {
-//     type AddressType = "SHIPPING" | "BILLING";
-
-//     try {
-//       const payload = {
-//         addressLine: values.street,
-//         city: values.city,
-//         state: values.state,
-//         postalCode: values.zip,
-//         country: "USA",
-//         type: "SHIPPING" as AddressType,
-//       };
-
-//       if (shippingAddress) {
-//         const res = await updateAddress({ id: shippingAddress.id, data: payload }).unwrap();
-//         api.open({
-//           type: "success",
-//           message: "Address Updated",
-//           description: res.message || "Shipping address updated successfully!",
-//           placement: "topRight",
-//         });
-//       } else {
-//         const res = await addAddress(payload).unwrap();
-//         api.open({
-//           type: "success",
-//           message: "Address Added",
-//           description: res.message || "Shipping address added successfully!",
-//           placement: "topRight",
-//         });
-//       }
-//     } catch (error: unknown) {
-//       api.open({
-//         type: "error",
-//         message: "Update Failed",
-//         description: `Failed to update address. Please try again.${error}`,
-//         placement: "topRight",
-//       });
-//     }
-//   };
 
 
 const onFinish = async (values: AddressFormValues) => {
@@ -99,7 +56,7 @@ const onFinish = async (values: AddressFormValues) => {
       res = await addAddress(payload).unwrap();
     }
 
-    // Wrap notification in setTimeout to avoid render-phase call
+
     setTimeout(() => {
       api.open({
         type: "success",

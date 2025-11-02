@@ -1,9 +1,9 @@
 
 
-// redux/features/product/seller/productApi.ts
+
 import { baseApi } from "@/redux/api/baseApi";
 
-// 🧾 TypeScript types for product
+
 export interface SellerProduct {
   id: string;
   productName: string;
@@ -11,7 +11,7 @@ export interface SellerProduct {
   price: number;
   discount: number;
   stock: number;
-  productImages: string[];  // Array of image URLs
+  productImages: string[];  
   isVisible: boolean;
   createdAt: string;
   updatedAt: string;
@@ -33,25 +33,25 @@ export interface SellerProductsResponse {
   };
 }
 
-// ✅ Type for delete product response
+
 export interface DeleteProductResponse {
   success: boolean;
   statusCode: number;
   message: string;
 }
 
-// ✅ Type for add product response
+
 export interface AddProductResponse {
   success: boolean;
   statusCode: number;
   message: string;
-  data: SellerProduct;  // Assuming the product returned is similar to SellerProduct
+  data: SellerProduct;  
 }
 
-// 🧩 API endpoints
+
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Fetch the products of the seller
+ 
     getMyProducts: builder.query<SellerProductsResponse, void>({
       query: () => ({
         url: "/products/my-products",
@@ -59,7 +59,6 @@ export const productApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // Delete a product by ID
     deleteProduct: builder.mutation<DeleteProductResponse, string>({
       query: (productId) => ({
         url: `/products/${productId}`,
@@ -67,20 +66,20 @@ export const productApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // Add a new product (with FormData for file uploads)
+  
     addProduct: builder.mutation<AddProductResponse, FormData>({
       query: (formData) => ({
         url: "/products",
         method: "POST",
-        body: formData, // Passing FormData directly
+        body: formData, 
       }),
     }),
 
     updateProduct: builder.mutation<AddProductResponse, { productId: string; formData: FormData }>({
       query: ({ productId, formData }) => ({
-        url: `/products/${productId}`, // use backticks for template string
-        method: "PATCH",              // PATCH instead of POST
-        body: formData,               // Passing FormData
+        url: `/products/${productId}`, 
+        method: "PATCH",             
+        body: formData,               
       }),
     }),
 

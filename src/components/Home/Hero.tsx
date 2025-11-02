@@ -5,7 +5,6 @@ import { IoArrowForward } from "react-icons/io5";
 import image from '../../../public/slide-image.png';
 import { useGetAllCategoriesQuery, Category } from "@/redux/features/categories/categoriesApi";
 
-// Static Skeleton
 const HeroCategorySkeleton = () => (
  <>
   <div className="h-8 w-[90%] bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse "></div>
@@ -35,24 +34,24 @@ const Hero = () => {
 
   return (
     <div className="container mx-auto flex flex-col-reverse md:flex-row">
-      {/* Mobile Categories */}
+     
       <div className="grid grid-cols-2 md:hidden gap-3 pt-5">
         {renderCategories()}
       </div>
 
-      {/* Desktop Categories */}
+   
       <div className="hidden md:flex md:flex-col md:w-[20%] gap-5 pt-10 h-[420px] border-r border-gray-200 dark:border-gray-600">
         {renderCategories()}
       </div>
 
-      {/* Hero Section */}
+
       <div className="w-full md:w-[80%] md:pl-5 lg:pl-5 py-5 lg:py-5">
         <div className="flex flex-col xl:flex-row h-[400px] w-full">
-          {/* Text Section */}
+          
           <div className="xl:w-[40%] bg-black dark:bg-[#1d1d1d] flex flex-col justify-center pl-10 lg:pl-18 py-5">
             <div>
-              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold">Up to 10%</h1>
-              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold mt-4">off Voucher</h1>
+              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold">Explore Our</h1>
+              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold mt-4">Products</h1>
             </div>
             <div className="flex gap-1 items-center mt-8 xl:mt-12">
               <Link href={`/product`}>
@@ -62,7 +61,7 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Image Section */}
+
           <div
             className="xl:w-[60%] h-[400px] bg-cover bg-center"
             style={{ backgroundImage: `url(${image.src})` }}

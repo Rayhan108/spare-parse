@@ -1,16 +1,12 @@
 "use client";
-
 import Image from "next/image";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-// import { useDispatch } from "react-redux";
-// import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useDeleteWishlistItemMutation } from "@/redux/features/wishlist/wishlistApi";
 import { notification } from "antd";
 
-// ------------------- Product type -------------------
 export interface Product {
-  id: string; // <-- product ID
+  id: string; 
   productName: string;
   price: number;
   discount?: number;
@@ -18,32 +14,22 @@ export interface Product {
 }
 
 interface ListedProductCartProps {
-  product: Product; // only product is needed
+  product: Product;
 }
 
 const ListedProductCart = ({ product }: ListedProductCartProps) => {
-//   const dispatch = useDispatch();
-  const [deleteWishlistItem, { isLoading }] = useDeleteWishlistItemMutation();
 
-  // Title and pricing
+  const [deleteWishlistItem, { isLoading }] = useDeleteWishlistItemMutation();
   const title = product.productName;
   const discount = product.discount ? product.discount / 100 : 0;
   const price = product.price - product.price * discount;
   const originalPrice = product.price;
   const discountPercentage = product.discount || 0;
    const [api, contextHolder] = notification.useNotification();
-
-  // Image
   const imageSrc =
     product.productImages && product.productImages.length > 0
       ? product.productImages[0]
       : "/placeholder.svg";
-
-  // ------------------- Handlers -------------------
-//   const handleAddToCart = async () => {
-//     dispatch(addToCart(product));
-//     await handleRemoveWishlist();
-//   };
 
   const handleRemoveWishlist = async () => {
     try {
@@ -65,7 +51,7 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
     }
   };
 
-  // ------------------- Render -------------------
+
   return (
     <div className="overflow-hidden rounded shadow-md">
       <div className="relative bg-[#f2fcf6] px-4 py-8">
@@ -103,7 +89,6 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
       </div>
 
       <button
-        // onClick={handleAddToCart}
         className="flex gap-2 w-full items-center justify-center bg-primary py-3 text-white rounded-b cursor-pointer"
       >
         <HiOutlineShoppingCart size={25} />

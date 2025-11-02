@@ -1,12 +1,10 @@
 "use client";
-
 import Link from "next/link";
-// import ProductCart, { Product } from "./ProductCart";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 import ProductSkeleton from "@/utils/ProductSkeleton";
 import ProductCart,{Product} from "@/components/Home/ProductCart";
 
-// ------------------- API Response Type -------------------
+
 interface ApiResponse {
   success: boolean;
   statusCode: number;
@@ -14,7 +12,7 @@ interface ApiResponse {
   data: Product[];
 }
 
-// ------------------- Component -------------------
+
 const ExploreProducts = () => {
   const { data, isLoading } = useGetAllProductsQuery(undefined) as {
     data?: ApiResponse;
@@ -37,8 +35,8 @@ const ExploreProducts = () => {
                 key={product.id}
                 product={{
                   ...product,
-                  productImages: product.productImages || [], // ensure array
-                  _count: { review: product._count?.review || 0 }, // ensure review exists
+                  productImages: product.productImages || [], 
+                  _count: { review: product._count?.review || 0 }, 
                 }}
               />
           ))}

@@ -24,18 +24,15 @@ import { useSwitchUserRoleMutation } from "@/redux/features/auth/switchRoleApi";
 import { RootState } from "@/redux/store";
 import { App } from "antd";
 const Header = () => {
+
   const dispatch = useDispatch();
   const router = useRouter();
   const { message } = App.useApp();
-
   const user = useSelector((state: RootState) => state.logInUser?.user);
-
-  // Use correct token based on current role
   const token = user?.role === "BUYER"
     ? Cookies.get("hatem-ecommerce-token")
     : Cookies.get("hatem-seller-token");
 
-  // ---------------- Dark Mode ----------------
   const [isDarkMode, setIsDarkMode] = useState(false);
   useEffect(() => {
     const storedMode = localStorage.getItem("darkMode");
@@ -57,16 +54,15 @@ const Header = () => {
     });
   };
 
-  // ---------------- Mobile Menu ----------------
   const [open, setOpen] = useState(false);
   const showDrawer = () => setOpen(true);
   const onClose = () => setOpen(false);
 
-  // ---------------- Submenu ----------------
+
   const [subMenu, setSubMenu] = useState(false);
   const subMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close submenu when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (subMenuRef.current && !subMenuRef.current.contains(event.target as Node)) {
@@ -77,17 +73,17 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ---------------- Cart ----------------
+
   const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
   const cartCount = cartData?.data?.length || 0;
 
-  // ---------------- Wishlist ----------------
+
   const { data: wishlistData, isLoading: isWishlistLoading } = useGetWishlistQuery();
   const wishlistCount = wishlistData?.length || 0;
 
-  // ---------------- Logout ----------------
+
   const handleLogOut = () => {
     dispatch(logout());
     Cookies.remove("hatem-ecommerce-token");
@@ -98,7 +94,7 @@ const Header = () => {
     router.replace("/auth/login");
   };
 
-  // ---------------- Switch Role ----------------
+
   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
   const handleRoleSwitch = async () => {
@@ -114,7 +110,7 @@ const Header = () => {
 
       const accessToken = res.data.accessToken;
 
-      // Remove old tokens
+   
       if (newRole === "SELLER") {
         Cookies.remove("hatem-ecommerce-token");
         localStorage.removeItem("hatem-ecommerce-token");
@@ -123,7 +119,7 @@ const Header = () => {
         localStorage.removeItem("hatem-seller-token");
       }
 
-      // Save new token
+   
       if (newRole === "SELLER") {
         Cookies.set("hatem-seller-token", accessToken, { expires: 7 });
         localStorage.setItem("hatem-seller-token", accessToken);
@@ -132,7 +128,7 @@ const Header = () => {
         localStorage.setItem("hatem-ecommerce-token", accessToken);
       }
 
-      // Update Redux properly
+     
       dispatch(setUser({
         user: { ...user, role: newRole },
         accessToken: accessToken,
@@ -172,7 +168,7 @@ const Header = () => {
             />
           </Link>
 
-          {/* Desktop Links */}
+          
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center justify-between gap-12 text-black dark:text-white">
             <Link href="/" className="text-lg hover:text-primary no-underline">
@@ -198,7 +194,7 @@ const Header = () => {
 
 
 
-          {/* Search, Wishlist, Cart, User */}
+  
           <div className="hidden w-[380px] lg:flex items-center justify-between gap-4">
             <ConfigProvider
               theme={{
