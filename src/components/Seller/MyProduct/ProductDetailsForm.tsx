@@ -1,9 +1,10 @@
 "use client"
 
-import { Form, Input, Select, message } from "antd"
+import { Form, Input, Select, message, Spin } from "antd"
 import { IoAdd } from "react-icons/io5"
 import { MdDelete } from "react-icons/md"
-import React from "react"
+import React, { useEffect } from "react"
+import { useGetSingleProductQuery } from "@/redux/features/products/productsApi"
 
 const { Option } = Select
 
@@ -43,6 +44,7 @@ interface Section {
 
 interface ProductDetailsFormProps {
   form: any
+  productId: string // ✅ added to fetch data
   sections: Section[]
   setSections: React.Dispatch<React.SetStateAction<Section[]>>
   oemReferences: OEMReference[]
@@ -54,6 +56,7 @@ interface ProductDetailsFormProps {
 
 const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({
   form,
+  productId,
   sections,
   setSections,
   oemReferences,
@@ -62,6 +65,46 @@ const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({
   setShippingInfo,
   brandId,
 }) => {
+  // ✅ Fetch existing product data
+  const { data: productData, isLoading } = useGetSingleProductQuery(productId)
+
+  // ✅ Prefill once data is loaded
+  useEffect(() => {
+    if (productData?.product) {
+      const product = productData.product
+
+      if (product.sections && product.sections.length > 0) {
+        setSections(product.sections)
+      }
+
+      if (product.references && product.references.length > 0) {
+        setOemReferences(product.references)
+      }
+
+      if (product.shipping && product.shipping.length > 0) {
+        setShippingInfo(product.shipping)
+      }
+
+      // Prefill form for extra fields if needed
+      form.setFieldsValue({
+        newSectionName: "",
+        refType: "",
+        refNumber: "",
+        refBrandId: brandId || product.brandId,
+      })
+    }
+  }, [productData, form, setSections, setOemReferences, setShippingInfo, brandId])
+
+  // ✅ Show loading spinner while fetching
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <Spin size="large" />
+      </div>
+    )
+  }
+
+  // ------------------------- existing UI unchanged --------------------------
   const handleAddSection = () => {
     const sectionName = form.getFieldValue("newSectionName")
     if (sectionName && sectionName.trim()) {
@@ -169,6 +212,9 @@ const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({
 
   return (
     <>
+      {/* ✅ same UI as before */}
+      {/* (Sections, References, and Shipping rendering stays identical) */}
+
       {/* Product Sections */}
       <div className="border-t pt-4 mt-4">
         <h3 className="text-lg font-semibold mb-3">Product Sections</h3>
