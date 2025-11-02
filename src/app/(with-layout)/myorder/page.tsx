@@ -9,36 +9,8 @@
 
 // import ProductDetailModal from "@/components/MyOrder/ProductDetailModal";
 // import ProductTrackModal from "@/components/MyOrder/ProductTrackModal";
-// import productPic from '../../../../public/products/wheel2.svg';
-// import { useGetMyOrdersQuery } from "@/redux/features/order/orderApi";
-
-// interface OrderItem {
-//   id: string;
-//   productName: string;
-//   productImages?: string[];
-//   price: number;
-//   discount?: number;
-// }
-
-// interface Address {
-//   addressLine: string;
-//   city?: string;
-//   state?: string;
-//   postalCode?: string;
-//   country?: string;
-//   type: "SHIPPING" | "BILLING";
-// }
-
-// interface Order {
-//   orderId: string;
-//   createdAt: string;
-//   status: string;
-//   totalAmount: number;
-//   items: OrderItem[];
-//   quantity: number;
-//   shipping: Address;
-//   billing: Address;
-// }
+// import productPic from "../../../../public/products/wheel2.svg";
+// import { useGetMyOrdersQuery, Order } from "@/redux/features/order/orderApi";
 
 // const MyOrder = () => {
 //   const { data: ordersData, isLoading, isError } = useGetMyOrdersQuery();
@@ -56,8 +28,19 @@
 //     setIsTrackModalOpen(true);
 //   };
 
-//   if (isLoading) return <Spin size="large" className="mt-10" />;
-//   if (isError) return <p className="text-red-500 mt-10">Failed to load orders.</p>;
+//   if (isLoading)
+//     return (
+//       <div className="flex items-center justify-center min-h-screen">
+//         <Spin size="large" />
+//       </div>
+//     );
+
+//   if (isError)
+//     return (
+//       <div className="flex items-center justify-center min-h-screen">
+//         <p className="text-red-500">Failed to load orders.</p>
+//       </div>
+//     );
 
 //   return (
 //     <div className="container mx-auto px-4 md:px-0 py-16">
@@ -73,9 +56,9 @@
 //           defaultValue="PROCESSING"
 //           style={{ width: 200 }}
 //           options={[
-//             { value: 'PROCESSING', label: 'Processing' },
-//             { value: 'DELIVERED', label: 'Delivered' },
-//             { value: 'TO_SHIP', label: 'To Ship' },
+//             { value: "PROCESSING", label: "Processing" },
+//             { value: "DELIVERED", label: "Delivered" },
+//             { value: "TO_SHIP", label: "To Ship" },
 //           ]}
 //         />
 //       </div>
@@ -94,14 +77,21 @@
 //           </thead>
 //           <tbody>
 //             {ordersData?.data?.map((order: Order) => {
-//               const firstItem = order.items[0];
+//               const firstItem = order.items?.[0];
+
+//               // ⚙️ Calculate subtotal and total quantity
 //               const subtotal = order.items?.reduce(
-//                 (sum, item) => sum + (item.price - (item.discount || 0)) * order.quantity,
+//                 (sum, item) => sum + (item.price - (item.discount || 0)),
 //                 0
 //               );
 
+//               const quantity = order.items?.length || 0;
+
 //               return (
-//                 <tr key={order.orderId} className="bg-white shadow-[0px_10px_30px_rgba(0,0,0,0.05)] rounded-md">
+//                 <tr
+//                   key={order.orderId}
+//                   className="bg-white shadow-[0px_10px_30px_rgba(0,0,0,0.05)] rounded-md"
+//                 >
 //                   <td className="p-4 flex items-center gap-3">
 //                     <Image
 //                       src={firstItem?.productImages?.[0] || productPic}
@@ -111,9 +101,11 @@
 //                     />
 //                     {firstItem?.productName || "N/A"}
 //                   </td>
+
 //                   <td className="p-6">${order.totalAmount?.toFixed(2)}</td>
-//                   <td className="p-6">{order.quantity.toString().padStart(2, "0")}</td>
+//                   <td className="p-6">{quantity.toString().padStart(2, "0")}</td>
 //                   <td className="p-6">${subtotal?.toFixed(2)}</td>
+
 //                   <td className="p-6">
 //                     <IoEyeOutline
 //                       onClick={() => showDetailModal(order)}
@@ -121,6 +113,7 @@
 //                       className="cursor-pointer text-lg"
 //                     />
 //                   </td>
+
 //                   <td className="p-6">
 //                     <CiDeliveryTruck
 //                       onClick={() => showTrackModal(order)}
@@ -158,6 +151,7 @@
 // export default MyOrder;
 
 
+
 "use client";
 
 import { Breadcrumb, Select, Spin } from "antd";
@@ -177,6 +171,7 @@ const MyOrder = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>("ALL"); // "ALL" shows all orders
 
   const showDetailModal = (order: Order) => {
     setSelectedOrder(order);
@@ -202,6 +197,12 @@ const MyOrder = () => {
       </div>
     );
 
+  // Filter orders based on selected status
+  const filteredOrders = ordersData?.data?.filter((order: Order) => {
+    if (filterStatus === "ALL") return true;
+    return order.status === filterStatus;
+  });
+
   return (
     <div className="container mx-auto px-4 md:px-0 py-16">
       <Breadcrumb
@@ -213,9 +214,11 @@ const MyOrder = () => {
 
       <div className="py-5 flex justify-end">
         <Select
-          defaultValue="PROCESSING"
+          value={filterStatus}
           style={{ width: 200 }}
+          onChange={(value) => setFilterStatus(value)}
           options={[
+            { value: "ALL", label: "All Orders" },
             { value: "PROCESSING", label: "Processing" },
             { value: "DELIVERED", label: "Delivered" },
             { value: "TO_SHIP", label: "To Ship" },
@@ -236,10 +239,9 @@ const MyOrder = () => {
             </tr>
           </thead>
           <tbody>
-            {ordersData?.data?.map((order: Order) => {
+            {filteredOrders?.map((order: Order) => {
               const firstItem = order.items?.[0];
 
-              // ⚙️ Calculate subtotal and total quantity
               const subtotal = order.items?.reduce(
                 (sum, item) => sum + (item.price - (item.discount || 0)),
                 0
