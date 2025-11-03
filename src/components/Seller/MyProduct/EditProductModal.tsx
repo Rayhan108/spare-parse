@@ -14,7 +14,9 @@ import TipTapMenu from "./TipTapMenu";
 import CarAndCategorySelector from "./SelectorBlock";
 import { useUpdateProductMutation } from "@/redux/features/seller/product/productApi";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
-
+import React from "react";
+import { Form, Input, Select } from "antd";
+import { IoAdd } from "react-icons/io5";
 
 export interface Field {
   fieldName: string;
@@ -87,9 +89,7 @@ interface Product {
 
 
 //
-import React from "react";
-import { Form, Input, Select, Button } from "antd";
-import { IoAdd } from "react-icons/io5";
+
 
 const { Option } = Select;
 
@@ -144,6 +144,87 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   const [discount, setDiscount] = useState<number | "">("");
   const [stock, setStock] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
+
+
+
+  const [form] = Form.useForm();
+  const [sections, setSections] = useState<Section[]>([]);
+  const [oemReferences, setOemReferences] = useState<OEMReference[]>([]);
+  const [shippingInfo, setShippingInfo] = useState<ShippingInfo[]>([]);
+  const brandId = "sample-brand-id"; // replace dynamically if needed
+
+  // --- Product Sections ---
+  const handleAddSection = () => {
+    const sectionName = form.getFieldValue("newSectionName");
+    if (sectionName?.trim()) {
+      setSections([...sections, { sectionName: sectionName.trim(), fields: [], subSections: [] }]);
+      form.setFieldsValue({ newSectionName: "" });
+      message.success("Section added");
+    } else message.error("Enter section name");
+  };
+
+  const handleAddField = (sectionIndex: number) => {
+    const fieldName = form.getFieldValue(`field_name_${sectionIndex}`);
+    const fieldValue = form.getFieldValue(`field_value_${sectionIndex}`);
+    const fieldType = form.getFieldValue(`field_type_${sectionIndex}`) || "string";
+    if (fieldName && fieldValue !== undefined && fieldValue !== "") {
+      const newField: Field = {
+        fieldName,
+        valueType: fieldType,
+        ...(fieldType === "float" ? { valueFloat: parseFloat(fieldValue) } : { valueString: fieldValue }),
+      };
+      const newSections = [...sections];
+      newSections[sectionIndex].fields.push(newField);
+      setSections(newSections);
+      form.setFieldsValue({ [`field_name_${sectionIndex}`]: "", [`field_value_${sectionIndex}`]: "", [`field_type_${sectionIndex}`]: "string" });
+      message.success("Field added");
+    } else message.error("Fill field name and value");
+  };
+
+  const handleRemoveField = (sectionIndex: number, fieldIndex: number) => {
+    const newSections = [...sections];
+    newSections[sectionIndex].fields.splice(fieldIndex, 1);
+    setSections(newSections);
+  };
+
+  const handleRemoveSection = (sectionIndex: number) => setSections(sections.filter((_, i) => i !== sectionIndex));
+
+  // --- References ---
+  const handleAddReference = () => {
+    const refType = form.getFieldValue("refType");
+    const refNumber = form.getFieldValue("refNumber");
+    if (refType && refNumber) {
+      const newRef: OEMReference = { type: refType, number: refNumber, ...(refType === "OE" && { brandId }) };
+      setOemReferences([...oemReferences, newRef]);
+      form.setFieldsValue({ refType: "", refNumber: "" });
+      message.success("Reference added");
+    } else message.error("Fill type and number");
+  };
+
+  const handleRemoveReference = (index: number) => setOemReferences(oemReferences.filter((_, i) => i !== index));
+
+  // --- Shipping ---
+  const handleAddShipping = () => {
+    const countryCode = form.getFieldValue("shippingCountryCode");
+    const countryName = form.getFieldValue("shippingCountryName");
+    const carrier = form.getFieldValue("shippingCarrier");
+    const cost = form.getFieldValue("shippingCost");
+    const deliveryMin = form.getFieldValue("shippingDeliveryMin") || 0;
+    const deliveryMax = form.getFieldValue("shippingDeliveryMax") || 0;
+    if (countryCode && countryName && carrier && cost !== undefined) {
+      const newShip: ShippingInfo = { countryCode, countryName, carrier, cost: parseFloat(cost), deliveryMin: parseInt(deliveryMin), deliveryMax: parseInt(deliveryMax) };
+      setShippingInfo([...shippingInfo, newShip]);
+      form.setFieldsValue({ shippingCountryCode: "", shippingCountryName: "", shippingCarrier: "", shippingCost: "", shippingDeliveryMin: "", shippingDeliveryMax: "" });
+      message.success("Shipping added");
+    } else message.error("Fill all required shipping fields");
+  };
+
+  const handleRemoveShipping = (index: number) => setShippingInfo(shippingInfo.filter((_, i) => i !== index));
+
+
+
+
+
   const [selectedValues, setSelectedValues] = useState<{
     year?: string;
     brandId?: string;
@@ -234,81 +315,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 
 
   ///
-
-
-  const [form] = Form.useForm();
-  const [sections, setSections] = useState<Section[]>([]);
-  const [oemReferences, setOemReferences] = useState<OEMReference[]>([]);
-  const [shippingInfo, setShippingInfo] = useState<ShippingInfo[]>([]);
-  const brandId = "sample-brand-id"; // replace dynamically if needed
-
-  // --- Product Sections ---
-  const handleAddSection = () => {
-    const sectionName = form.getFieldValue("newSectionName");
-    if (sectionName?.trim()) {
-      setSections([...sections, { sectionName: sectionName.trim(), fields: [], subSections: [] }]);
-      form.setFieldsValue({ newSectionName: "" });
-      message.success("Section added");
-    } else message.error("Enter section name");
-  };
-
-  const handleAddField = (sectionIndex: number) => {
-    const fieldName = form.getFieldValue(`field_name_${sectionIndex}`);
-    const fieldValue = form.getFieldValue(`field_value_${sectionIndex}`);
-    const fieldType = form.getFieldValue(`field_type_${sectionIndex}`) || "string";
-    if (fieldName && fieldValue !== undefined && fieldValue !== "") {
-      const newField: Field = {
-        fieldName,
-        valueType: fieldType,
-        ...(fieldType === "float" ? { valueFloat: parseFloat(fieldValue) } : { valueString: fieldValue }),
-      };
-      const newSections = [...sections];
-      newSections[sectionIndex].fields.push(newField);
-      setSections(newSections);
-      form.setFieldsValue({ [`field_name_${sectionIndex}`]: "", [`field_value_${sectionIndex}`]: "", [`field_type_${sectionIndex}`]: "string" });
-      message.success("Field added");
-    } else message.error("Fill field name and value");
-  };
-
-  const handleRemoveField = (sectionIndex: number, fieldIndex: number) => {
-    const newSections = [...sections];
-    newSections[sectionIndex].fields.splice(fieldIndex, 1);
-    setSections(newSections);
-  };
-
-  const handleRemoveSection = (sectionIndex: number) => setSections(sections.filter((_, i) => i !== sectionIndex));
-
-  // --- References ---
-  const handleAddReference = () => {
-    const refType = form.getFieldValue("refType");
-    const refNumber = form.getFieldValue("refNumber");
-    if (refType && refNumber) {
-      const newRef: OEMReference = { type: refType, number: refNumber, ...(refType === "OE" && { brandId }) };
-      setOemReferences([...oemReferences, newRef]);
-      form.setFieldsValue({ refType: "", refNumber: "" });
-      message.success("Reference added");
-    } else message.error("Fill type and number");
-  };
-
-  const handleRemoveReference = (index: number) => setOemReferences(oemReferences.filter((_, i) => i !== index));
-
-  // --- Shipping ---
-  const handleAddShipping = () => {
-    const countryCode = form.getFieldValue("shippingCountryCode");
-    const countryName = form.getFieldValue("shippingCountryName");
-    const carrier = form.getFieldValue("shippingCarrier");
-    const cost = form.getFieldValue("shippingCost");
-    const deliveryMin = form.getFieldValue("shippingDeliveryMin") || 0;
-    const deliveryMax = form.getFieldValue("shippingDeliveryMax") || 0;
-    if (countryCode && countryName && carrier && cost !== undefined) {
-      const newShip: ShippingInfo = { countryCode, countryName, carrier, cost: parseFloat(cost), deliveryMin: parseInt(deliveryMin), deliveryMax: parseInt(deliveryMax) };
-      setShippingInfo([...shippingInfo, newShip]);
-      form.setFieldsValue({ shippingCountryCode: "", shippingCountryName: "", shippingCarrier: "", shippingCost: "", shippingDeliveryMin: "", shippingDeliveryMax: "" });
-      message.success("Shipping added");
-    } else message.error("Fill all required shipping fields");
-  };
-
-  const handleRemoveShipping = (index: number) => setShippingInfo(shippingInfo.filter((_, i) => i !== index));
 
 
 
@@ -415,12 +421,21 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                         <Form.Item name={`field_type_${sIdx}`} noStyle>
                         </Form.Item>
                         <Form.Item name={`field_value_${sIdx}`} noStyle><Input placeholder="Value" /></Form.Item>
-                        <Button type="primary" onClick={() => handleAddField(sIdx)} icon={<IoAdd />} />
+                        {/* <Button type="primary" onClick={() => handleAddField(sIdx)} icon={<IoAdd />} /> */}
+                        <button
+                          type="button"
+                          onClick={() => handleAddField(sIdx)}
+                          className="flex items-center gap-2 bg-[#f56100] hover:bg-[#e04b00] text-white px-3 py-2 rounded transition-colors"
+                        >
+                          <IoAdd size={16} />
+                          Add
+                        </button>
+
                       </div>
                       {section.fields.map((f, fIdx) => (
                         <div key={fIdx} className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm">
                           <span>{f.fieldName}: {f.valueType === "float" ? f.valueFloat : f.valueString}</span>
-                          <button onClick={() => handleRemoveField(sIdx, fIdx)} className="text-red-500">×</button>
+                          <button onClick={() => handleRemoveField(sIdx, fIdx)} className="text-red-500">remove</button>
                         </div>
                       ))}
                     </div>
@@ -438,7 +453,16 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                       </Select>
                     </Form.Item>
                     <Form.Item name="refNumber" noStyle><Input placeholder="Reference number" className="w-1/3" /></Form.Item>
-                    <Button type="primary" onClick={handleAddReference} icon={<IoAdd />} />
+                    {/* <Button type="primary" onClick={handleAddReference} icon={<IoAdd />} /> */}
+                    <button
+                      type="button"
+                      onClick={handleAddReference}
+                      className="flex items-center gap-2 bg-[#f56100] hover:bg-[#e04b00] text-white px-4 py-2 rounded transition-colors"
+                    >
+                      <IoAdd size={18} />
+                      Add
+                    </button>
+
                   </div>
                   {oemReferences.map((ref, idx) => (
                     <div key={idx} className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm">
@@ -459,13 +483,13 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                     <Form.Item name="shippingDeliveryMin" noStyle><Input placeholder="Min Days" type="number" /></Form.Item>
                     <Form.Item name="shippingDeliveryMax" noStyle><Input placeholder="Max Days" type="number" /></Form.Item>
                   </div>
-                    <button
-                      type="button"
-                      onClick={handleAddShipping}
-                      className="w-full bg-[#f56100] py-2 rounded text-white cursor-pointer mb-4"
-                    >
-                      Add Shipping
-                    </button>
+                  <button
+                    type="button"
+                    onClick={handleAddShipping}
+                    className="w-full bg-[#f56100] py-2 rounded text-white cursor-pointer mb-4"
+                  >
+                    Add Shipping
+                  </button>
                   {shippingInfo.map((ship, idx) => (
                     <div key={idx} className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm">
                       <span>{ship.countryName} ({ship.countryCode}) - {ship.carrier} - ${ship.cost}</span>
