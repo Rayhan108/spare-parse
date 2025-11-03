@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store"; 
+import { RootState } from "@/redux/store";
 import { useGetAddressesQuery } from "@/redux/features/address/addressApi";
 import { Spin } from "antd";
 
@@ -10,6 +10,7 @@ interface User {
   fullName?: string;
   email?: string;
   phoneNumber?: string;
+  role?: string;
 }
 
 const AccountDetails = () => {
@@ -60,11 +61,23 @@ const AccountDetails = () => {
           </div>
         </div>
         <div>
-          <Link href={`/myprofile/editaccount`}>
+          {/* <Link href={`/myprofile/editaccount`}>
+            <button className="w-[200px] py-3 rounded border border-primary cursor-pointer">
+              Edit Account
+            </button>
+          </Link> */}
+          <Link
+            href={
+              user?.role === "SELLER"
+                ? "/myprofile/seller-editaccount"
+                : "/myprofile/editaccount"
+            }
+          >
             <button className="w-[200px] py-3 rounded border border-primary cursor-pointer">
               Edit Account
             </button>
           </Link>
+
         </div>
       </div>
 

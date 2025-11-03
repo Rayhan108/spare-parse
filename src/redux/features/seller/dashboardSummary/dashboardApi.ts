@@ -1,7 +1,7 @@
-// redux/features/order/seller/dashboardApi.ts
+
 import { baseApi } from "@/redux/api/baseApi";
 
-// 🧾 TypeScript types for dashboard summary
+
 export interface DashboardSummary {
   totalOrders: number;
   totalSalesAmount: number;
@@ -16,7 +16,7 @@ export interface DashboardSummaryResponse {
   data: DashboardSummary;
 }
 
-// 🧩 API endpoint
+
 export const dashboardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getDashboardSummary: builder.query<DashboardSummaryResponse, void>({

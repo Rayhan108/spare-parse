@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Form, Input, Modal, Select, Upload, message, Spin } from "antd"
+import { Form, Input, Modal, Select, Upload, message, Spin, Button } from "antd"
 import { useState } from "react"
 import { IoAdd } from "react-icons/io5"
 import { SlCloudUpload } from "react-icons/sl"
@@ -14,7 +14,7 @@ import Image from "next/image"
 import { IoMdArrowRoundBack } from "react-icons/io"
 import { MdDelete } from "react-icons/md"
 import TipTapMenu from "./TipTapMenu"
-import { useAddProductMutation } from "@/redux/features/seller/product/productApi" 
+import { useAddProductMutation } from "@/redux/features/seller/product/productApi"
 import { useEffect } from "react";
 import {
   useGetBrandsByYearQuery,
@@ -119,6 +119,20 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
   console.log("brand id ", brandId);
   console.log(brandName);
   console.log(modelName);
+
+  const [engineId, setEngineId] = useState<string>();
+
+  const [fitVehicles, setFitVehicles] = useState<string[]>([]);
+
+
+  console.log("fitengineid",fitVehicles );
+
+
+  console.log("engineid ", engineId);
+
+
+
+
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
     const y = String(currentYear - i);
@@ -171,6 +185,17 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
   useEffect(() => {
     setHp(undefined);
   }, [modelId]);
+
+
+
+  useEffect(() => {
+    if (hp && enginesData?.data?.length) {
+      const selectedEngine = enginesData.data.find((e: Engine) => String(e.hp) === hp);
+      setEngineId(selectedEngine?.engineId);
+    } else {
+      setEngineId(undefined);
+    }
+  }, [hp, enginesData]);
 
 
   const { Option } = Select
@@ -432,7 +457,8 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
         discount: Number(values.discount) || 10,
         stock: Number(values.stock) || 10,
         isVisible: values.productAvailability === "inStock",
-        fitVehicles: values.fitVehicles ? [values.fitVehicles] : [],
+        // fitVehicles: values.fitVehicles ? [values.fitVehicles] : [],
+        fitVehicles:fitVehicles,
         sections: updatedSections,
         references: oemReferences,
         shipping: shippingInfo,
@@ -462,8 +488,8 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
 
       router.refresh();
       setTimeout(() => {
-        window.location.reload(); 
-      }, 1000); 
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error("Upload error:", error);
       message.error("Error uploading product");
@@ -554,6 +580,8 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                       setModelId(val);
                       const selected = modelsData?.data.find((m: Model) => m.modelId === val);
                       setModelName(selected?.modelName);
+                      // setEngineId(selected.engineId);
+
                     }}
                     disabled={!brandId}
                   />
@@ -573,7 +601,27 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                   />
                 </div>
 
+                {/* <div className="flex justify-end mt-4">
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      if (!engineId) {
+                        message.warning("Please select engine power first.");
+                        return;
+                      }
 
+                      if (!fitVehicles.includes(engineId)) {
+                        setFitVehicles((prev) => [...prev, engineId]);
+                        message.success("Vehicle added.");
+                      } else {
+                        message.info("This engine already added.");
+                      }
+                    }}
+                  >
+                    + Add
+                  </Button>
+                </div> */}
+          
                 <div className="flex items-center w-full">
                   <span className="bg-[#f56100] py-[11px] px-4 text-white">4</span>
                   <Select
@@ -584,6 +632,41 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                     value={categoryId}
                     onChange={setCategoryId}
                   />
+                </div>
+
+                     <div className="flex items-center w-full">
+                  <Button
+                    className="!bg-primary"
+                     style={{ padding: "20px 30px" }} 
+                    onClick={() => {
+                      if (!hp) {
+                        message.warning("Please select engine power first.");
+                        return;
+                      }
+
+                      // Find matching engine by HP
+                      const selectedEngine = enginesData?.data.find(
+                        (e: Engine) => String(e.hp) === hp
+                      );
+
+                      if (!selectedEngine) {
+                        message.error("No matching engine found for this HP.");
+                        return;
+                      }
+
+                      const newEngineId = selectedEngine.engineId;
+
+                      // Avoid duplicates
+                      if (!fitVehicles.includes(newEngineId)) {
+                        setFitVehicles((prev) => [...prev, newEngineId]);
+                        message.success(`${selectedEngine.hp} HP engine added.`);
+                      } else {
+                        message.info("This engine is already added.");
+                      }
+                    }}
+                  >
+                    + Add
+                  </Button>
                 </div>
 
               </div>
@@ -668,10 +751,6 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                                   <Input placeholder="Field name" className="flex-1" />
                                 </Form.Item>
                                 <Form.Item name={`field_type_${sectionIndex}`} noStyle initialValue="string">
-                                  <Select className="w-24">
-                                    <Option value="string">Text</Option>
-                                    <Option value="float">Number</Option>
-                                  </Select>
                                 </Form.Item>
                                 <Form.Item name={`field_value_${sectionIndex}`} noStyle>
                                   <Input placeholder="Value" className="flex-1" />
@@ -863,8 +942,8 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({ isModalOpen, handl
                     <Upload
                       showUploadList={false}
                       beforeUpload={(file: File) => {
-                        setProfilePic(file) 
-                        return false 
+                        setProfilePic(file)
+                        return false
                       }}
                     >
                       <SlCloudUpload className="cursor-pointer" size={32} />

@@ -1,6 +1,5 @@
 import { baseApi } from "../../api/baseApi";
 
-// 🧾 TypeScript types
 export interface SalesReportItem {
   orderId: string;
   totalAmount: number;
@@ -28,7 +27,7 @@ export interface SalesReportResponse {
   };
 }
 
-// 🧩 API endpoint
+
 export const salesReportApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSalesReport: builder.query<SalesReportResponse, void>({

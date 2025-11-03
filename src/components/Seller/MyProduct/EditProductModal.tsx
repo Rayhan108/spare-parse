@@ -31,7 +31,7 @@ export interface SubSection {
 export interface Section {
   sectionName: string;
   fields: Field[];
-  subSections?: SubSection[]; 
+  subSections?: SubSection[];
 }
 
 export interface OEMReference {
@@ -45,8 +45,8 @@ export interface ShippingInfo {
   countryName: string;
   carrier: string;
   cost: number;
-  deliveryMin?: number; 
-  deliveryMax?: number; 
+  deliveryMin?: number;
+  deliveryMax?: number;
   isDefault?: boolean;
 }
 
@@ -82,6 +82,54 @@ interface Product {
   isVisible?: boolean;
   productImages?: string[];
 }
+
+
+
+
+//
+import React from "react";
+import { Form, Input, Select, Button } from "antd";
+import { IoAdd } from "react-icons/io5";
+
+const { Option } = Select;
+
+// interface Field {
+//   fieldName: string;
+//   valueString?: string;
+//   valueFloat?: number;
+//   valueType: "string" | "float";
+// }
+
+// interface SubSection {
+//   sectionName: string;
+//   fields: Field[];
+// }
+
+// interface Section {
+//   sectionName: string;
+//   fields: Field[];
+//   subSections: SubSection[];
+// }
+
+// interface OEMReference {
+//   type: "OE" | "INTERNAL";
+//   number: string;
+//   brandId?: string;
+// }
+
+// interface ShippingInfo {
+//   countryCode: string;
+//   countryName: string;
+//   carrier: string;
+//   cost: number;
+//   deliveryMin: number;
+//   deliveryMax: number;
+//   isDefault?: boolean;
+// }
+
+
+
+
 
 const EditProductModal: React.FC<EditProductModalProps> = ({
   isModalOpen,
@@ -180,6 +228,90 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     }
   };
 
+
+
+
+
+
+  ///
+
+
+  const [form] = Form.useForm();
+  const [sections, setSections] = useState<Section[]>([]);
+  const [oemReferences, setOemReferences] = useState<OEMReference[]>([]);
+  const [shippingInfo, setShippingInfo] = useState<ShippingInfo[]>([]);
+  const brandId = "sample-brand-id"; // replace dynamically if needed
+
+  // --- Product Sections ---
+  const handleAddSection = () => {
+    const sectionName = form.getFieldValue("newSectionName");
+    if (sectionName?.trim()) {
+      setSections([...sections, { sectionName: sectionName.trim(), fields: [], subSections: [] }]);
+      form.setFieldsValue({ newSectionName: "" });
+      message.success("Section added");
+    } else message.error("Enter section name");
+  };
+
+  const handleAddField = (sectionIndex: number) => {
+    const fieldName = form.getFieldValue(`field_name_${sectionIndex}`);
+    const fieldValue = form.getFieldValue(`field_value_${sectionIndex}`);
+    const fieldType = form.getFieldValue(`field_type_${sectionIndex}`) || "string";
+    if (fieldName && fieldValue !== undefined && fieldValue !== "") {
+      const newField: Field = {
+        fieldName,
+        valueType: fieldType,
+        ...(fieldType === "float" ? { valueFloat: parseFloat(fieldValue) } : { valueString: fieldValue }),
+      };
+      const newSections = [...sections];
+      newSections[sectionIndex].fields.push(newField);
+      setSections(newSections);
+      form.setFieldsValue({ [`field_name_${sectionIndex}`]: "", [`field_value_${sectionIndex}`]: "", [`field_type_${sectionIndex}`]: "string" });
+      message.success("Field added");
+    } else message.error("Fill field name and value");
+  };
+
+  const handleRemoveField = (sectionIndex: number, fieldIndex: number) => {
+    const newSections = [...sections];
+    newSections[sectionIndex].fields.splice(fieldIndex, 1);
+    setSections(newSections);
+  };
+
+  const handleRemoveSection = (sectionIndex: number) => setSections(sections.filter((_, i) => i !== sectionIndex));
+
+  // --- References ---
+  const handleAddReference = () => {
+    const refType = form.getFieldValue("refType");
+    const refNumber = form.getFieldValue("refNumber");
+    if (refType && refNumber) {
+      const newRef: OEMReference = { type: refType, number: refNumber, ...(refType === "OE" && { brandId }) };
+      setOemReferences([...oemReferences, newRef]);
+      form.setFieldsValue({ refType: "", refNumber: "" });
+      message.success("Reference added");
+    } else message.error("Fill type and number");
+  };
+
+  const handleRemoveReference = (index: number) => setOemReferences(oemReferences.filter((_, i) => i !== index));
+
+  // --- Shipping ---
+  const handleAddShipping = () => {
+    const countryCode = form.getFieldValue("shippingCountryCode");
+    const countryName = form.getFieldValue("shippingCountryName");
+    const carrier = form.getFieldValue("shippingCarrier");
+    const cost = form.getFieldValue("shippingCost");
+    const deliveryMin = form.getFieldValue("shippingDeliveryMin") || 0;
+    const deliveryMax = form.getFieldValue("shippingDeliveryMax") || 0;
+    if (countryCode && countryName && carrier && cost !== undefined) {
+      const newShip: ShippingInfo = { countryCode, countryName, carrier, cost: parseFloat(cost), deliveryMin: parseInt(deliveryMin), deliveryMax: parseInt(deliveryMax) };
+      setShippingInfo([...shippingInfo, newShip]);
+      form.setFieldsValue({ shippingCountryCode: "", shippingCountryName: "", shippingCarrier: "", shippingCost: "", shippingDeliveryMin: "", shippingDeliveryMax: "" });
+      message.success("Shipping added");
+    } else message.error("Fill all required shipping fields");
+  };
+
+  const handleRemoveShipping = (index: number) => setShippingInfo(shippingInfo.filter((_, i) => i !== index));
+
+
+
   return (
     <Modal
       closable
@@ -254,6 +386,94 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 placeholder="Enter stock quantity"
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
+
+              <Form form={form} layout="vertical">
+                {/* Product Sections */}
+                <div className="border-t pt-4 mt-4">
+                  <h3 className="text-lg font-semibold mb-3">Product Sections</h3>
+                  <div className="flex gap-2 mb-4">
+                    <Form.Item name="newSectionName" noStyle>
+                      <Input placeholder="Section name" className="flex-1" />
+                    </Form.Item>
+                    <button
+                      type="button"
+                      onClick={handleAddSection}
+                      className="bg-[#f56100] px-4 py-2 text-white cursor-pointer rounded flex items-center gap-2"
+                    >
+                      <IoAdd size={20} /> Add Section
+                    </button>
+                  </div>
+
+                  {sections.map((section, sIdx) => (
+                    <div key={sIdx} className="border rounded-lg p-4 bg-gray-50 mb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-semibold">{section.sectionName}</h4>
+                        <button onClick={() => handleRemoveSection(sIdx)} className="text-red-500">Delete</button>
+                      </div>
+                      <div className="flex gap-2 mb-2">
+                        <Form.Item name={`field_name_${sIdx}`} noStyle><Input placeholder="Field name" /></Form.Item>
+                        <Form.Item name={`field_type_${sIdx}`} noStyle>
+                        </Form.Item>
+                        <Form.Item name={`field_value_${sIdx}`} noStyle><Input placeholder="Value" /></Form.Item>
+                        <Button type="primary" onClick={() => handleAddField(sIdx)} icon={<IoAdd />} />
+                      </div>
+                      {section.fields.map((f, fIdx) => (
+                        <div key={fIdx} className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm">
+                          <span>{f.fieldName}: {f.valueType === "float" ? f.valueFloat : f.valueString}</span>
+                          <button onClick={() => handleRemoveField(sIdx, fIdx)} className="text-red-500">×</button>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+
+                {/* References */}
+                <div className="border-t pt-4 mt-4">
+                  <h3 className="text-lg font-semibold mb-3">References</h3>
+                  <div className="flex gap-2 mb-4">
+                    <Form.Item name="refType" noStyle>
+                      <Select placeholder="Type" className="w-1/4">
+                        <Option value="OE">OE</Option>
+                        <Option value="INTERNAL">INTERNAL</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item name="refNumber" noStyle><Input placeholder="Reference number" className="w-1/3" /></Form.Item>
+                    <Button type="primary" onClick={handleAddReference} icon={<IoAdd />} />
+                  </div>
+                  {oemReferences.map((ref, idx) => (
+                    <div key={idx} className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm">
+                      <span>{ref.type} - {ref.number}</span>
+                      <button onClick={() => handleRemoveReference(idx)} className="text-red-500">Remove</button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Shipping */}
+                <div className="border-t pt-4 mt-4">
+                  <h3 className="text-lg font-semibold mb-3">Shipping Information</h3>
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <Form.Item name="shippingCountryCode" noStyle><Input placeholder="Country Code" /></Form.Item>
+                    <Form.Item name="shippingCountryName" noStyle><Input placeholder="Country Name" /></Form.Item>
+                    <Form.Item name="shippingCarrier" noStyle><Input placeholder="Carrier" /></Form.Item>
+                    <Form.Item name="shippingCost" noStyle><Input placeholder="Cost" type="number" /></Form.Item>
+                    <Form.Item name="shippingDeliveryMin" noStyle><Input placeholder="Min Days" type="number" /></Form.Item>
+                    <Form.Item name="shippingDeliveryMax" noStyle><Input placeholder="Max Days" type="number" /></Form.Item>
+                  </div>
+                    <button
+                      type="button"
+                      onClick={handleAddShipping}
+                      className="w-full bg-[#f56100] py-2 rounded text-white cursor-pointer mb-4"
+                    >
+                      Add Shipping
+                    </button>
+                  {shippingInfo.map((ship, idx) => (
+                    <div key={idx} className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm">
+                      <span>{ship.countryName} ({ship.countryCode}) - {ship.carrier} - ${ship.cost}</span>
+                      <button onClick={() => handleRemoveShipping(idx)} className="text-red-500">Remove</button>
+                    </div>
+                  ))}
+                </div>
+              </Form>
             </div>
 
             <button
@@ -319,6 +539,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
           </>
         )}
       </div>
+
+
     </Modal>
   );
 };

@@ -1,6 +1,4 @@
 
-
-// src/utils/firebase.ts
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage, isSupported } from "firebase/messaging";
 
@@ -13,7 +11,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 
 export const requestForToken = async (): Promise<string | null> => {
@@ -40,7 +38,7 @@ export const requestForToken = async (): Promise<string | null> => {
   }
 };
 
-// Optional — handle foreground messages
+
 export const onMessageListener = async () =>
   new Promise((resolve) => {
     isSupported().then((supported) => {

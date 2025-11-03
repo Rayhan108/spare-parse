@@ -16,7 +16,7 @@ interface Order {
   orderId: string;
   createdAt?: string;
   status: string;
-  quantity?: number; // total order quantity
+  quantity?: number; 
   items: OrderItem[];
 }
 
