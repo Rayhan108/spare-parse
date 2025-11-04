@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import Image from "next/image";
@@ -107,7 +108,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
   );
 
 
-  const reviews = reviewData?.data ?? [];
+  const reviews = reviewData?.data || [];
   const totalRatings = reviews.length;
   const averageRating =
     totalRatings > 0

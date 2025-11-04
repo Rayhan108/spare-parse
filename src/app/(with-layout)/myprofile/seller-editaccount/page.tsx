@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // "use client";
 
 // import { useEffect } from "react";
@@ -189,7 +191,7 @@ const EditAccount = () => {
         description: "Your profile has been updated successfully!",
         placement: "topRight",
       });
-    } catch (error) {
+    } catch (error:any) {
       api.open({
         type: "error",
         message: "Update Failed",

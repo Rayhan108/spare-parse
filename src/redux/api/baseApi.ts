@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery,} from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://fit-parts-ecommerce-for-vehicle-par.vercel.app/api/v1",
+  baseUrl: "http://13.62.189.94:7080/api/v1",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).logInUser?.accessToken;
 
