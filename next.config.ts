@@ -1,19 +1,4 @@
-// import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-//   /* config options here */
-//   images: {
-//     domains: [
-//       'lerirides.nyc3.digitaloceanspaces.com',
-//       'avatar.iran.liara.run', // add this
-//     ],
-//   },
-// };
-
-// export default nextConfig;
-
-
-
+// next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -22,17 +7,14 @@ const nextConfig: NextConfig = {
     domains: [
       "lerirides.nyc3.digitaloceanspaces.com",
       "avatar.iran.liara.run",
+      "hatem-s3-bucket.s3.eu-north-1.amazonaws.com", // <-- add this
     ],
   },
   webpack: (config) => {
-    // 👇 Patch to suppress the AntD React 19 compatibility warning
     const originalWarn = console.warn;
     console.warn = (...args) => {
-      if (
-        typeof args[0] === "string" &&
-        args[0].includes("[antd: compatible]")
-      ) {
-        return; // skip the warning
+      if (typeof args[0] === "string" && args[0].includes("[antd: compatible]")) {
+        return;
       }
       originalWarn(...args);
     };

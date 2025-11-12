@@ -88,6 +88,7 @@ import "./globals.css";
 import { App as AntdApp, ConfigProvider, ThemeConfig } from "antd";
 import { mainTheme } from "@/theme/ant-theme";
 import ClientProviders from "@/utils/ClientProviders";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -117,6 +118,7 @@ export default function RootLayout({
         {/* ✅ Wrap in ConfigProvider (theme + locale) */}
         <ConfigProvider theme={mainTheme as ThemeConfig}>
           {/* ✅ Wrap with Ant Design App for message/notification/modal context */}
+          <Toaster/>
           <AntdApp>
             <ClientProviders>{children}</ClientProviders>
           </AntdApp>
