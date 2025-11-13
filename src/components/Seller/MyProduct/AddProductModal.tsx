@@ -261,26 +261,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
   const [profilePic, setProfilePic] = useState<File | null>(null);
   const profilePicUrl = profilePic ? URL.createObjectURL(profilePic) : null;
 
-  // const handleAddOEMReference = () => {
-  //   const refType = form.getFieldValue("refType")
-  //   const refNumber = form.getFieldValue("refNumber")
-  //   const refBrandId = form.getFieldValue("refBrandId")
 
-  //   console.log("[v0] Reference values:", { refType, refNumber, refBrandId })
-
-  //   if (refType && refNumber) {
-  //     const newRef: OEMReference = {
-  //       type: refType,
-  //       number: refNumber,
-  //       ...(refType === "OE" && { brandId: refBrandId }),
-  //     }
-  //     setOemReferences([...oemReferences, newRef])
-  //     form.setFieldsValue({ refType: "", refNumber: "", refBrandId: "" })
-  //     message.success("Reference added")
-  //   } else {
-  //     message.error("Please fill in reference type and number")
-  //   }
-  // }
   const handleAddOEMReference = () => {
     const refType = form.getFieldValue("refType");
     const refNumber = form.getFieldValue("refNumber");
@@ -418,112 +399,6 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
 
   const router = useRouter();
 
-  // const handleSubmitProduct = async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     const selectedBrandId = brandId;
-  //     const values = { ...formData, ...form.getFieldsValue() };
-  //     console.log("Form values:", values);
-
-  //     if (!values.productName) {
-  //       console.log("Please add product name");
-  //       return;
-  //     }
-
-  //     const updatedSections = sections.map((section, sIndex) => {
-  //       const updatedFields = [...section.fields];
-  //       const typedFieldName = form.getFieldValue(`field_name_${sIndex}`);
-  //       const typedFieldValue = form.getFieldValue(`field_value_${sIndex}`);
-  //       const typedFieldType = form.getFieldValue(`field_type_${sIndex}`);
-  //       if (typedFieldName && typedFieldValue !== undefined && typedFieldValue !== "") {
-  //         updatedFields.push({
-  //           fieldName: typedFieldName,
-  //           valueType: typedFieldType || "string",
-  //           ...(typedFieldType === "float"
-  //             ? { valueFloat: parseFloat(typedFieldValue) }
-  //             : { valueString: typedFieldValue }),
-  //         });
-  //       }
-
-  //       const updatedSubSections = section.subSections.map((subSection, subIndex) => {
-  //         const updatedSubFields = [...subSection.fields];
-  //         const typedSubName = form.getFieldValue(`subfield_name_${sIndex}_${subIndex}`);
-  //         const typedSubValue = form.getFieldValue(`subfield_value_${sIndex}_${subIndex}`);
-  //         const typedSubType = form.getFieldValue(`subfield_type_${sIndex}_${subIndex}`);
-  //         if (typedSubName && typedSubValue !== undefined && typedSubValue !== "") {
-  //           updatedSubFields.push({
-  //             fieldName: typedSubName,
-  //             valueType: typedSubType || "string",
-  //             ...(typedSubType === "float"
-  //               ? { valueFloat: parseFloat(typedSubValue) }
-  //               : { valueString: typedSubValue }),
-  //           });
-  //         }
-  //         return {
-  //           sectionName: subSection.sectionName,
-  //           fields: updatedSubFields,
-  //         };
-  //       });
-
-  //       return {
-  //         sectionName: section.sectionName,
-  //         fields: updatedFields,
-  //         subSections: updatedSubSections,
-  //       };
-  //     });
-
-  //     // 2️⃣ Build the full product data
-  //     const productData = {
-  //       categoryId,
-  //       brandId: selectedBrandId,
-  //       productName: values.productName,
-  //       description: editor?.getHTML() || "",
-  //       price: Number(values.price) || 30,
-  //       discount: Number(values.discount) || 10,
-  //       stock: Number(values.stock) || 10,
-  //       isVisible: values.productAvailability === "inStock",
-  //       // fitVehicles: values.fitVehicles ? [values.fitVehicles] : [],
-  //       fitVehicles:fitVehicles,
-  //       sections: updatedSections,
-  //       references: oemReferences,
-  //       shipping: shippingInfo,
-  //     };
-
-  //     // 3️⃣ Prepare FormData
-  //     const formDataToSend = new FormData();
-  //     formDataToSend.append("bodyData", JSON.stringify(productData));
-  //     if (profilePic) formDataToSend.append("productImages", profilePic);
-
-  //     console.log("Final payload before upload:");
-  //     formDataToSend.forEach((v, k) => console.log(k, v));
-
-  //     return
-  //     // 4️⃣ Upload
-  //     const result = await addProduct(formDataToSend).unwrap();
-  //     message.success(`Product uploaded successfully! ${result}`);
-
-  //     // 5️⃣ Reset form
-  //     form.resetFields();
-  //     setOemReferences([]);
-  //     setShippingInfo([]);
-  //     setSections([]);
-  //     setProfilePic(null);
-  //     SetNextComponent("details");
-  //     editor?.commands.clearContent();
-  //     handleOk();
-
-  //     router.refresh();
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1000);
-  //   } catch (error) {
-  //     console.error("Upload error:", error);
-  //     message.error("Error uploading product");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSubmitProduct = async () => {
     try {

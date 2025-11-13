@@ -22,7 +22,7 @@ interface Model {
 
 interface Engine {
     engineId: string;
-    hp: number;
+    kw: number;
 }
 
 interface Category {
@@ -78,8 +78,8 @@ const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelec
     const { data: enginesData, isLoading: isEnginesLoading } = useGetEnginesByModelQuery(modelId!, { skip: !modelId });
     const hpOptions =
         (enginesData?.data as Engine[] | undefined)?.map((e) => ({
-            value: String(e.hp),
-            label: `${e.hp} HP`,
+            value: String(e.kw),
+            label: `${e.kw} KW`,
         })) || [];
 
     useEffect(() => {
@@ -153,17 +153,21 @@ const CarAndCategorySelector: React.FC<CarAndCategorySelectorProps> = ({ onSelec
                 className="w-full"
             />
 
-            {/* 4️⃣ Engine HP */}
-            <Select
-                placeholder="Select Engine Power"
-                loading={isEnginesLoading}
-                options={hpOptions}
-                value={hp}
-                onChange={(val: string) => setHp(val)}
-                disabled={!modelId}
-                className="w-full"
-            />
-
+       
+    {/* Engine Power (Multiple Selection) */}
+                <div className="flex items-center w-full">
+      
+                  <Select
+                    placeholder="Engine Power"
+                    className="w-full"
+                    mode="multiple"
+                    loading={isEnginesLoading}
+                    options={hpOptions}
+                    value={hp} // Using fitVehicles as the value to store selected MongoDB _id(s)
+                     onChange={(val: string) => setHp(val)}
+                    disabled={!modelId}
+                  />
+                </div>
             {/* 5️⃣ Category */}
             <Select
                 placeholder="Select Category"
