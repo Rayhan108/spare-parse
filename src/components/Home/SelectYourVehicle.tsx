@@ -112,7 +112,7 @@ const SelectYourVehicle = () => {
     } = useGetEnginesByModelQuery(modelId!, { skip: !modelId });
 
     const hpOptions: { value: string; label: string }[] =
-        enginesData?.data.map((e: Engine) => ({ value: String(e.hp), label: `${e.hp} HP` })) || [];
+        enginesData?.data.map((e: Engine) => ({ value: String(e.kw), label: `${e.kw} KW` })) || [];
 
     const {
         data: vehiclesData,

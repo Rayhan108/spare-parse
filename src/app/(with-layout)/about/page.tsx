@@ -11,6 +11,9 @@ import money_back from "../../../../public/service/money_back.svg";
 import { useGetAboutUsQuery } from "@/redux/features/aboutUs/aboutUsApi";
 import { useGetFoundingTeamsQuery } from "@/redux/features/foundingTeam/foundingTeam";
 
+const removeHTMLTags = (str: string) => {
+  return str.replace(/<\/?[^>]+(>|$)/g, ""); // Regex to remove all HTML tags
+};
 
 const About = () => {
 
@@ -59,9 +62,9 @@ const About = () => {
         <div className="flex dark:text-white items-start">
           <div className="md:w-1/2 h-[400px] 2xl:h-[700px] flex flex-col justify-center">
             <h2 className="text-5xl font-bold">{about?.heading || "Our Story"}</h2>
-            <p className="mt-5 text-lg">
-              {about?.content ||
-                "At Sparedoc, we're transforming the way you shop for car parts. As a trusted e-commerce platform, we offer a wide selection of genuine and aftermarket auto components, accessories, and tools."}
+         <p className="mt-5 text-lg">
+              {/* Remove HTML tags from about?.content */}
+              {removeHTMLTags(about?.content || "At Sparedoc, we're transforming the way you shop for car parts. As a trusted e-commerce platform, we offer a wide selection of genuine and aftermarket auto components, accessories, and tools.")}
             </p>
           </div>
           <div className="relative">

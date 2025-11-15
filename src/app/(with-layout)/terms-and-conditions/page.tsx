@@ -4,20 +4,27 @@ import { useGetTermsAndConditionsQuery } from "@/redux/features/terms/termsApi";
 import { Breadcrumb, Spin } from "antd";
 import Link from "next/link";
 
+// Function to remove HTML tags using a regex
+const removeHTMLTags = (str: string) => {
+  return str.replace(/<\/?[^>]+(>|$)/g, ""); // Regex to remove all HTML tags
+};
+
 const TermsAndConditions = () => {
   const { data, isLoading, isError } = useGetTermsAndConditionsQuery();
   const terms = data?.data;
 
+  // Loading State
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-96">
+      <div className="flex justify-center items-center h-screen">
         <Spin size="large" />
       </div>
     );
 
+  // Error State
   if (isError)
     return (
-      <div className="flex justify-center items-center h-96">
+      <div className="flex justify-center items-center h-screen">
         <p className="text-red-500 text-lg">
           Failed to load Terms & Conditions.
         </p>
@@ -25,7 +32,7 @@ const TermsAndConditions = () => {
     );
 
   return (
-    <div className="container mx-auto py-16 px-3 md:px-0">
+    <div className="container mx-auto py-16 px-4 md:px-0">
       {/* Breadcrumb */}
       <Breadcrumb
         items={[
@@ -53,7 +60,8 @@ const TermsAndConditions = () => {
 
       {/* Content */}
       <div className="space-y-6 text-gray-700 dark:text-gray-300 text-lg">
-        <p>{terms?.content || "No terms and conditions available."}</p>
+        {/* Removing HTML tags */}
+        <p>{removeHTMLTags(terms?.content || "No terms and conditions available.")}</p>
       </div>
     </div>
   );

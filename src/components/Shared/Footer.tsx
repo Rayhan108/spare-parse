@@ -11,13 +11,17 @@ import { PiTiktokLogoLight } from "react-icons/pi"
 import { useState } from "react"
 import { useGetContactUsInfoQuery } from "@/redux/features/contactUs/contactUsApi"
 import { useSubscribeNewsletterMutation } from "@/redux/features/newsletter/newsletterApi"
+import { useSelector } from "react-redux"
+import { selectCurrentUser } from "@/redux/features/auth/authSlice"
 
 const Footer = () => {
   const { data, isError } = useGetContactUsInfoQuery()
   const [email, setEmail] = useState<string>("")
   const [subscribeNewsletter, { isLoading: isSubscribing }] = useSubscribeNewsletterMutation()
   const [api, contextHolder] = notification.useNotification()
-
+  const user = useSelector(selectCurrentUser);
+  console.log("user------->",user);
+  const role = user?.role
   if (isError || !data?.data) return <p className="text-center text-white py-10">Failed to load footer info</p>
 
   const contact = data.data
@@ -123,8 +127,13 @@ const Footer = () => {
           <h2 className="text-2xl text-white mb-4">Account</h2>
           <div className="flex flex-col gap-5 text-white">
             <Link href={'/myprofile'}>My Account</Link>
-            <Link href={'/cart'}>Cart</Link>
-            <Link href={'/wishlist'}>Wishlist</Link>
+       {role === "BUYER" && (
+          <>
+            <Link href="/cart">Cart</Link>
+            <Link href="/wishlist">Wishlist</Link>
+          </>
+        )}
+           
             <Link href={'/product'}>Shop</Link>
           </div>
         </div>

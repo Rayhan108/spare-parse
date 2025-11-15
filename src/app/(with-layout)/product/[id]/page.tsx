@@ -15,6 +15,8 @@ import Reviews from "@/components/Products/Review";
 import SingleProductSkeleton from "@/utils/SingleProductSkeleton";
 import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 
 type Tab = "references" | "vehicles" | "alternatives" | "reviews";
@@ -70,6 +72,7 @@ interface Product {
 interface AddToCartRequest { productId: string }
 
 export default function SingleProduct() {
+  const user = useSelector(selectCurrentUser)
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useGetSingleProductQuery(id);
   const [quantity, setQuantity] = useState<number>(1);
@@ -80,6 +83,7 @@ export default function SingleProduct() {
   if (isError || !data?.data) return <p>Failed to load product details.</p>;
   const product: Product = data.data;
 
+const role = user?.role
   const handleAddToCart = async () => {
     try {
       const token = Cookies.get("hatem-ecommerce-token");
@@ -201,8 +205,9 @@ export default function SingleProduct() {
                   <span>Easy returns</span>
                 </div>
               </div>
-
-              <div className="flex gap-2">
+{
+  role == 'BUYER' && (
+  <div className="flex gap-2">
                 <input
                   type="number"
                   min={1}
@@ -219,6 +224,9 @@ export default function SingleProduct() {
                 </Button>
 
               </div>
+  )
+}
+            
             </div>
           </div>
         </div>

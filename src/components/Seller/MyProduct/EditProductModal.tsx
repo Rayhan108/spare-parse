@@ -20,7 +20,11 @@ import React from "react";
 import { Form, Input, Select } from "antd";
 import { IoAdd } from "react-icons/io5";
 import { useGetAllCategoriesQuery } from "@/redux/features/categories/categoriesApi";
-import { useGetBrandsByYearQuery, useGetEnginesByModelQuery, useGetModelsByBrandQuery } from "@/redux/features/carBrand/carBrandApi";
+import {
+  useGetBrandsByYearQuery,
+  useGetEnginesByModelQuery,
+  useGetModelsByBrandQuery,
+} from "@/redux/features/carBrand/carBrandApi";
 
 export interface Field {
   fieldName: string;
@@ -77,16 +81,16 @@ interface SellerProduct {
 }
 
 interface Category {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
 }
 interface Model {
-    modelId: string;
-    modelName: string;
+  modelId: string;
+  modelName: string;
 }
 interface Engine {
-    engineId: string;
-    kw: number;
+  engineId: string;
+  kw: number;
 }
 interface Product {
   id: string;
@@ -104,7 +108,6 @@ interface Product {
 //
 
 const { Option } = Select;
-
 
 const EditProductModal: React.FC<EditProductModalProps> = ({
   isModalOpen,
@@ -131,51 +134,55 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   const [oemReferences, setOemReferences] = useState<OEMReference[]>([]);
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo[]>([]);
 
-interface Brand {
-  brandId: string;
-  brandName: string;
-}
+  interface Brand {
+    brandId: string;
+    brandName: string;
+  }
 
- const [year, setYear] = useState<string>();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [refBrandId, setRefBrandId] = useState<string>();
-    const [brandName, setBrandName] = useState<string>();
-    const [modelId, setModelId] = useState<string>();
-    const [modelName, setModelName] = useState<string>();
-    const [hp, setHp] = useState<string>();
-    const [categoryId, setCategoryId] = useState<string>();
-    const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ page: 1, limit: 100 });
-    const currentYear = new Date().getFullYear();
-    const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
-        const y = String(currentYear - i);
-        return { value: y, label: y };
-    });
+  const [year, setYear] = useState<string>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [refBrandId, setRefBrandId] = useState<string>();
+  const [brandName, setBrandName] = useState<string>();
+  const [modelId, setModelId] = useState<string>();
+  const [modelName, setModelName] = useState<string>();
+  const [hp, setHp] = useState<string>();
+  const [categoryId, setCategoryId] = useState<string>();
+  const { data: categoriesData, isLoading: isCategoriesLoading } =
+    useGetAllCategoriesQuery({ page: 1, limit: 100 });
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
+    const y = String(currentYear - i);
+    return { value: y, label: y };
+  });
 
-    const { data: brandsData, isLoading: isBrandsLoading } = useGetBrandsByYearQuery(year!, { skip: !year });
-    const brandOptions =
-        (brandsData?.data as Brand[] | undefined)?.map((b) => ({
-            value: b.brandId,
-            label: b.brandName,
-        })) || [];
+  const { data: brandsData, isLoading: isBrandsLoading } =
+    useGetBrandsByYearQuery(year!, { skip: !year });
+  const brandOptions =
+    (brandsData?.data as Brand[] | undefined)?.map((b) => ({
+      value: b.brandId,
+      label: b.brandName,
+    })) || [];
 
-    const { data: modelsData, isLoading: isModelsLoading } = useGetModelsByBrandQuery(
-        { brandId: brandId!, year: year! },
-        { skip: !brandId || !year }
+  const { data: modelsData, isLoading: isModelsLoading } =
+    useGetModelsByBrandQuery(
+      { brandId: brandId!, year: year! },
+      { skip: !brandId || !year }
     );
-    const modelOptions =
-        (modelsData?.data as Model[] | undefined)?.map((m) => ({
-            value: m.modelId,
-            label: m.modelName,
-        })) || [];
+  const modelOptions =
+    (modelsData?.data as Model[] | undefined)?.map((m) => ({
+      value: m.modelId,
+      label: m.modelName,
+    })) || [];
 
-    const { data: enginesData, isLoading: isEnginesLoading } = useGetEnginesByModelQuery(modelId!, { skip: !modelId });
-    const hpOptions =
-        (enginesData?.data as Engine[] | undefined)?.map((e) => ({
-            value: String(e.kw),
-            label: `${e.kw} KW`,
-        })) || [];
+  const { data: enginesData, isLoading: isEnginesLoading } =
+    useGetEnginesByModelQuery(modelId!, { skip: !modelId });
+  const hpOptions =
+    (enginesData?.data as Engine[] | undefined)?.map((e) => ({
+      value: String(e.kw),
+      label: `${e.kw} KW`,
+    })) || [];
 
-const [selectedValues, setSelectedValues] = useState<{
+  const [selectedValues, setSelectedValues] = useState<{
     year?: string;
     brandId?: string;
     brandName?: string;
@@ -184,32 +191,29 @@ const [selectedValues, setSelectedValues] = useState<{
     kw?: string;
     categoryId?: string;
     hp?: string; // Add hp to the state type
-}>({});
+  }>({});
 
+  // const handleSelectChange = useCallback((values: typeof selectedValues) => {
+  //   setSelectedValues(values);
+  // }, []);
 
+  useEffect(() => {
+    setBrandId(undefined);
+    setBrandName(undefined);
+    setModelId(undefined);
+    setModelName(undefined);
+    setHp(undefined);
+  }, [year]);
 
-// const handleSelectChange = useCallback((values: typeof selectedValues) => {
-//   setSelectedValues(values);
-// }, []);
+  useEffect(() => {
+    setModelId(undefined);
+    setModelName(undefined);
+    setHp(undefined);
+  }, [brandId]);
 
-
-    useEffect(() => {
-        setBrandId(undefined);
-        setBrandName(undefined);
-        setModelId(undefined);
-        setModelName(undefined);
-        setHp(undefined);
-    }, [year]);
-
-    useEffect(() => {
-        setModelId(undefined);
-        setModelName(undefined);
-        setHp(undefined);
-    }, [brandId]);
-
-    useEffect(() => {
-        setHp(undefined);
-    }, [modelId]);
+  useEffect(() => {
+    setHp(undefined);
+  }, [modelId]);
 
   // useEffect(() => {
   //   handleSelectChange({
@@ -222,26 +226,6 @@ const [selectedValues, setSelectedValues] = useState<{
   //     categoryId,
   //   });
   // }, [year, brandId, brandName, modelId, modelName, hp, categoryId, handleSelectChange]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // --- Product Sections ---
   const handleAddSection = () => {
@@ -357,8 +341,6 @@ const [selectedValues, setSelectedValues] = useState<{
   const handleRemoveShipping = (index: number) =>
     setShippingInfo(shippingInfo.filter((_, i) => i !== index));
 
-
- 
   const { data, isLoading, isError } = useGetSingleProductQuery(productId);
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
   const editor = useEditor({
@@ -396,7 +378,6 @@ const [selectedValues, setSelectedValues] = useState<{
     }
   }, [data, editor]);
 
-
   const handleSubmit = async () => {
     if (!data?.data) return message.error("Product data not loaded.");
 
@@ -427,6 +408,13 @@ const [selectedValues, setSelectedValues] = useState<{
       const formData = new FormData();
       formData.append("bodyData", JSON.stringify(bodyData));
       if (profilePic) formData.append("productImages", profilePic);
+// Log formData
+// eslint-disable-next-line prefer-const
+for (let [key, value] of formData.entries()) {
+  console.log(`${key}:`, value);
+}
+
+
 
       await updateProduct({ productId, formData }).unwrap();
       message.success(" Product updated successfully!");
@@ -466,126 +454,107 @@ const [selectedValues, setSelectedValues] = useState<{
         {/* <CarAndCategorySelector onSelectChange={handleSelectChange} /> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* 1️⃣ Year */}
-<Select
-  placeholder="Select Year"
-  options={yearOptions}
-  value={year}
-  onChange={(val: string) => {
-    setYear(val);
-    setSelectedValues((prev) => ({ ...prev, year: val }));
-  }}
-  className="w-full"
-/>
+          {/* 1️⃣ Year */}
+          <Select
+            placeholder="Select Year"
+            options={yearOptions}
+            value={year}
+            onChange={(val: string) => {
+              setYear(val);
+              setSelectedValues((prev) => ({ ...prev, year: val }));
+            }}
+            className="w-full"
+          />
 
+          {/* 2️⃣ Brand */}
+          <Select
+            placeholder="Select Brand"
+            loading={isBrandsLoading}
+            options={brandOptions}
+            value={brandId}
+            onChange={(val: string) => {
+              setBrandId(val);
+              const selected = (brandsData?.data as Brand[] | undefined)?.find(
+                (b) => b.brandId === val
+              );
+              const name = selected?.brandName;
 
-            {/* 2️⃣ Brand */}
-     <Select
-  placeholder="Select Brand"
-  loading={isBrandsLoading}
-  options={brandOptions}
-  value={brandId}
-  onChange={(val: string) => {
-    setBrandId(val);
-    const selected = (brandsData?.data as Brand[] | undefined)?.find(
-      (b) => b.brandId === val
-    );
-    const name = selected?.brandName;
+              setBrandName(name);
 
-    setBrandName(name);
+              setSelectedValues((prev) => ({
+                ...prev,
+                brandId: val,
+                brandName: name,
+              }));
+            }}
+            disabled={!year}
+            className="w-full"
+          />
 
-    setSelectedValues((prev) => ({
-      ...prev,
-      brandId: val,
-      brandName: name,
-    }));
-  }}
-  disabled={!year}
-  className="w-full"
-/>
+          {/* 3️⃣ Model */}
+          <Select
+            placeholder="Select Model"
+            loading={isModelsLoading}
+            options={modelOptions}
+            value={modelId}
+            onChange={(val: string) => {
+              setModelId(val);
+              const selected = (modelsData?.data as Model[] | undefined)?.find(
+                (m) => m.modelId === val
+              );
+              const name = selected?.modelName;
 
+              setModelName(name);
 
-            {/* 3️⃣ Model */}
- <Select
-  placeholder="Select Model"
-  loading={isModelsLoading}
-  options={modelOptions}
-  value={modelId}
-  onChange={(val: string) => {
-    setModelId(val);
-    const selected = (modelsData?.data as Model[] | undefined)?.find(
-      (m) => m.modelId === val
-    );
-    const name = selected?.modelName;
+              setSelectedValues((prev) => ({
+                ...prev,
+                modelId: val,
+                modelName: name,
+              }));
+            }}
+            disabled={!brandId}
+            className="w-full"
+          />
 
-    setModelName(name);
+          {/* Engine Power (Multiple Selection) */}
+          <div className="flex items-center w-full">
+            <Select
+              placeholder="Engine Power"
+              className="w-full"
+              mode="multiple"
+              loading={isEnginesLoading}
+              options={hpOptions}
+              value={hp}
+              onChange={(val: any) => {
+                setHp(val);
+                setSelectedValues((prev) => ({
+                  ...prev,
 
-    setSelectedValues((prev) => ({
-      ...prev,
-      modelId: val,
-      modelName: name,
-    }));
-  }}
-  disabled={!brandId}
-  className="w-full"
-/>
-
-       
-    {/* Engine Power (Multiple Selection) */}
-                <div className="flex items-center w-full">
-      
-         <Select
-  placeholder="Engine Power"
-  className="w-full"
-  mode="multiple"
-  loading={isEnginesLoading}
-  options={hpOptions}
-  value={hp}
-  onChange={(val: any) => {
-    // TODO: val multiple hole ekhane handle koro, ekhon just first value dhorlam
-    const first = Array.isArray(val) ? val[0] : val;
-    setHp(first);
-    setSelectedValues((prev) => ({
-      ...prev,
-      hp: first,
-      kw: first, // jodi kw hishebe pathate chao
-    }));
-  }}
-  disabled={!modelId}
-/>
-
-                </div>
-            {/* 5️⃣ Category */}
-    <Select
-  placeholder="Select Category"
-  allowClear
-  loading={isCategoriesLoading}
-  options={(categoriesData?.data as Category[] | undefined)?.map((cat) => ({
-    value: cat.id,
-    label: cat.name,
-  }))}
-  value={categoryId}
-  onChange={(val: string) => {
-    setCategoryId(val);
-    setSelectedValues((prev) => ({ ...prev, categoryId: val }));
-  }}
-  className="w-full"
-/>
-
+                  kw: val,
+                }));
+              }}
+              disabled={!modelId}
+            />
+          </div>
+          {/* 5️⃣ Category */}
+          <Select
+            placeholder="Select Category"
+            allowClear
+            loading={isCategoriesLoading}
+            options={(categoriesData?.data as Category[] | undefined)?.map(
+              (cat) => ({
+                value: cat.id,
+                label: cat.name,
+              })
+            )}
+            value={categoryId}
+            onChange={(val: string) => {
+              setCategoryId(val);
+              setSelectedValues((prev) => ({ ...prev, categoryId: val }));
+            }}
+            className="w-full"
+          />
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         {isLoading ? (
           <div className="flex justify-center py-10">
@@ -715,132 +684,68 @@ const [selectedValues, setSelectedValues] = useState<{
                   ))}
                 </div>
 
-                {/* References */}
-                {/* <div className="border-t pt-4 mt-4">
+                <div className="border-t pt-4 mt-4">
                   <h3 className="text-lg font-semibold mb-3">References</h3>
                   <div className="flex gap-2 mb-4">
-                    <Form.Item name="refType" noStyle>
+                    <Form.Item name="refType" noStyle initialValue="">
                       <Select placeholder="Type" className="w-1/4">
                         <Option value="OE">OE</Option>
                         <Option value="INTERNAL">INTERNAL</Option>
                       </Select>
                     </Form.Item>
-                    <Form.Item name="refNumber" noStyle>
+                    <Form.Item name="refNumber" noStyle initialValue="">
                       <Input placeholder="Reference number" className="w-1/3" />
                     </Form.Item>
-     
+                    <div className="flex items-center w-full">
+                      <Select
+                        placeholder="Brand"
+                        className="w-full"
+                        loading={isBrandsLoading}
+                        options={brandOptions}
+                        value={brandId} // Ensure this reflects the selected brand ID
+                        onChange={(val) => {
+                          setBrandId(val); // Update the main brandId
+                          const selected = brandsData?.data.find(
+                            (b: Brand) => b.brandId === val
+                          );
+                          setBrandName(selected?.brandName); // Set the brand name
+                          setRefBrandId(val); // Sync the reference brand ID to the main brandId
+                        }}
+                        disabled={!year}
+                      />
+                    </div>
+
                     <button
                       type="button"
                       onClick={handleAddReference}
-                      className="flex items-center gap-2 bg-[#f56100] hover:bg-[#e04b00] text-white px-4 py-2 rounded transition-colors"
+                      className="w-10 flex justify-center items-center bg-[#f56100] px-2 text-white cursor-pointer rounded"
                     >
-                      <IoAdd size={18} />
-                      Add
+                      <IoAdd size={20} />
                     </button>
                   </div>
-                  {oemReferences.map((ref, idx) => (
-                    <div
-                      key={idx}
-                      className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm"
-                    >
-                      <span>
-                        {ref.type} - {ref.number}
-                      </span>
-                      <button
-                        onClick={() => handleRemoveReference(idx)}
-                        className="text-red-500"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                </div> */}
-
-
-
-    <div className="border-t pt-4 mt-4">
-                    <h3 className="text-lg font-semibold mb-3">References</h3>
-                    <div className="flex gap-2 mb-4">
-                      <Form.Item name="refType" noStyle initialValue="">
-                        <Select placeholder="Type" className="w-1/4">
-                          <Option value="OE">OE</Option>
-                          <Option value="INTERNAL">INTERNAL</Option>
-                        </Select>
-                      </Form.Item>
-                      <Form.Item name="refNumber" noStyle initialValue="">
-                        <Input
-                          placeholder="Reference number"
-                          className="w-1/3"
-                        />
-                      </Form.Item>
-                      <div className="flex items-center w-full">
-                        <Select
-                          placeholder="Brand"
-                          className="w-full"
-                          loading={isBrandsLoading}
-                          options={brandOptions}
-                          value={brandId} // Ensure this reflects the selected brand ID
-                          onChange={(val) => {
-                            setBrandId(val); // Update the main brandId
-                            const selected = brandsData?.data.find(
-                              (b: Brand) => b.brandId === val
-                            );
-                            setBrandName(selected?.brandName); // Set the brand name
-                            setRefBrandId(val); // Sync the reference brand ID to the main brandId
-                          }}
-                          disabled={!year}
-                        />
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={handleAddReference}
-                        className="w-10 flex justify-center items-center bg-[#f56100] px-2 text-white cursor-pointer rounded"
-                      >
-                        <IoAdd size={20} />
-                      </button>
-                    </div>
-                    {oemReferences.length > 0 && (
-                      <div className="mb-4">
-                        {oemReferences.map((ref, idx) => (
-                          <div
-                            key={idx}
-                            className="flex justify-between items-center bg-gray-100 p-2 rounded mb-2"
+                  {oemReferences.length > 0 && (
+                    <div className="mb-4">
+                      {oemReferences.map((ref, idx) => (
+                        <div
+                          key={idx}
+                          className="flex justify-between items-center bg-gray-100 p-2 rounded mb-2"
+                        >
+                          <span>
+                            {ref.type} - {ref.number}{" "}
+                            {ref.brandId && `- Brand: ${ref.brandName}`}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveReference(idx)}
+                            className="text-red-500 cursor-pointer"
                           >
-                            <span>
-                              {ref.type} - {ref.number}{" "}
-                              {ref.brandId && `- Brand: ${ref.brandName}`}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveReference(idx)}
-                              className="text-red-500 cursor-pointer"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 {/* Shipping */}
                 <div className="border-t pt-4 mt-4">
@@ -914,43 +819,46 @@ const [selectedValues, setSelectedValues] = useState<{
             </div>
 
             {/* Image Upload */}
-          <div className="mb-5">
-        <h2 className="text-xl font-semibold mb-4">Product Images</h2>
-        <div className="flex items-center justify-center rounded-2xl py-3 border border-dashed border-[#f56100] mt-4 relative">
-          {profilePic ? (
-            <>
-              <div className="relative w-full h-64 bg-gray-200 overflow-hidden rounded-xl ">
-                <Image
-                  src={profilePicUrl || ""}
-                  layout="fill"
-                  objectFit="cover"  // Ensures the image covers the container properly
-                  alt="Product image"
-                  className="transition-all duration-300 transform hover:scale-105"
-                />
-                <button
-                  type="button"
-                  onClick={() => setProfilePic(null)}
-                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer shadow-md transition-all duration-300 hover:bg-red-700"
-                >
-                  ×
-                </button>
+            <div className="mb-5">
+              <h2 className="text-xl font-semibold mb-4">Product Images</h2>
+              <div className="flex items-center justify-center rounded-2xl py-3 border border-dashed border-[#f56100] mt-4 relative">
+                {profilePic ? (
+                  <>
+                    <div className="relative w-full h-64 bg-gray-200 overflow-hidden rounded-xl ">
+                      <Image
+                        src={profilePicUrl || ""}
+                        layout="fill"
+                        objectFit="cover" // Ensures the image covers the container properly
+                        alt="Product image"
+                        className="transition-all duration-300 transform hover:scale-105"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setProfilePic(null)}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer shadow-md transition-all duration-300 hover:bg-red-700"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <Upload
+                    showUploadList={false}
+                    beforeUpload={(file: File) => {
+                      setProfilePic(file);
+                      return false;
+                    }}
+                  >
+                    <div className="w-32 h-32  border border-dashed border-[#f56100] rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#f56100] hover:text-white">
+                      <SlCloudUpload
+                        size={40}
+                        className="transition-all duration-300 hover:scale-110"
+                      />
+                    </div>
+                  </Upload>
+                )}
               </div>
-            </>
-          ) : (
-            <Upload
-              showUploadList={false}
-              beforeUpload={(file: File) => {
-                setProfilePic(file);
-                return false;
-              }}
-            >
-              <div className="w-32 h-32  border border-dashed border-[#f56100] rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#f56100] hover:text-white">
-                <SlCloudUpload size={40} className="transition-all duration-300 hover:scale-110" />
-              </div>
-            </Upload>
-          )}
-        </div>
-      </div>
+            </div>
 
             <button
               onClick={handleSubmit}

@@ -48,4 +48,6 @@ export const authSlice = createSlice({
 
 
 export const { setUser, logout } = authSlice.actions;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const selectCurrentUser = (state: any) => state.logInUser.user;
 export default authSlice.reducer;
