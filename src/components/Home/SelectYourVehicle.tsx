@@ -1,5 +1,4 @@
-"use client";
-
+'use client'
 import { useState, useEffect } from "react";
 import { Select, Pagination } from "antd";
 import Image from "next/image";
@@ -11,7 +10,6 @@ import {
     useGetCarBrandsQuery,
 } from "@/redux/features/carBrand/carBrandApi";
 import { useRouter } from "next/navigation";
-
 
 interface Brand {
     brandId: string;
@@ -63,9 +61,7 @@ interface Product {
     yearRange: string;
 }
 
-
 const SelectYourVehicle = () => {
-   
     const [year, setYear] = useState<string>();
     const [brandId, setBrandId] = useState<string>();
     const [brandName, setBrandName] = useState<string>();
@@ -73,52 +69,24 @@ const SelectYourVehicle = () => {
     const [modelName, setModelName] = useState<string>();
     const [hp, setHp] = useState<string>();
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [hasSearched, setHasSearched] = useState<boolean>(false); // New state for search tracking
     const pageSize = 8;
     const currentYear = new Date().getFullYear();
     const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
         const y = String(currentYear - i);
         return { value: y, label: y };
     });
-    const {
-        data: brandsData,
-        isLoading: isBrandsLoading,
-    } = useGetBrandsByYearQuery(year!, { skip: !year });
 
-    const brandOptions =
-        brandsData?.data.map((b: Brand) => ({
-            value: b.brandId,
-            label: b.brandName,
-        })) || [];
+    const { data: brandsData, isLoading: isBrandsLoading } = useGetBrandsByYearQuery(year!, { skip: !year });
+    const brandOptions = brandsData?.data.map((b: Brand) => ({ value: b.brandId, label: b.brandName })) || [];
 
+    const { data: modelsData, isLoading: isModelsLoading } = useGetModelsByBrandQuery({ brandId: brandId!, year: year! }, { skip: !brandId || !year });
+    const modelOptions = modelsData?.data.map((m: Model) => ({ value: m.modelId, label: m.modelName })) || [];
 
-    const {
-        data: modelsData,
-        isLoading: isModelsLoading,
-    } = useGetModelsByBrandQuery(
-        { brandId: brandId!, year: year! },
-        { skip: !brandId || !year }
-    );
+    const { data: enginesData, isLoading: isEnginesLoading } = useGetEnginesByModelQuery(modelId!, { skip: !modelId });
+    const hpOptions: { value: string; label: string }[] = enginesData?.data.map((e: Engine) => ({ value: String(e.kw), label: `${e.kw} KW` })) || [];
 
-    const modelOptions =
-        modelsData?.data.map((m: Model) => ({
-            value: m.modelId,
-            label: m.modelName,
-        })) || [];
-
-
-    const {
-        data: enginesData,
-        isLoading: isEnginesLoading,
-    } = useGetEnginesByModelQuery(modelId!, { skip: !modelId });
-
-    const hpOptions: { value: string; label: string }[] =
-        enginesData?.data.map((e: Engine) => ({ value: String(e.kw), label: `${e.kw} KW` })) || [];
-
-    const {
-        data: vehiclesData,
-        isLoading: isVehiclesLoading,
-        isError: isVehiclesError,
-    } = useGetCarBrandsQuery(
+    const { data: vehiclesData, isLoading: isVehiclesLoading, isError: isVehiclesError } = useGetCarBrandsQuery(
         { year, brandName, modelName, hp },
         { skip: !year || !brandName || !modelName || !hp }
     );
@@ -136,9 +104,7 @@ const SelectYourVehicle = () => {
             hp: item.hp,
             kw: item.kw,
             ccm: item.ccm,
-            yearRange: `${new Date(item.productionStart).getFullYear()} - ${new Date(
-                item.productionEnd
-            ).getFullYear()}`,
+            yearRange: `${new Date(item.productionStart).getFullYear()} - ${new Date(item.productionEnd).getFullYear()}`,
         })) || [];
 
     useEffect(() => {
@@ -148,6 +114,7 @@ const SelectYourVehicle = () => {
         setModelName(undefined);
         setHp(undefined);
         setCurrentPage(1);
+        setHasSearched(false); // Reset search status when the year is changed
     }, [year]);
 
     useEffect(() => {
@@ -155,27 +122,31 @@ const SelectYourVehicle = () => {
         setModelName(undefined);
         setHp(undefined);
         setCurrentPage(1);
+        setHasSearched(false); // Reset search status when brand is changed
     }, [brandId]);
 
     useEffect(() => {
         setHp(undefined);
         setCurrentPage(1);
+        setHasSearched(false); // Reset search status when model is changed
     }, [modelId]);
 
     useEffect(() => setCurrentPage(1), [hp]);
-    const paginatedProducts = products.slice(
-        (currentPage - 1) * pageSize,
-        currentPage * pageSize
-    );
 
+    const paginatedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-const router = useRouter();
+    const router = useRouter();
 
-const handleClick = (engineId: string) => {
+    const handleClick = (engineId: string) => {
+        router.push(`/vehicle?engineId=${engineId}`);
+    };
 
-    router.push(`/vehicle?engineId=${engineId}`);
-};
-
+    // Trigger search flag when user selects all necessary filters (i.e., year, brand, model, hp)
+    useEffect(() => {
+        if (year && brandName && modelName && hp) {
+            setHasSearched(true);
+        }
+    }, [year, brandName, modelName, hp]);
 
     return (
         <div className="container mx-auto py-8 md:py-16">
@@ -207,7 +178,7 @@ const handleClick = (engineId: string) => {
                             placeholder="Brand"
                             options={brandOptions}
                             loading={isBrandsLoading}
-                            onChange={val => {
+                            onChange={(val) => {
                                 setBrandId(val);
                                 const selected = brandsData?.data.find((b: Brand) => b.brandId === val);
                                 setBrandName(selected?.brandName);
@@ -224,7 +195,7 @@ const handleClick = (engineId: string) => {
                             placeholder="Model"
                             options={modelOptions}
                             loading={isModelsLoading}
-                            onChange={val => {
+                            onChange={(val) => {
                                 setModelId(val);
                                 const selected = modelsData?.data.find((m: Model) => m.modelId === val);
                                 setModelName(selected?.modelName);
@@ -249,17 +220,17 @@ const handleClick = (engineId: string) => {
             </div>
 
             <div className="mt-10">
-
-
                 <div className="mt-8 space-y-4">
                     {isVehiclesLoading ? (
                         <p className="text-center text-gray-500">Loading...</p>
                     ) : isVehiclesError ? (
                         <p className="text-center text-red-500">Failed to load products</p>
-                    ) : paginatedProducts.length > 0 ? (
-                        paginatedProducts.map(product => (
+                    ) : hasSearched && paginatedProducts.length === 0 ? (
+                        <p className="text-center text-gray-500">No products found. Please select your vehicle.</p>
+                    ) : (
+                        paginatedProducts.map((product) => (
                             <div
-                             onClick={() => handleClick(product.id)}
+                                onClick={() => handleClick(product.id)}
                                 key={product.id}
                                 className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                             >
@@ -310,10 +281,6 @@ const handleClick = (engineId: string) => {
                                 </div>
                             </div>
                         ))
-                    ) : (
-                        <p className="text-center text-gray-500">
-                            No products found. Please select your vehicle.
-                        </p>
                     )}
                 </div>
 
@@ -329,10 +296,8 @@ const handleClick = (engineId: string) => {
                     </div>
                 )}
             </div>
-
         </div>
     );
 };
 
 export default SelectYourVehicle;
-
