@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 22.17.1
       - name: Install Dependencies
-        run: npm install
+        run: npm install --frozen-lockfile
       - name: Build App
         run: npm run build  
   deploy:
@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 22.17.1
       - name: Install Dependencies
-        run: npm install
+        run: npm install --frozen-lockfile
       - name: Build App
         run: npm run build  
       - name: Configure SSH
@@ -65,12 +65,12 @@ jobs:
           ssh $EC2_USER@$EC2_HOST "echo \"$ENV_FILE\" > ~/hatem_website/.env"
           
           # install production dependencies on EC2
-          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=$PATH:/run/user/1000/fnm_multishells/2125_1762145897069/bin && npm install"
+          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=\$PATH:/home/ubuntu/.local/share/fnm/aliases/default/bin && npm install --frozen-lockfile"
           
           # Stop existing PM2 process if it exists
-          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=$PATH:/run/user/1000/fnm_multishells/2125_1762145897069/bin && pm2 delete hatem_website || true"
+          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=\$PATH:/home/ubuntu/.local/share/fnm/aliases/default/bin && pm2 delete hatem_website || true"
 
           # Start the application with PM2
-          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=$PATH:/run/user/1000/fnm_multishells/2125_1762145897069/bin && pm2 start npm --name hatem_website -- run start"
+          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=\$PATH:/home/ubuntu/.local/share/fnm/aliases/default/bin && pm2 start npm --name hatem_website -- run start"
   
   
