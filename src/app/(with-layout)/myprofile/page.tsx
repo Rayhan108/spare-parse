@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useGetAddressesQuery } from "@/redux/features/address/addressApi";
 import { Spin } from "antd";
+import { useGetUserProfileQuery } from "@/redux/features/auth/authApi";
 
 interface User {
   fullName?: string;
@@ -18,6 +19,8 @@ const AccountDetails = () => {
   const user = useSelector<RootState, User | null>(
     (state) => state.logInUser.user
   );
+  const {data:myProfile}=useGetUserProfileQuery(undefined)
+  console.log("my profile -->",myProfile);
   const { data: addressData, isLoading: loadingAddresses } = useGetAddressesQuery();
   const shippingAddress = addressData?.data.find((addr) => addr.type === "SHIPPING");
 
@@ -49,15 +52,15 @@ const AccountDetails = () => {
         <div>
           <div className="mb-5">
             <p>Full Name</p>
-            <p>{user.fullName || "N/A"}</p>
+            <p>{myProfile?.data?.fullName || "N/A"}</p>
           </div>
           <div className="mb-5">
             <p>Email</p>
-            <p>{user.email || "N/A"}</p>
+            <p>{myProfile?.data?.email || "N/A"}</p>
           </div>
           <div>
             <p>Phone Number</p>
-            <p>{user.phoneNumber || "N/A"}</p>
+            <p>{myProfile?.data?.phoneNumber || "N/A"}</p>
           </div>
         </div>
         <div>

@@ -31,6 +31,7 @@ export interface CheckoutData {
   createdAt: string;
   updatedAt: string;
   items: CheckoutItem[];
+  shippingCost: number|string;
 }
 
 

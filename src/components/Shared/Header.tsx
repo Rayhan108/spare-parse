@@ -25,6 +25,7 @@ import { useGetWishlistQuery } from "@/redux/features/wishlist/wishlistApi";
 import { useSwitchUserRoleMutation } from "@/redux/features/auth/switchRoleApi";
 import { RootState } from "@/redux/store";
 import { App } from "antd";
+import { useGetUserProfileQuery } from "@/redux/features/auth/authApi";
 const Header = () => {
 
   const dispatch = useDispatch();
@@ -32,7 +33,8 @@ const Header = () => {
   const { message } = App.useApp();
   const user = useSelector((state: RootState) => state.logInUser?.user);
   // console.log("user from header--->",user);
-  const userImg =user?.image
+   const {data:myProfile}=useGetUserProfileQuery(undefined)
+  const userImg =myProfile?.data?.image
   const token = user?.role === "BUYER"
     ? Cookies.get("hatem-ecommerce-token")
     : Cookies.get("hatem-seller-token");

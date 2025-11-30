@@ -301,7 +301,7 @@ console.log("checkouts------->",checkouts);
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium dark:text-white">Shipping:</span>
-                  <span className="font-medium dark:text-white">Free</span>
+                  <span className="font-medium dark:text-white">${checkout?.shippingCost||"Free"}</span>
                 </div>
                 <div className="flex justify-between border-t pt-2">
                   <span className="font-medium dark:text-white">Total:</span>
