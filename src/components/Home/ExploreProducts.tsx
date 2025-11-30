@@ -3,6 +3,7 @@ import Link from "next/link";
 import ProductCart, { Product } from "./ProductCart";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 import ProductSkeleton from "@/utils/ProductSkeleton";
+import { useSearchParams } from "next/navigation";
 
 interface ApiResponse {
   success: boolean;
@@ -12,15 +13,18 @@ interface ApiResponse {
 }
 
 const ExploreProducts = () => {
-  const { data, isLoading } = useGetAllProductsQuery(undefined) as {
-    data?: ApiResponse;
-    isLoading: boolean;
-  };
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get('query');
+const { data, isLoading } = useGetAllProductsQuery(searchTerm || undefined) as {
+  data?: ApiResponse;
+  isLoading: boolean;
+};
 
+  // console.log("query--->",encodeURIComponent(query||""));
   return (
     <div className="container mx-auto pb-20">
       <div className="flex gap-2 items-center mb-5">
-        <span className="bg-primary h-10 px-[10px] rounded-md"></span>
+        <span className="bg-primary h-10 px-10 rounded-md"></span>
         <p className="text-primary font-semibold text-lg">Our Products</p>
       </div>
 

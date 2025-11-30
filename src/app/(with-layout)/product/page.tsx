@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 import ProductSkeleton from "@/utils/ProductSkeleton";
 import ProductCart,{Product} from "@/components/Home/ProductCart";
+import { useSearchParams } from "next/navigation";
 
 
 interface ApiResponse {
@@ -14,10 +15,12 @@ interface ApiResponse {
 
 
 const ExploreProducts = () => {
-  const { data, isLoading } = useGetAllProductsQuery(undefined) as {
-    data?: ApiResponse;
-    isLoading: boolean;
-  };
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get('query');
+const { data, isLoading } = useGetAllProductsQuery(searchTerm || undefined) as {
+  data?: ApiResponse;
+  isLoading: boolean;
+};
 
   return (
     <div className="container mx-auto pb-20 mt-20">

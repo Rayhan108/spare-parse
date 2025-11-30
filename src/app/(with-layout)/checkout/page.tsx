@@ -275,7 +275,7 @@ const CheckoutPage = () => {
         <div className="w-full sm:w-[440px] p-6 space-y-6">
           {checkouts.map((checkout) => (
             <div key={checkout.id} className="border p-4 rounded-lg dark:border-gray-600 space-y-4">
-              {checkout.items.map((item: CheckoutItem) => (
+              {checkout?.items?.map((item: CheckoutItem) => (
                 <div key={item.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Image

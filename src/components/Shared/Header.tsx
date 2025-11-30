@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
@@ -94,6 +95,22 @@ const Header = () => {
     router.replace("/auth/login");
   };
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Handle input change
+  const handleInputChange = (e:any) => {
+  const value = e.target.value;
+  setSearchQuery(value);
+  // update url as user types
+  router.push(`?query=${encodeURIComponent(value)}`);
+  };
+
+  // Handle form submission (search query)
+const handleSearch = () => {
+  if (searchQuery.trim()) {
+    router.push(`?query=${searchQuery}`);
+  }
+};
 
   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
@@ -208,12 +225,21 @@ const Header = () => {
                 },
               }}
             >
-              <Input
+              {/* <Input
                 style={{ backgroundColor: "#f0f0f0" }}
                 suffix={<FiSearch className="text-black w-6 h-6" />}
                 className="w-[280px]"
                 placeholder="What are you looking for?"
-              />
+              /> */}
+                  <Input
+      style={{ backgroundColor: "#f0f0f0" }}
+      suffix={<FiSearch className="text-black w-6 h-6" />}
+      className="w-[280px]"
+      placeholder="What are you looking for?"
+      value={searchQuery}
+      onChange={handleInputChange}
+      onPressEnter={handleSearch} 
+    />
             </ConfigProvider>
 
             {/* Wishlist & Cart only for Buyer */}
