@@ -25,7 +25,7 @@ export const useGoogleAuth = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       
-      // Get ID Token (তোমার backend এ পাঠাতে পারবে)
+ 
       const accessToken = await user.getIdToken();
 
       const googleUser: GoogleUser = {
