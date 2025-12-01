@@ -155,7 +155,7 @@ console.log("google user--->",user);
       <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14 py-10 rounded-lg">
         <h1 className="text-2xl font-semibold text-center mb-6">Log In</h1>
 
-        {/* Email/Password Login */}
+        {/* Email/Password Login field */}
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
             label="Email"
