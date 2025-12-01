@@ -165,7 +165,7 @@ console.log("google user--->",user);
               { type: "email", message: "Enter a valid email!" },
             ]}
           >
-            <Input placeholder="Enter your email" className="h-10" />
+            <Input placeholder="Enter your email" className="h-10"/>
           </Form.Item>
 
           <Form.Item

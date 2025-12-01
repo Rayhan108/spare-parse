@@ -3,6 +3,7 @@ import image from '../../../public/product_bg.png'
 import image2 from '../../../public/product_bg2.png'
 
 const NewArrival = () => {
+    
     return (
         <div className="container mx-auto pb-5 md:pb-20">
             <div className="flex gap-2 items-center mb-5">
