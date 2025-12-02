@@ -62,7 +62,7 @@ jobs:
             . $EC2_USER@$EC2_HOST:~/hatem_website/
           
           # ✅ Create .env file on EC2 from the single GitHub secret
-          ssh $EC2_USER@$EC2_HOST "echo \"$ENV_FILE\" > ~/hatem_website/.env.local"
+          ssh $EC2_USER@$EC2_HOST "echo \"$ENV_FILE\" > ~/hatem_website/.env"
           
           # install production dependencies on EC2
           ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=\$PATH:/home/ubuntu/.local/share/fnm/aliases/default/bin && npm install --frozen-lockfile"
