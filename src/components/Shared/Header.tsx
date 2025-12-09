@@ -308,20 +308,21 @@ const Header = () => {
             )}
 
             {/* User Submenu */}
-            {token && (
-              <div
-                onClick={() => setSubMenu(!subMenu)}
-                className="cursor-pointer"
-              >
-                <Image
-                  alt="user"
-                  src={userImg ? userImg : avatar}
-                  width={80}
-                  height={80}
-                  className="object-cover w-full h-full rounded-full"
-                />
-              </div>
-            )}
+       {/* User Submenu */}
+{token && (
+  <div
+    onClick={() => setSubMenu(!subMenu)}
+    className="cursor-pointer w-10 h-10 flex-shrink-0"  // Added fixed size
+  >
+    <Image
+      alt="user"
+      src={userImg ? userImg : avatar}
+      width={40}
+      height={40}
+      className="object-cover w-10 h-10 rounded-full"  // Fixed size instead of w-full h-full
+    />
+  </div>
+)}
           </div>
 
           {/* Mobile Menu Icon */}
