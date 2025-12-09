@@ -365,11 +365,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
             to{" "}
             <span className="font-semibold text-gray-800">{targetRole}</span>?
           </p>
-          <p className="text-gray-500 text-sm mt-3">
-            {user?.role === "BUYER"
-              ? "As a Seller, you will be able to list products and manage orders."
-              : "As a Buyer, you will be able to browse products and make purchases."}
-          </p>
+ 
         </div>
       </Modal>
     </>
