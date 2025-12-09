@@ -3,8 +3,8 @@
 import Image from "next/image";
 import ordersIcon from "../../../../../../public/seller/orders-icon.svg";
 import { useState, useEffect } from "react";
-import { Input, Pagination, Select, Spin, message } from "antd";
-import { CiSearch } from "react-icons/ci";
+import {Pagination, Select, Spin, message } from "antd";
+
 import { useGetCurrentOrdersQuery} from "@/redux/features/order/seller/orderApi";
 import { useUpdateOrderStatusMutation } from "@/redux/features/seller/orderApi";
 
@@ -89,9 +89,9 @@ const Orders = () => {
               </p>
             </div>
           </div>
-          <div>
+          {/* <div>
             <Input placeholder="Search product" suffix={<CiSearch size={20} />} />
-          </div>
+          </div> */}
         </div>
 
         {/* Orders List */}
