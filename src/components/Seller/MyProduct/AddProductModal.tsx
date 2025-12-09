@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import type React from "react";
@@ -518,9 +519,9 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
       // setTimeout(() => {
       //   window.location.reload();
       // }, 1000);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Upload error:", error);
-      toast.error("Error uploading product"); // Show an error message if something goes wrong
+      toast.error(error?.data?.message); // Show an error message if something goes wrong
     } finally {
       setLoading(false); // Reset the loading state
     }
