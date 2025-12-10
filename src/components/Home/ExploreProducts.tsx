@@ -49,7 +49,7 @@ const { data, isLoading } = useGetAllProductsQuery({
                   _count: { review: product._count?.review || 0 },
                 }}
               />
-          ))}
+          )).slice(0,4)}
       </div>
 
       <div className="flex justify-center mt-10">
