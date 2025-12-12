@@ -13,10 +13,93 @@
     "myProduct": "Mes produits",
     "sellerOverview": "Vue d'ensemble du vendeur",
     "logout": "Se déconnecter",
-     "summerSale": "Vente d'été",
+    "summerSale": "Vente d'été",
     "shopNow": "Achetez maintenant",
     "cancel": "Annuler",
-     "buyer": "Acheteur",
+    "buyer": "Acheteur",
     "seller": "Vendeur"
+  },
+
+  "hero": {
+    "exploreOur": "Explorez nos",
+    "products": "produits",
+    "shopNow": "Achetez maintenant"
+  },
   
-}}
+  "vehicleSelection": {
+    "title": "Sélectionnez votre véhicule",
+    "subtitle": "Pour trouver la pièce correcte",
+  
+      "year": "Année",
+      "brand": "Marque",
+      "model": "Modèle",
+      "enginePower": "Puissance du moteur"
+   
+  },
+    "categories": {
+    "title": "Catégories",
+    "browseByCategory": "Parcourir par catégorie",
+    "failedToLoad": "Échec du chargement",
+    "noProductsFound": "Aucun produit trouvé dans cette catégorie."
+  },
+ "exploreProducts": {
+    "title": "Explorez nos produits",
+    "ourProducts": "Nos produits",
+    "viewAllProducts": "Voir tous les produits",
+        "features": "Caractéristiques",
+    "newArrival": "Nouvelle arrivée",
+    "shopNow": "Achetez maintenant"
+  },
+    "serviceFeatures": {
+    "freeFastDelivery": {
+      "title": "LIVRAISON GRATUITE ET RAPIDE",
+      "description": "Livraison gratuite pour toutes les commandes de plus de 140 $"
+    },
+    "customerService": {
+      "title": "SERVICE CLIENT 24/7",
+      "description": "Support client amical 24/7"
+    },
+    "moneyBackGuarantee": {
+      "title": "GARANTIE REMBOURSEMENT",
+      "description": "Nous retournons l'argent dans les 30 jours"
+    }
+  },
+    "footer": {
+    "exclusive": {
+      "title": "Exclusif",
+      "subscribe": "S'abonner",
+      "description": "Obtenez 10% de réduction sur votre première commande"
+    },
+    "support": {
+      "title": "Support",
+      "location": "123 Rue Principale, Ville, Pays",
+      "email": "support@sparedoc.com",
+      "phoneNumber": "+123 456 7890"
+    },
+    "account": {
+      "title": "Compte",
+      "myAccount": "Mon Compte",
+      "cart": "Panier",
+      "wishlist": "Liste de souhaits",
+      "shop": "Boutique"
+    },
+    "quickLinks": {
+      "title": "Liens rapides",
+      "privacyPolicy": "Politique de confidentialité",
+      "termsOfUse": "Conditions d'utilisation",
+      "faq": "FAQ",
+      "contact": "Contact"
+    },
+    "joinWithUs": {
+      "title": "Rejoignez-nous",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn"
+    },
+    "copyright": {
+      "text": "Copyright Sparedoc 2025. Tous droits réservés"
+    }
+  }
+
+}

@@ -10,6 +10,7 @@ import {
     useGetCarBrandsQuery,
 } from "@/redux/features/carBrand/carBrandApi";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface Brand {
     brandId: string;
@@ -63,6 +64,7 @@ interface Product {
 
 const SelectYourVehicle = () => {
     const [year, setYear] = useState<string>();
+    const t = useTranslations('vehicleSelection')
     const [brandId, setBrandId] = useState<string>();
     const [brandName, setBrandName] = useState<string>();
     const [modelId, setModelId] = useState<string>();
@@ -153,8 +155,8 @@ const SelectYourVehicle = () => {
             {/* Vehicle selectors */}
             <div className="container mx-auto shadow-md border-t-[10px] border-t-[#f56100] border border-[#FCCEB0] py-14">
                 <div className="text-center">
-                    <h2 className="text-4xl font-semibold dark:text-white">Select Your Vehicle</h2>
-                    <p className="text-[#5A5B54] mt-3 dark:text-gray-300">For finding the correct part</p>
+                    <h2 className="text-4xl font-semibold dark:text-white">{t('title')}</h2>
+                    <p className="text-[#5A5B54] mt-3 dark:text-gray-300">{t('subtitle')}</p>
                 </div>
 
                 <div className="px-4 md:px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-8">
@@ -163,7 +165,7 @@ const SelectYourVehicle = () => {
                         <span className="bg-[#f56100] py-[10px] px-4 text-white rounded-l-md">1</span>
                         <Select
                             className="w-full"
-                            placeholder="Year"
+                            placeholder={t("year")}
                             options={yearOptions}
                             onChange={setYear}
                             value={year}
@@ -175,7 +177,7 @@ const SelectYourVehicle = () => {
                         <span className="bg-[#f56100] py-[10px] px-4 text-white rounded-l-md">2</span>
                         <Select
                             className="w-full"
-                            placeholder="Brand"
+                            placeholder={t("brand")}
                             options={brandOptions}
                             loading={isBrandsLoading}
                             onChange={(val) => {
@@ -192,7 +194,7 @@ const SelectYourVehicle = () => {
                         <span className="bg-[#f56100] py-[10px] px-4 text-white rounded-l-md">3</span>
                         <Select
                             className="w-full"
-                            placeholder="Model"
+                            placeholder={t("model")}
                             options={modelOptions}
                             loading={isModelsLoading}
                             onChange={(val) => {
@@ -209,7 +211,7 @@ const SelectYourVehicle = () => {
                         <span className="bg-[#f56100] py-[10px] px-4 text-white rounded-l-md">4</span>
                         <Select
                             className="w-full"
-                            placeholder="Engine Power"
+                            placeholder={t("enginePower")}
                             options={hpOptions}
                             loading={isEnginesLoading}
                             onChange={setHp}

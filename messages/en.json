@@ -19,6 +19,99 @@
          "buyer": "Buyer",
     "seller": "Seller"
 
-  }
+  },
+   "hero": {
+    "exploreOur": "Explore Our",
+    "products": "Products",
+    "shopNow": "Shop Now"
+  },
+    "vehicleSelection": {
+    "title": "Select Your Vehicle",
+    "subtitle": "For finding the correct part",
+
+      "year": "Year",
+      "brand": "Brand",
+      "model": "Model",
+      "enginePower": "Engine Power"
+    
   
+},
+ "categories": {
+    "title": "Categories",
+    "browseByCategory": "Browse By Category",
+    "failedToLoad": "Failed to load",
+    "noProductsFound": "No products found in this category.",
+    "viewAllProducts": "View All Products",
+    "exploreOurProducts": "Explore Our Products",
+    "ourProducts": "Our Products"
+  },
+    "exploreProducts": {
+    "title": "Explore Our Products",
+    "ourProducts": "Our Products",
+    "viewAllProducts": "View All Products",
+      "features": "Features",
+    "newArrival": "New Arrival",
+    "shopNow": "Shop Now"
+  },
+   "serviceFeatures": {
+    "freeFastDelivery": {
+      "title": "FREE AND FAST DELIVERY",
+      "description": "Free delivery for all orders over $140"
+    },
+    "customerService": {
+      "title": "24/7 CUSTOMER SERVICE",
+      "description": "Friendly 24/7 customer support"
+    },
+    "moneyBackGuarantee": {
+      "title": "MONEY BACK GUARANTEE",
+      "description": "We return money within 30 days"
+    }
+  },
+  
+  "footer": {
+    "exclusive": {
+      "title": "Exclusive",
+      "subscribe": "Subscribe",
+      "description": "Get 10% off your first order"
+    },
+    "support": {
+      "title": "Support",
+      "location": "123 Main Street, City, Country",
+      "email": "support@sparedoc.com",
+      "phoneNumber": "+123 456 7890"
+    },
+    "account": {
+      "title": "Account",
+      "myAccount": "My Account",
+      "cart": "Cart",
+      "wishlist": "Wishlist",
+      "shop": "Shop"
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfUse": "Terms Of Use",
+      "faq": "FAQ",
+      "contact": "Contact"
+    },
+    "joinWithUs": {
+      "title": "Join With Us",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn"
+    },
+    "copyright": {
+      "text": "Copyright Sparedoc 2025. All rights reserved"
+    }
+  
+}
+
+
+
+
+
+
+
+
 }

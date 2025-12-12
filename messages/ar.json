@@ -19,5 +19,85 @@
      "cancel": "إلغاء",
       "buyer": "المشتري",
     "seller": "البائع"
+  },
+
+  "hero": {
+    "exploreOur": "استكشاف منتجاتنا",
+    "products": "المنتجات",
+    "shopNow": "تسوق الآن"
+  },
+    "vehicleSelection": {
+    "title": "اختر مركبتك",
+    "subtitle": "لإيجاد القطعة الصحيحة",
+
+      "year": "السنة",
+      "brand": "العلامة التجارية",
+      "model": "الموديل",
+      "enginePower": "قوة المحرك"
+    },
+      "categories": {
+    "title": "الفئات",
+    "browseByCategory": "تصفح حسب الفئة",
+    "failedToLoad": "فشل في التحميل",
+    "noProductsFound": "لم يتم العثور على منتجات في هذه الفئة."
+  },
+    "exploreProducts": {
+    "title": "استكشاف منتجاتنا",
+    "ourProducts": "منتجاتنا",
+    "viewAllProducts": "عرض جميع المنتجات",
+       "features": "الميزات",
+    "newArrival": "وصل حديثًا",
+    "shopNow": "تسوق الآن"
+  },
+    "serviceFeatures": {
+    "freeFastDelivery": {
+      "title": "توصيل سريع ومجاني",
+      "description": "توصيل مجاني لجميع الطلبات التي تتجاوز 140 دولارًا"
+    },
+    "customerService": {
+      "title": "خدمة العملاء على مدار الساعة طوال أيام الأسبوع",
+      "description": "دعم العملاء الودود على مدار الساعة طوال أيام الأسبوع"
+    },
+    "moneyBackGuarantee": {
+      "title": "ضمان استرجاع المال",
+      "description": "نُعيد المال خلال 30 يومًا"
+    }
+  },
+    "footer": {
+    "exclusive": {
+      "title": "حصري",
+      "subscribe": "اشترك",
+      "description": "احصل على خصم 10% على طلبك الأول"
+    },
+    "support": {
+      "title": "الدعم",
+      "location": "123 الشارع الرئيسي، المدينة، البلد",
+      "email": "support@sparedoc.com",
+      "phoneNumber": "+123 456 7890"
+    },
+    "account": {
+      "title": "الحساب",
+      "myAccount": "حسابي",
+      "cart": "عربة التسوق",
+      "wishlist": "قائمة الرغبات",
+      "shop": "تسوق"
+    },
+    "quickLinks": {
+      "title": "روابط سريعة",
+      "privacyPolicy": "سياسة الخصوصية",
+      "termsOfUse": "شروط الاستخدام",
+      "faq": "الأسئلة الشائعة",
+      "contact": "اتصل"
+    },
+    "joinWithUs": {
+      "title": "انضم إلينا",
+      "facebook": "فيسبوك",
+      "twitter": "تويتر",
+      "instagram": "إنستغرام",
+      "linkedin": "لينكد إن"
+    },
+    "copyright": {
+      "text": "حقوق الطبع والنشر Sparedoc 2025. جميع الحقوق محفوظة"
+    }
   }
 }

@@ -13,15 +13,18 @@ import { useGetContactUsInfoQuery } from "@/redux/features/contactUs/contactUsAp
 import { useSubscribeNewsletterMutation } from "@/redux/features/newsletter/newsletterApi"
 import { useSelector } from "react-redux"
 import { selectCurrentUser } from "@/redux/features/auth/authSlice"
+import { useTranslations } from "next-intl"
+
 
 const Footer = () => {
+  const  t  = useTranslations()
   const { data, isError } = useGetContactUsInfoQuery()
   const [email, setEmail] = useState<string>("")
   const [subscribeNewsletter, { isLoading: isSubscribing }] = useSubscribeNewsletterMutation()
   const [api, contextHolder] = notification.useNotification()
-  const user = useSelector(selectCurrentUser);
-  console.log("user------->",user);
+  const user = useSelector(selectCurrentUser)
   const role = user?.role
+
   if (isError || !data?.data) return <p className="text-center text-white py-10">Failed to load footer info</p>
 
   const contact = data.data
@@ -56,12 +59,10 @@ const Footer = () => {
     <div className='bg-[#383838] dark:bg-[#1d1d1d] px-3 lg:px-0'>
       {contextHolder}
       <div className="container mx-auto py-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 justify-between">
-
         {/* Subscribe */}
         <div>
-          <h2 className="text-2xl text-white mb-4">Exclusive</h2>
-          <p className="text-xl text-white mb-4">Subscribe</p>
-          {/* <p className="text-lg text-white mb-3">Get 10% off your first order</p> */}
+          <h2 className="text-2xl text-white mb-4">{t('footer.exclusive.title')}</h2>
+          <p className="text-xl text-white mb-4">{t('footer.exclusive.subscribe')}</p>
           <ConfigProvider theme={{
             components: {
               Input: {
@@ -82,20 +83,18 @@ const Footer = () => {
           }}>
             <Input
               className="custom-input"
-              placeholder="Enter your email"
+              placeholder={t('footer.exclusive.description')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onPressEnter={handleSubscribe}
               suffix={
                 isSubscribing ? (
                   <div className="flex items-center justify-center w-5 h-5">
-                    <ConfigProvider
-                      theme={{
-                        components: {
-                          Spin: { colorPrimary: "white" },
-                        },
-                      }}
-                    >
+                    <ConfigProvider theme={{
+                      components: {
+                        Spin: { colorPrimary: "white" },
+                      },
+                    }}>
                       <div className="flex items-center justify-center">
                         <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       </div>
@@ -109,14 +108,13 @@ const Footer = () => {
                   />
                 )
               }
-
             />
           </ConfigProvider>
         </div>
 
         {/* Contact Info */}
         <div>
-          <h2 className="text-2xl text-white mb-4">Support</h2>
+          <h2 className="text-2xl text-white mb-4">{t('footer.support.title')}</h2>
           <p className="text-white">{contact.location}</p>
           <p className="text-white">{contact.email}</p>
           <p className="text-white">{contact.phoneNumber}</p>
@@ -124,34 +122,33 @@ const Footer = () => {
 
         {/* Account Links */}
         <div>
-          <h2 className="text-2xl text-white mb-4">Account</h2>
+          <h2 className="text-2xl text-white mb-4">{t('footer.account.title')}</h2>
           <div className="flex flex-col gap-5 text-white">
-            <Link href={'/myprofile'}>My Account</Link>
-       {role === "BUYER" && (
-          <>
-            <Link href="/cart">Cart</Link>
-            <Link href="/wishlist">Wishlist</Link>
-          </>
-        )}
-           
-            <Link href={'/product'}>Shop</Link>
+            <Link href={'/myprofile'}>{t('footer.account.myAccount')}</Link>
+            {role === "BUYER" && (
+              <>
+                <Link href="/cart">{t('footer.account.cart')}</Link>
+                <Link href="/wishlist">{t('footer.account.wishlist')}</Link>
+              </>
+            )}
+            <Link href={'/product'}>{t('footer.account.shop')}</Link>
           </div>
         </div>
 
         {/* Quick Links */}
         <div>
-          <h2 className="text-2xl text-white mb-4">Quick Link</h2>
+          <h2 className="text-2xl text-white mb-4">{t('footer.quickLinks.title')}</h2>
           <div className="flex flex-col gap-5 text-white">
-            <Link href={'/privacy-policy'}>Privacy Policy</Link>
-            <Link href={'/terms-and-conditions'}>Terms Of Use</Link>
-            <Link href={'/faq'}>FAQ</Link>
-            <Link href={'/contact'}>Contact</Link>
+            <Link href={'/privacy-policy'}>{t('footer.quickLinks.privacyPolicy')}</Link>
+            <Link href={'/terms-and-conditions'}>{t('footer.quickLinks.termsOfUse')}</Link>
+            <Link href={'/faq'}>{t('footer.quickLinks.faq')}</Link>
+            <Link href={'/contact'}>{t('footer.quickLinks.contact')}</Link>
           </div>
         </div>
 
         {/* Social Links */}
         <div>
-          <h2 className="text-2xl text-white mb-4">Join With US</h2>
+          <h2 className="text-2xl text-white mb-4">{t('footer.joinWithUs.title')}</h2>
           <div className="flex gap-3">
             {contact.facebook && <a href={contact.facebook} target="_blank" rel="noreferrer"><RiFacebookLine size={30} className="text-white cursor-pointer" /></a>}
             {contact.twitter && <a href={contact.twitter} target="_blank" rel="noreferrer"><FaXTwitter size={25} className="text-white cursor-pointer" /></a>}
@@ -165,10 +162,10 @@ const Footer = () => {
       {/* Copyright */}
       <div className="flex items-center justify-center text-white border-t border-primary py-4">
         <LuCopyright size={22} />
-        <p className="text-sm md:text-lg ml-2">Copyright Sparedoc 2025. All rights reserved</p>
+        <p className="text-sm md:text-lg ml-2">{t('footer.copyright.text')}</p>
       </div>
     </div>
   )
 }
 
-export default Footer
+export default Footer;

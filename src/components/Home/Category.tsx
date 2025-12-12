@@ -13,6 +13,7 @@ import {
   Category,
 } from "@/redux/features/categories/categoriesApi";
 import ProductSkeleton from "@/utils/ProductSkeleton";
+import { useTranslations } from "next-intl";
 
 
 const CategoryComponent = () => {
@@ -23,7 +24,7 @@ const CategoryComponent = () => {
     selectedCategoryId!,
     { skip: !selectedCategoryId }
   );
-
+const t = useTranslations('categories')
   const categories: Category[] = categoryData?.data ?? [];
   const products: Product[] = productData?.data ?? [];
 
@@ -37,12 +38,12 @@ const CategoryComponent = () => {
       {/* Header */}
       <div className="flex gap-2 items-center mb-5">
         <span className="bg-primary h-10 px-[10px] rounded-md"></span>
-        <p className="text-primary font-semibold text-lg">Categories</p>
+        <p className="text-primary font-semibold text-lg">{t('title')}</p>
       </div>
 
       <div className="flex justify-between items-center mb-16">
         <h2 className="text-2xl md:text-3xl lg:text-5xl dark:text-white">
-          Browse By Category
+      {t('browseByCategory')}
         </h2>
         <div className="flex items-center gap-4">
           <button className="bg-[#f5f5f5] p-2 rounded-full" onClick={() => swiper?.slidePrev()}>
@@ -103,7 +104,7 @@ const CategoryComponent = () => {
         {catError && (
           <SwiperSlide>
             <div className="border flex flex-col items-center justify-center h-[170px] rounded opacity-60">
-              <p className="text-gray-400 text-sm">Failed to load</p>
+              <p className="text-gray-400 text-sm">{t('failedToLoad')}</p>
             </div>
           </SwiperSlide>
         )}
@@ -127,7 +128,7 @@ const CategoryComponent = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400">No products found in this category.</p>
+            <p className="text-gray-400">{t('failedToLoad')}</p>
           )}
         </div>
       )}

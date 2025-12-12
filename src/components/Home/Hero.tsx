@@ -4,6 +4,7 @@ import Link from "next/link";
 import { IoArrowForward } from "react-icons/io5";
 import image from '../../../public/slide-image.png';
 import { useGetAllCategoriesQuery, Category } from "@/redux/features/categories/categoriesApi";
+import { useTranslations } from "next-intl";
 
 const HeroCategorySkeleton = () => (
  <>
@@ -21,7 +22,7 @@ const HeroCategorySkeleton = () => (
 const Hero = () => {
   const { data: categoryData, isLoading, isError } = useGetAllCategoriesQuery();
   const categories: Category[] = categoryData?.data ?? [];
-
+const t = useTranslations('hero')
   const renderCategories = () => {
     if (isLoading) return <HeroCategorySkeleton />;
     if (isError) return <p className="text-red-500">Failed to load categories</p>;
@@ -50,12 +51,12 @@ const Hero = () => {
           
           <div className="xl:w-[40%] bg-black dark:bg-[#1d1d1d] flex flex-col justify-center pl-10 lg:pl-18 py-5">
             <div>
-              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold">Explore Our</h1>
-              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold mt-4">Products</h1>
+              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold">{t('exploreOur')}</h1>
+              <h1 className="text-white text-3xl lg:text-4xl xl:text-6xl font-semibold mt-4">{t('products')}</h1>
             </div>
             <div className="flex gap-1 items-center mt-8 xl:mt-12">
               <Link href={`/product`}>
-                <button className="text-white border-b-2 py-2 border-white text-lg cursor-pointer">Shop Now</button>
+                <button className="text-white border-b-2 py-2 border-white text-lg cursor-pointer">{t('shopNow')}</button>
               </Link>
               <IoArrowForward size={25} className="text-white" />
             </div>
