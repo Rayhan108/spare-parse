@@ -27,14 +27,25 @@ import { useSwitchUserRoleMutation } from "@/redux/features/auth/switchRoleApi";
 import { RootState } from "@/redux/store";
 import { App } from "antd";
 import { useGetUserProfileQuery } from "@/redux/features/auth/authApi";
+import { ChevronDown } from "lucide-react";
+import { usePathname } from "@/utils/navigation";
+import { useTranslations } from "next-intl";
 
-const Header = () => {
+const Header = ({ locale }: { locale: string }) => {
+    const t = useTranslations("nav");
+
   const dispatch = useDispatch();
   const router = useRouter();
+  
+  const pathname = usePathname();
   const { message } = App.useApp();
   const user = useSelector((state: RootState) => state.logInUser?.user);
   const { data: myProfile } = useGetUserProfileQuery(undefined);
   const userImg = myProfile?.data?.image;
+    const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState(
+    locale === "en" ? "English" : "العربية"
+  );
   const token =
     user?.role === "BUYER"
       ? Cookies.get("hatem-ecommerce-token")
@@ -42,6 +53,30 @@ const Header = () => {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   
+
+  const toggleLanguageDropdown = () => {
+    setIsLanguageOpen(!isLanguageOpen);
+ 
+  };
+  //  Handle locale change manually (no next-intl/navigation)
+  const handleLanguageSelect = (language: string) => {
+    setSelectedLanguage(language);
+    setIsLanguageOpen(false);
+
+    const newLocale = language === "English" ? "en" : "ar";
+
+    // When you are on the root path
+    if (!pathname.startsWith(`/${locale}`)) {
+      router.push(`/${newLocale}`);
+      router.refresh();
+      return;
+    }
+
+    // Replace current locale in the path
+    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+    router.push(newPath);
+    router.refresh();
+  };
   useEffect(() => {
     const storedMode = localStorage.getItem("darkMode");
     if (storedMode === "true") {
@@ -222,19 +257,19 @@ const Header = () => {
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center justify-between gap-12 text-black dark:text-white">
             <Link href="/" className="text-lg hover:text-primary no-underline">
-              Home
+            {t("home")}
             </Link>
             <Link
               href="/contact"
               className="text-lg hover:text-primary no-underline"
             >
-              Contact
+              {t("contact")}
             </Link>
             <Link
               href="/about"
               className="text-lg hover:text-primary no-underline"
             >
-              About
+               {t("about")}
             </Link>
             {!token && (
               <Link
@@ -252,6 +287,32 @@ const Header = () => {
                 Dashboard
               </Link>
             )}
+                  {/* Language */}
+          <div className="relative">
+            <button
+              className="flex items-center text-orange-500 hover:text-orange-600 font-medium"
+              onClick={toggleLanguageDropdown}
+            >
+              {selectedLanguage}
+              <ChevronDown className="ml-1 h-4 w-4" />
+            </button>
+            {isLanguageOpen && (
+              <div className="absolute bg-white shadow-lg border border-gray-200 mt-1 w-32 rounded-md text-sm text-gray-700">
+                <button
+                  onClick={() => handleLanguageSelect("English")}
+                  className="block px-3 py-2 hover:bg-gray-100"
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => handleLanguageSelect("العربية")}
+                  className="block px-3 py-2 hover:bg-gray-100"
+                >
+                  العربية
+                </button>
+              </div>
+            )}
+          </div>
           </div>
 
           <div className="hidden w-[380px] lg:flex items-center justify-between gap-4">

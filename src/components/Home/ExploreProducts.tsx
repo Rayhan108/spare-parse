@@ -39,14 +39,14 @@ const { data, isLoading } = useGetAllProductsQuery({
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-10">
         {isLoading
-          ? [...Array(8)].map((_, index) => <ProductSkeleton key={index} />)
+          ? [...Array(8)]?.map((_, index) => <ProductSkeleton key={index} />)
           : data?.data?.map((product:any) => (
               <ProductCart
-                key={product.id}
+                key={product?.id}
                 product={{
                   ...product,
-                  productImages: product.productImages || [], 
-                  _count: { review: product._count?.review || 0 },
+                  productImages: product?.productImages || [], 
+                  _count: { review: product?._count?.review || 0 },
                 }}
               />
           )).slice(0,4)}

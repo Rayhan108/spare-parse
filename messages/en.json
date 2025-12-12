@@ -1,0 +1,169 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "award": {
+  "home": {
+    "title": "Best Customer Satisfaction Awards Winner in Travel Industry - 2025",
+    "subtitle": "We are proud to share this — out of thousands of reviews across all channels, we achieved an average rating of 4.8 stars out of 5.",
+    "trustpilot": {
+      "label": "Trustpilot",
+      "reviews": "Excellent Reviews",
+      "rating": "4.7",
+      "badge": "✓ VERIFIED COMPANY"
+    },
+    "facebook": {
+      "label": "Facebook",
+      "reviews": "Excellent Reviews",
+      "rating": "5.0",
+      "badge": "LOCAL & TRAVEL WEBSITE"
+    },
+    "google": {
+      "label": "Google",
+      "reviews": "Excellent Reviews",
+      "rating": "4.9",
+      "badge": "BEST TOUR OPERATOR"
+    }
+  }
+},
+  "currency": "AED",
+  "language": "English",
+  
+  "buttons": {
+    "bookNow": "Book Now",
+    "whatsapp": "WhatsApp",
+    "previous": "Previous",
+    "next": "Next",
+    "confirmCheckout": "Confirm & Checkout",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "getInTouch": "Get in Touch",
+    "callNow": "Call Now"
+  },
+  "home": {
+    "title": "Experience the Magic of Dubai",
+    "subtitle": "There’s truly no place like Dubai a city where golden deserts meet sparkling skylines. From thrilling dune bashing to serene sunset views, Dubai offers an experience unlike anywhere else in the world. Let us take you on an unforgettable desert safari adventure that captures the heart and soul of this vibrant city.",
+    "experiencesTitle": "Our Experiences",
+    "activitiesTitle": "The Desert Safari Activities",
+ "eventTitle": "Exclusive arrangement for Corporate,<br />individual, special day or personalize",
+    "exploreDubai": "Explore Dubai with <br/> Oasis Tours",
+    "amazingFeatures": "Amazing Features",
+    "whyChoose": "Why Choose Oasis Palm Tourism",
+    "whyChooseDet": "We shape the future of travels at OASIS PALM tourism. It seemed impossible when we had a vision, but after 15 years of working with our professional tour guides, the journey became easier. Today OASIS PALM sells Dubai's adventure and experience with expert tour operators help. We know all adventure seeker's needs and work on fulfilling their needs.",
+    "faqTitle": "FAQs - Dubai Tours by Oasis Palm Tourism",
+    "faq": "Got question about our Dubai tours? Find quick answer on booking, pickups and more."
+ 
+  },
+  "category": {
+    "title": "Desert Safari Tour Dubai", 
+    "filters": {
+      "activity": "Select Activity",
+      "date": "Date",
+      "guests": "Guests",
+      "search": "Search"
+    },
+    "cards": {
+      "eveningSafari": "Evening Desert Safari - Premium",
+      "location": "Dubai Desert Conservation Reserve",
+      "duration": "Duration",
+      "maxAdults": "Max Adults",
+      "maxChildren": "Max Child",
+      "availability": "Availability",
+      "price": "AED {{price}} / Person + VAT"
+    }
+  },
+  "booking": {
+    "title": "Evening Desert Safari – Premium",
+    "location": "Dubai Desert Conservation Reserve",
+    "details": {
+      "date": "Date",
+      "adults": "Adults",
+      "children": "Children",
+      "customer": "Customer",
+      "email": "Email",
+      "phone": "Phone",
+      "pickup": "Pickup Location",
+      "currency": "Currency",
+      "basePrice": "Base Tour Price",
+      "additionalPrice": "Additional Price",
+      "grandTotal": "Grand Total"
+    }
+  },
+  "checkout": {
+    "title": "Confirm Your Booking",
+    "success": "Checkout successful!",
+    "error": "Checkout failed. Please try again."
+  },
+  "about": {
+    "title": "Quality Desert Tours",
+    "about": "About",
+    "celebrating": "Celebrating Success",
+    "celebratingProud": "Sand trail's proud achievements",
+     "imageText": "Each award is a testament to our passion and dedication.",
+    "aboutUs": "About Us",
+    "mission": "Mission",
+    "vision": "Vision",
+    "contactUs": "Contact us at",
+    "join": "Join 99k adventures who&apos;ve experienced unforgettable desert safaris. Be part of the journey — create your story today",
+    "drivenUs": "What Drivers Us",
+    "missionTitle": "Our Values, Mission & Vision",
+    "aboutDet": "A Dubai Desert Safari is more than just a tour—it's a journey into the heart of the Arabian wilderness, where nature, adventure, and tradition meet under a vast, sun-kissed sky. Imagine leaving behind the towering skyscrapers and bustling streets of Dubai and stepping into a world of endless golden dunes that stretch as far as the eye can see.",
+    "missionDet": "Our mission is to create unforgettable desert adventures that connect travelers with the beauty, culture, and spirit of the Arabian desert. We strive to deliver exceptional service, thrilling activities.",
+    "visionDet": "Our vision is to be the leading desert safari experience provider in Dubai, recognized globally for our commitment to excellence, authenticity, and sustainability",
+    "awardsTitle": "Sand Trail’s Proud Achievements"
+  },
+  "blogs": {
+    "title": "Blogs",
+    
+    "articles": {
+      "guide": "The Ultimate Guide to Dubai Desert Safari: What to Expect",
+      "morningVsEvening": "Morning vs. Evening Desert Safari: Which One Should You Choose?",
+      "activities": "Top 7 Activities You Can’t Miss on a Dubai Desert Safari",
+      "whatToWear": "What to Wear on a Dubai Desert Safari: A Complete Style & Comfort Guide",
+      "essentials": "Dubai Desert Safari Essentials: What You Need to Know"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "getInTouch": "Get In Touch",
+    "contactDet":"We are committed to processing the information in order to contact you and talk about your project.",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message"
+    },
+    "address": "4074 Ebert Summit Suite 375, Lake Leonardchester",
+    "phone": "+971506800227",
+    "emailAddress": "hello@desertlaila.com"
+  },
+  "footer": {
+    "why": {
+      "title": "Why CityLaila?",
+      "instant": "Instant confirmation. Purchase anytime you need it, anywhere you want it.",
+      "customers": "100k+ Happy customers",
+      "deals": "Get the lowest prices and last-minute deals",
+      "support": "Have a question? Live chat our experts 24/7",
+      "discover": "Discover and connect with 500+ experiences"
+    },
+    "connect": {
+      "title": "Connect With Us",
+      "email": "Mail",
+      "company": "Company",
+      "uae": "UAE Office",
+      "egypt": "Egypt Office",
+      "singapore": "Singapore Office"
+    },
+    "links": {
+       "title": "Important Links",
+      "about": "About Us",
+      "faqs": "FAQs",
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions",
+      "refund": "Refund & Returns",
+      "contact": "Contact Us"
+    },
+    "copyright": "© 2025 CityLaila FZ-LLC. All rights reserved."
+  }
+}
