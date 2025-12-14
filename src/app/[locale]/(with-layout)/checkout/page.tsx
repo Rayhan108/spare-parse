@@ -29,6 +29,8 @@ import {
   Address,
 } from "@/redux/features/address/addressApi";
 import { FiPrinter } from "react-icons/fi";
+import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { FaTruck } from "react-icons/fa";
 
 type FieldType = {
   name?: string;
@@ -38,6 +40,18 @@ type FieldType = {
   phone?: string;
   email?: string;
   save?: boolean;
+};
+
+type ShippingAddressFieldType = {
+  shippingName?: string;
+  shippingStreet?: string;
+  shippingApartment?: string;
+  shippingCity?: string;
+  shippingState?: string;
+  shippingPostalCode?: string;
+  shippingCountry?: string;
+  shippingPhone?: string;
+  saveShipping?: boolean;
 };
 
 interface ShippingOption {
@@ -50,7 +64,6 @@ interface ShippingOption {
   deliveryMax: number;
 }
 
-// Selected shipping per CHECKOUT (not per item)
 interface SelectedShipping {
   [checkoutId: string]: ShippingOption | null;
 }
@@ -58,22 +71,34 @@ interface SelectedShipping {
 const CheckoutPage = () => {
   const receiptRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  
-  // State for selected shipping per CHECKOUT
-  const [selectedShipping, setSelectedShipping] = useState<SelectedShipping>({});
+  const [billingForm] = Form.useForm();
+  const [shippingForm] = Form.useForm();
+
+  const [selectedShipping, setSelectedShipping] = useState<SelectedShipping>(
+    {}
+  );
   const [shippingId, setShippingId] = useState<string | null>(null);
+  const [isShippingFormOpen, setIsShippingFormOpen] = useState(false);
+  const [sameAsBilling, setSameAsBilling] = useState(false);
 
   const { data, isLoading, isError } = useGetCheckoutQuery();
   const [
     createPaymentSession,
     { data: sessionData, isLoading: paymentLoading },
   ] = useCreatePaymentSessionMutation();
-  const [placeOrder, { isLoading: orderLoading }] = usePurchaseWithCODMutation();
+  const [placeOrder, { isLoading: orderLoading }] =
+    usePurchaseWithCODMutation();
   const { data: addressesData } = useGetAddressesQuery();
+
+  // Same API - will be called twice
   const [addAddress] = useAddAddressMutation();
   const [updateAddress] = useUpdateAddressMutation();
+
   const [billingAddress, setBillingAddress] = useState<Address | null>(null);
+  const [shippingAddressData, setShippingAddressData] =
+    useState<Address | null>(null);
   const [loading, setLoading] = useState(false);
+  const [savingStatus, setSavingStatus] = useState<string>("");
 
   const checkouts = Array.isArray(data?.data)
     ? data.data
@@ -81,7 +106,6 @@ const CheckoutPage = () => {
     ? [data.data]
     : [];
 
-  // Get all unique shipping options for a checkout (combining from all items)
   const getShippingOptionsForCheckout = (checkout: any): ShippingOption[] => {
     const allShippings: ShippingOption[] = [];
     const seenIds = new Set<string>();
@@ -98,7 +122,6 @@ const CheckoutPage = () => {
     return allShippings;
   };
 
-  // Handle shipping change at CHECKOUT level
   const handleShippingChange = (
     checkoutId: string,
     selectedShippingId: string,
@@ -112,13 +135,11 @@ const CheckoutPage = () => {
     }));
   };
 
-  // Calculate shipping cost for checkout
   const calculateShippingCost = (checkoutId: string): number => {
     const shipping = selectedShipping[checkoutId];
     return shipping?.cost || 0;
   };
 
-  // Calculate grand total (subtotal + shipping)
   const calculateGrandTotal = (checkout: any): number => {
     const shippingCost = calculateShippingCost(checkout.id);
     return checkout.totalAmount + shippingCost;
@@ -129,9 +150,30 @@ const CheckoutPage = () => {
       const billing = addressesData.data.find(
         (addr) => addr.type === "BILLING"
       );
-      if (billing) setBillingAddress(billing);
+      const shipping = addressesData.data.find(
+        (addr) => addr.type === "SHIPPING"
+      );
+
+      if (billing) {
+        setBillingAddress(billing);
+        billingForm.setFieldsValue({
+          street: billing.addressLine,
+          city: billing.city,
+        });
+      }
+
+      if (shipping) {
+        setShippingAddressData(shipping);
+        shippingForm.setFieldsValue({
+          shippingStreet: shipping.addressLine,
+          shippingCity: shipping.city,
+          shippingState: shipping.state,
+          shippingPostalCode: shipping.postalCode,
+          shippingCountry: shipping.country,
+        });
+      }
     }
-  }, [addressesData]);
+  }, [addressesData, billingForm, shippingForm]);
 
   useEffect(() => {
     if (sessionData?.data?.redirectUrl) {
@@ -139,7 +181,6 @@ const CheckoutPage = () => {
     }
   }, [sessionData]);
 
-  // Initialize with first shipping option when data loads
   useEffect(() => {
     if (checkouts.length > 0) {
       const initialShipping: SelectedShipping = {};
@@ -152,36 +193,32 @@ const CheckoutPage = () => {
       });
       setSelectedShipping(initialShipping);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const handleBillingAddressSave = async (values: FieldType) => {
-    if (!values.save) return;
-    const billingData = {
-      addressLine: values.street!,
-      city: values.city!,
-      state: "",
-      postalCode: "",
-      country: "",
-      type: "BILLING",
-    } as const;
-
-    try {
-      if (billingAddress) {
-        const res = await updateAddress({
-          id: billingAddress.id,
-          data: billingData,
-        }).unwrap();
-        console.log("Update Address Response:", res);
-        message.success("Billing address updated successfully!");
+  const handleSameAsBilling = (checked: boolean) => {
+    setSameAsBilling(checked);
+    if (checked) {
+      const billingValues = billingForm.getFieldsValue();
+      shippingForm.setFieldsValue({
+        shippingName: billingValues.name,
+        shippingStreet: billingValues.street,
+        shippingApartment: billingValues.apartment,
+        shippingCity: billingValues.city,
+        shippingPhone: billingValues.phone,
+      });
+    } else {
+      if (shippingAddressData) {
+        shippingForm.setFieldsValue({
+          shippingStreet: shippingAddressData.addressLine,
+          shippingCity: shippingAddressData.city,
+          shippingState: shippingAddressData.state,
+          shippingPostalCode: shippingAddressData.postalCode,
+          shippingCountry: shippingAddressData.country,
+        });
       } else {
-        const res = await addAddress(billingData).unwrap();
-        console.log("Add Address Response:", res);
-        message.success("Billing address saved successfully!");
+        shippingForm.resetFields();
       }
-    } catch (err) {
-      console.error("Billing Address Error:", err);
-      message.error("Failed to save billing address.");
     }
   };
 
@@ -193,6 +230,7 @@ const CheckoutPage = () => {
     const checkout = checkouts[0];
     const shippingCost = calculateShippingCost(checkout?.id);
     const grandTotal = calculateGrandTotal(checkout);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const selectedShip = selectedShipping[checkout?.id];
 
     const printWindow = window.open("", "", "width=800,height=600");
@@ -203,54 +241,11 @@ const CheckoutPage = () => {
         <head>
           <title>Order Receipt</title>
           <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 20px;
-              max-width: 600px;
-              margin: 0 auto;
-            }
-            .receipt-header {
-              text-align: center;
-              border-bottom: 2px solid #000;
-              padding-bottom: 10px;
-              margin-bottom: 20px;
-            }
-            .receipt-item {
-              display: flex;
-              justify-content: space-between;
-              padding: 8px 0;
-              border-bottom: 1px solid #eee;
-            }
-            .receipt-total {
-              font-weight: bold;
-              font-size: 18px;
-              margin-top: 20px;
-              padding-top: 10px;
-              border-top: 2px solid #000;
-            }
-            .shipping-info {
-              background: #f5f5f5;
-              padding: 10px;
-              margin: 10px 0;
-              border-radius: 4px;
-            }
-            .item-row {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 10px 0;
-              border-bottom: 1px solid #eee;
-            }
-            .item-info {
-              display: flex;
-              align-items: center;
-              gap: 10px;
-            }
-            .item-image {
-              width: 48px;
-              height: 48px;
-              object-fit: contain;
-            }
+            body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+            .receipt-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .receipt-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+            .receipt-total { font-weight: bold; font-size: 18px; margin-top: 20px; padding-top: 10px; border-top: 2px solid #000; }
+            .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
           </style>
         </head>
         <body>
@@ -259,50 +254,22 @@ const CheckoutPage = () => {
             <p>Order ID: ${checkout?.id}</p>
             <p>Date: ${new Date().toLocaleDateString()}</p>
           </div>
-          
           <div>
             ${checkout?.items
               .map(
                 (item: CheckoutItem) => `
               <div class="item-row">
-                <div class="item-info">
-                  <img src="${item.product.productImages[0]}" class="item-image" />
-                  <div>
-                    <div><strong>${item.product.productName}</strong></div>
-                    <div>Qty: ${item.quantity}</div>
-                  </div>
-                </div>
+                <div>${item.product.productName} x ${item.quantity}</div>
                 <div>$${item.product.price * item.quantity}</div>
               </div>
             `
               )
               .join("")}
           </div>
-
-          ${
-            selectedShip
-              ? `
-            <div class="shipping-info">
-              <strong>Shipping:</strong> ${selectedShip.carrier} to ${selectedShip.countryName}<br/>
-              <strong>Delivery:</strong> ${selectedShip.deliveryMin}-${selectedShip.deliveryMax} days
-            </div>
-          `
-              : ""
-          }
-
           <div class="receipt-total">
-            <div class="receipt-item">
-              <span>Subtotal:</span>
-              <span>$${checkout?.totalAmount}</span>
-            </div>
-            <div class="receipt-item">
-              <span>Shipping:</span>
-              <span>${shippingCost > 0 ? `$${shippingCost}` : "Free"}</span>
-            </div>
-            <div class="receipt-item" style="font-size: 20px;">
-              <span>Total:</span>
-              <span>$${grandTotal}</span>
-            </div>
+            <div class="receipt-item"><span>Subtotal:</span><span>$${checkout?.totalAmount}</span></div>
+            <div class="receipt-item"><span>Shipping:</span><span>${shippingCost > 0 ? `$${shippingCost}` : "Free"}</span></div>
+            <div class="receipt-item" style="font-size: 20px;"><span>Total:</span><span>$${grandTotal}</span></div>
           </div>
         </body>
       </html>
@@ -312,8 +279,11 @@ const CheckoutPage = () => {
     printWindow.close();
   };
 
+  // ============ MAIN FORM SUBMIT ============
   const onFinish = async (values: FieldType) => {
-    console.log("Form Values Submitted:", values);
+    console.log("=".repeat(50));
+    console.log(" CHECKOUT FORM SUBMITTED");
+    console.log("=".repeat(50));
 
     const { name, street, apartment, city, phone, email, save } = values;
 
@@ -321,10 +291,9 @@ const CheckoutPage = () => {
       return message.error("Please fill in all required fields.");
     }
 
-    // Validate shipping is selected
     const checkoutId = checkouts[0]?.id;
     if (!checkoutId) {
-      message.error("Checkout ID not found. Please refresh and try again.");
+      message.error("Checkout ID not found.");
       return;
     }
 
@@ -332,20 +301,33 @@ const CheckoutPage = () => {
       return message.error("Please select a shipping option.");
     }
 
+    const shippingValues = shippingForm.getFieldsValue();
     const paymentInput = document.querySelector(
       'input[name="payment"]:checked'
     ) as HTMLInputElement;
     const paymentMethod = paymentInput?.value || "cash";
-    console.log("Selected Payment Method:", paymentMethod);
 
     const productIds: string[] = checkouts.flatMap((checkout) =>
       checkout.items.map((item: CheckoutItem) => item.product.id)
     );
 
+    const shippingAddressForOrder = sameAsBilling
+      ? { name, street, apartment, city, phone }
+      : {
+          name: shippingValues.shippingName || name,
+          street: shippingValues.shippingStreet,
+          apartment: shippingValues.shippingApartment,
+          city: shippingValues.shippingCity,
+          state: shippingValues.shippingState,
+          postalCode: shippingValues.shippingPostalCode,
+          country: shippingValues.shippingCountry,
+          phone: shippingValues.shippingPhone || phone,
+        };
+
     const orderData = {
       checkoutId,
       productIds,
-      shippingId, // Single shipping ID for the entire checkout
+      shippingId,
       name,
       street,
       apartment,
@@ -353,42 +335,121 @@ const CheckoutPage = () => {
       phone,
       email,
       saveForNextTime: save,
+      shippingAddress: shippingAddressForOrder,
     };
 
-    console.log("Order Data to send:", orderData);
-
-    const paymentData = {
-      checkoutId,
-      shippingId,
-    };
+    const paymentData = { checkoutId, shippingId };
 
     try {
       setLoading(true);
 
-      await handleBillingAddressSave(values);
+      // ========================================
+      //  SAME API CALLED TWICE - START
+      // ========================================
+
+      // ---------- 1st API Call: BILLING ----------
+      if (save) {
+        setSavingStatus("Saving billing address...");
+        console.log(" ========== BILLING ADDRESS API CALL ==========");
+
+        const billingData = {
+          addressLine: street!,
+          city: city!,
+          state: "",
+          postalCode: "",
+          country: "",
+          type: "BILLING" as const,
+        };
+
+        console.log(" BILLING Data:", billingData);
+
+        if (billingAddress?.id) {
+          const res = await updateAddress({
+            id: billingAddress.id,
+            data: billingData,
+          }).unwrap();
+          console.log(" BILLING Updated:", res);
+          message.success("Billing address updated!");
+        } else {
+          const res = await addAddress(billingData).unwrap();
+          console.log(" BILLING Added///////////////----------->:", res);
+          message.success("Billing address saved!");
+        }
+      }
+
+      // ---------- 2nd API Call: SHIPPING ----------
+      if (shippingValues.saveShipping) {
+        setSavingStatus("Saving shipping address...");
+        console.log("\n2️ ========== SHIPPING ADDRESS API CALL ==========");
+
+        let shippingData;
+
+        if (sameAsBilling) {
+          shippingData = {
+            addressLine: street!,
+            city: city!,
+            state: "",
+            postalCode: "",
+            country: "",
+            type: "SHIPPING" as const,
+          };
+        } else {
+          shippingData = {
+            addressLine: shippingValues.shippingStreet || "",
+            city: shippingValues.shippingCity || "",
+            state: shippingValues.shippingState || "",
+            postalCode: shippingValues.shippingPostalCode || "",
+            country: shippingValues.shippingCountry || "",
+            type: "SHIPPING" as const,
+          };
+        }
+
+        console.log(" SHIPPING Data:", shippingData);
+
+        if (shippingAddressData?.id) {
+          const res = await updateAddress({
+            id: shippingAddressData.id,
+            data: shippingData,
+          }).unwrap();
+          console.log(" SHIPPING Updated:", res);
+          message.success("Shipping address updated!");
+        } else {
+          const res = await addAddress(shippingData).unwrap();
+          console.log(" SHIPPING Added:", res);
+          message.success("Shipping address saved!");
+        }
+      }
+
+      console.log("========== BOTH API CALLS COMPLETED ==========\n");
+
+      // ========================================
+      //  SAME API CALLED TWICE - END
+      // ========================================
+
+      // ---------- Process Payment ----------
+
+      setSavingStatus("Processing order...");
+
 
       if (paymentMethod === "online") {
         const sessionRes = await createPaymentSession(paymentData).unwrap();
-        console.log("Stripe Session Response:", sessionRes);
-
         if (sessionRes?.data?.redirectUrl) {
           await placeOrder(orderData).unwrap();
-          console.log("Order placed successfully before redirect to Stripe.");
           window.location.href = sessionRes.data.redirectUrl;
         } else {
           message.error("Failed to create payment session.");
         }
       } else {
-        const codRes = await placeOrder(orderData).unwrap();
-        console.log("Cash on Delivery Order Response:", codRes);
-        message.success("Order placed successfully with Cash on Delivery!");
+        await placeOrder(orderData).unwrap();
+        message.success("Order placed successfully!");
         router.push("/order-success");
       }
     } catch (error) {
-      console.error("Checkout Error:", error);
-      message.error("Failed to process the order. Please try again.");
+      console.error(" Checkout Error:", error);
+      message.error("Failed to process the order.");
     } finally {
       setLoading(false);
+      setSavingStatus("");
     }
   };
 
@@ -430,8 +491,8 @@ const CheckoutPage = () => {
       />
 
       <div className="flex flex-col lg:flex-row items-start justify-between gap-20 mt-8">
-        {/* Billing Form */}
-        <div className="w-full sm:w-[450px]">
+        {/* Billing & Shipping Forms */}
+        <div className="w-full sm:w-[500px]">
           <h1 className="text-3xl md:text-4xl font-semibold mb-5 dark:text-white">
             Billing Details
           </h1>
@@ -448,14 +509,15 @@ const CheckoutPage = () => {
             }}
           >
             <Form
+              form={billingForm}
               layout="vertical"
               onFinish={onFinish}
               autoComplete="off"
               initialValues={{
                 name: "",
-                street: billingAddress?.addressLine || "",
+                street: "",
                 apartment: "",
-                city: billingAddress?.city || "",
+                city: "",
                 phone: "",
                 email: "",
                 save: true,
@@ -473,10 +535,7 @@ const CheckoutPage = () => {
                 label={<span className="dark:text-white">Street Address</span>}
                 name="street"
                 rules={[
-                  {
-                    required: true,
-                    message: "Please input your street address!",
-                  },
+                  { required: true, message: "Please input street address!" },
                 ]}
               >
                 <Input />
@@ -484,9 +543,7 @@ const CheckoutPage = () => {
 
               <Form.Item<FieldType>
                 label={
-                  <span className="dark:text-white">
-                    Apartment, floor, etc.
-                  </span>
+                  <span className="dark:text-white">Apartment, floor, etc.</span>
                 }
                 name="apartment"
               >
@@ -496,9 +553,7 @@ const CheckoutPage = () => {
               <Form.Item<FieldType>
                 label={<span className="dark:text-white">Town/City</span>}
                 name="city"
-                rules={[
-                  { required: true, message: "Please input your town/city!" },
-                ]}
+                rules={[{ required: true, message: "Please input town/city!" }]}
               >
                 <Input />
               </Form.Item>
@@ -506,9 +561,7 @@ const CheckoutPage = () => {
               <Form.Item<FieldType>
                 label={<span className="dark:text-white">Phone Number</span>}
                 name="phone"
-                rules={[
-                  { required: true, message: "Please input your number!" },
-                ]}
+                rules={[{ required: true, message: "Please input phone!" }]}
               >
                 <Input />
               </Form.Item>
@@ -516,30 +569,218 @@ const CheckoutPage = () => {
               <Form.Item<FieldType>
                 label={<span className="dark:text-white">Email Address</span>}
                 name="email"
-                rules={[
-                  { required: true, message: "Please input your email!" },
-                ]}
+                rules={[{ required: true, message: "Please input email!" }]}
               >
                 <Input />
               </Form.Item>
 
-              <Form.Item<FieldType> name="save" valuePropName="checked">
+              {/* <Form.Item<FieldType> name="save" valuePropName="checked">
                 <Checkbox>
                   <span className="dark:text-white">
-                    Save this information for faster check-out next time
+                    Save billing address for next time
                   </span>
                 </Checkbox>
-              </Form.Item>
+              </Form.Item> */}
+
+              {/* Collapsible Shipping Address */}
+              <div className="mt-6 mb-6 border dark:border-gray-600 rounded-lg overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsShippingFormOpen(!isShippingFormOpen)}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <FaTruck className="text-primary text-xl" />
+                    <div className="text-left">
+                      <h3 className="font-semibold dark:text-white text-lg">
+                        Shipping Address
+                      </h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {sameAsBilling
+                          ? "Same as billing address"
+                          : "Add different shipping address"}
+                      </p>
+                    </div>
+                  </div>
+                  {isShippingFormOpen ? (
+                    <IoChevronUp className="text-xl dark:text-white" />
+                  ) : (
+                    <IoChevronDown className="text-xl dark:text-white" />
+                  )}
+                </button>
+
+                <div
+                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                    isShippingFormOpen
+                      ? "max-h-[1000px] opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <div className="p-4 border-t dark:border-gray-600">
+                    <div className="mb-4">
+                      <Checkbox
+                        checked={sameAsBilling}
+                        onChange={(e) => handleSameAsBilling(e.target.checked)}
+                      >
+                        <span className="dark:text-white font-medium">
+                          Ship to billing address
+                        </span>
+                      </Checkbox>
+                    </div>
+
+                    <Form
+                      form={shippingForm}
+                      layout="vertical"
+                      autoComplete="off"
+                      className="mt-4"
+                      initialValues={{
+                        shippingName: "",
+                        shippingStreet: "",
+                        shippingApartment: "",
+                        shippingCity: "",
+                        shippingState: "",
+                        shippingPostalCode: "",
+                        shippingCountry: "",
+                        shippingPhone: "",
+                        saveShipping: true,
+                      }}
+                    >
+                      {!sameAsBilling && (
+                        <>
+                          <Form.Item<ShippingAddressFieldType>
+                            label={
+                              <span className="dark:text-white">
+                                Recipient Name
+                              </span>
+                            }
+                            name="shippingName"
+                          >
+                            <Input placeholder="Full name" />
+                          </Form.Item>
+
+                          <Form.Item<ShippingAddressFieldType>
+                            label={
+                              <span className="dark:text-white">
+                                Street Address
+                              </span>
+                            }
+                            name="shippingStreet"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please input street!",
+                              },
+                            ]}
+                          >
+                            <Input placeholder="Street address" />
+                          </Form.Item>
+
+                          <Form.Item<ShippingAddressFieldType>
+                            label={
+                              <span className="dark:text-white">
+                                Apartment, Suite
+                              </span>
+                            }
+                            name="shippingApartment"
+                          >
+                            <Input placeholder="Apartment (optional)" />
+                          </Form.Item>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <Form.Item<ShippingAddressFieldType>
+                              label={
+                                <span className="dark:text-white">City</span>
+                              }
+                              name="shippingCity"
+                              rules={[
+                                { required: true, message: "Please input city!" },
+                              ]}
+                            >
+                              <Input placeholder="City" />
+                            </Form.Item>
+
+                            <Form.Item<ShippingAddressFieldType>
+                              label={
+                                <span className="dark:text-white">State</span>
+                              }
+                              name="shippingState"
+                            >
+                              <Input placeholder="State" />
+                            </Form.Item>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <Form.Item<ShippingAddressFieldType>
+                              label={
+                                <span className="dark:text-white">
+                                  Postal Code
+                                </span>
+                              }
+                              name="shippingPostalCode"
+                            >
+                              <Input placeholder="Postal code" />
+                            </Form.Item>
+
+                            <Form.Item<ShippingAddressFieldType>
+                              label={
+                                <span className="dark:text-white">Country</span>
+                              }
+                              name="shippingCountry"
+                            >
+                              <Input placeholder="Country" />
+                            </Form.Item>
+                          </div>
+
+                          <Form.Item<ShippingAddressFieldType>
+                            label={
+                              <span className="dark:text-white">Phone</span>
+                            }
+                            name="shippingPhone"
+                          >
+                            <Input placeholder="Phone for delivery" />
+                          </Form.Item>
+                        </>
+                      )}
+
+                      <Form.Item<ShippingAddressFieldType>
+                        name="saveShipping"
+                        valuePropName="checked"
+                      >
+                        <Checkbox>
+                          <span className="dark:text-white">
+                            Save shipping address for future orders
+                          </span>
+                        </Checkbox>
+                      </Form.Item>
+
+                      {sameAsBilling && (
+                        <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                          <p className="text-green-700 dark:text-green-400 font-medium">
+                            ✓ Using billing address for shipping
+                          </p>
+                        </div>
+                      )}
+                    </Form>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Display */}
+              {savingStatus && (
+                <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-blue-700 dark:text-blue-400 text-sm flex items-center gap-2">
+                    <span className="animate-spin">⏳</span> {savingStatus}
+                  </p>
+                </div>
+              )}
 
               <Form.Item>
                 <button
                   type="submit"
-                  className="w-full bg-primary text-white py-3 rounded font-medium mt-2"
+                  className="w-full bg-primary text-white py-3 rounded font-medium mt-2 hover:bg-primary/90 transition-colors disabled:opacity-50"
                   disabled={loading || paymentLoading || orderLoading}
                 >
-                  {loading || paymentLoading || orderLoading
-                    ? "Processing..."
-                    : "Place Order"}
+                  {loading ? "Processing..." : "Place Order"}
                 </button>
               </Form.Item>
             </Form>
@@ -548,7 +789,6 @@ const CheckoutPage = () => {
 
         {/* Order Summary */}
         <div className="w-full sm:w-[480px] p-6 space-y-6">
-          {/* Print Button */}
           <div className="flex justify-end">
             <button
               onClick={handlePrint}
@@ -559,7 +799,6 @@ const CheckoutPage = () => {
             </button>
           </div>
 
-          {/* Receipt Content - Printable */}
           <div ref={receiptRef}>
             {checkouts.map((checkout) => {
               const shippingOptions = getShippingOptionsForCheckout(checkout);
@@ -570,18 +809,6 @@ const CheckoutPage = () => {
                   key={checkout.id}
                   className="border p-4 rounded-lg dark:border-gray-600 space-y-4"
                 >
-                  {/* Receipt Header for Print */}
-                  <div className="receipt-header hidden print:block text-center pb-4 border-b-2 border-black">
-                    <h2 className="text-xl font-bold">Order Receipt</h2>
-                    <p className="text-sm text-gray-500">
-                      Order ID: {checkout.id}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Date: {new Date().toLocaleDateString()}
-                    </p>
-                  </div>
-
-                  {/* Products List */}
                   <div className="space-y-3">
                     <h3 className="font-medium dark:text-white text-lg">
                       Order Items ({checkout.items?.length || 0})
@@ -615,19 +842,15 @@ const CheckoutPage = () => {
                     ))}
                   </div>
 
-                  {/* SINGLE Shipping Dropdown for the entire checkout */}
                   {shippingOptions.length > 0 && (
                     <div className="pt-4 border-t dark:border-gray-600">
                       <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-                        🚚 Select Shipping Option:
+                        🚚 Select Shipping:
                       </label>
                       <ConfigProvider
                         theme={{
                           components: {
-                            Select: {
-                              controlHeight: 44,
-                              borderRadius: 8,
-                            },
+                            Select: { controlHeight: 44, borderRadius: 8 },
                           },
                         }}
                       >
@@ -642,44 +865,29 @@ const CheckoutPage = () => {
                               shippingOptions
                             )
                           }
-                          options={shippingOptions.map(
-                            (shipping: ShippingOption) => ({
-                              value: shipping.id,
-                              label: (
-                                <div className="flex justify-between items-center w-full py-1">
-                                  <span className="font-medium">
-                                    {shipping.countryName} - {shipping.carrier}
-                                  </span>
-                                  <span className="text-primary font-bold">
-                                    ${shipping.cost} •{" "}
-                                    {shipping.deliveryMin === shipping.deliveryMax
-                                      ? `${shipping.deliveryMin} days`
-                                      : `${shipping.deliveryMin}-${shipping.deliveryMax} days`}
-                                  </span>
-                                </div>
-                              ),
-                            })
-                          )}
+                          options={shippingOptions.map((s) => ({
+                            value: s.id,
+                            label: (
+                              <div className="flex justify-between items-center w-full">
+                                <span>
+                                  {s.countryName} - {s.carrier}
+                                </span>
+                                <span className="text-primary font-bold">
+                                  ${s.cost}
+                                </span>
+                              </div>
+                            ),
+                          }))}
                         />
                       </ConfigProvider>
 
-                      {/* Selected Shipping Info */}
                       {currentShipping && (
                         <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                           <div className="flex justify-between items-center">
-                            <div>
-                              <span className="text-green-700 dark:text-green-400 font-medium">
-                                ✓ {currentShipping.carrier} to{" "}
-                                {currentShipping.countryName}
-                              </span>
-                              <p className="text-green-600 dark:text-green-500 text-sm mt-1">
-                                Estimated delivery:{" "}
-                                {currentShipping.deliveryMin ===
-                                currentShipping.deliveryMax
-                                  ? `${currentShipping.deliveryMin} days`
-                                  : `${currentShipping.deliveryMin}-${currentShipping.deliveryMax} days`}
-                              </p>
-                            </div>
+                            <span className="text-green-700 dark:text-green-400 font-medium">
+                              ✓ {currentShipping.carrier} to{" "}
+                              {currentShipping.countryName}
+                            </span>
                             <span className="text-lg font-bold text-green-700 dark:text-green-400">
                               +${currentShipping.cost}
                             </span>
@@ -689,7 +897,6 @@ const CheckoutPage = () => {
                     </div>
                   )}
 
-                  {/* Summary */}
                   <div className="pt-4 space-y-2 border-t dark:border-gray-600">
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-300">
@@ -719,12 +926,9 @@ const CheckoutPage = () => {
                     </div>
                   </div>
 
-                  {/* Payment Options */}
                   <div className="space-y-3 mt-4 pt-4 border-t dark:border-gray-600">
-                    <h3 className="font-medium dark:text-white">
-                      Payment Method
-                    </h3>
-                    <div className="flex items-center space-x-3 p-3 border dark:border-gray-600 rounded-lg hover:border-primary dark:hover:border-primary transition-colors cursor-pointer">
+                    <h3 className="font-medium dark:text-white">Payment</h3>
+                    <div className="flex items-center space-x-3 p-3 border dark:border-gray-600 rounded-lg hover:border-primary cursor-pointer">
                       <input
                         type="radio"
                         name="payment"
@@ -732,17 +936,11 @@ const CheckoutPage = () => {
                         value="online"
                         className="w-4 h-4 accent-primary"
                       />
-                      <label
-                        htmlFor="online"
-                        className="dark:text-white cursor-pointer flex-1"
-                      >
+                      <label htmlFor="online" className="dark:text-white flex-1 cursor-pointer">
                         <span className="font-medium">Online Payment</span>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Pay securely with card
-                        </p>
                       </label>
                     </div>
-                    <div className="flex items-center space-x-3 p-3 border dark:border-gray-600 rounded-lg hover:border-primary dark:hover:border-primary transition-colors cursor-pointer">
+                    <div className="flex items-center space-x-3 p-3 border dark:border-gray-600 rounded-lg hover:border-primary cursor-pointer">
                       <input
                         type="radio"
                         name="payment"
@@ -751,14 +949,8 @@ const CheckoutPage = () => {
                         defaultChecked
                         className="w-4 h-4 accent-primary"
                       />
-                      <label
-                        htmlFor="cash"
-                        className="dark:text-white cursor-pointer flex-1"
-                      >
+                      <label htmlFor="cash" className="dark:text-white flex-1 cursor-pointer">
                         <span className="font-medium">Cash on Delivery</span>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Pay when you receive
-                        </p>
                       </label>
                     </div>
                   </div>
