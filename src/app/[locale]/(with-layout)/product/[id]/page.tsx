@@ -188,7 +188,7 @@ const role = user?.role
           <div className="lg:col-span-2 xl:col-span-1 flex flex-col gap-4">
             <div className="sticky top-4 border rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 md:p-6 space-y-4">
               <div className="space-y-2">
-                <div className="text-3xl font-bold md:text-4xl">${product.price}</div>
+                <div className="text-3xl font-bold md:text-4xl">DZ {product.price}</div>
                 <div className="flex items-center gap-1 text-xs md:text-sm text-gray-500 dark:text-gray-300">
                   <span>Price excludes VAT</span>
                   <Info className="h-3 w-3 md:h-4 md:w-4" />

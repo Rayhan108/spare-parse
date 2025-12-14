@@ -251,8 +251,8 @@ const CheckoutPage = () => {
         <body>
           <div class="receipt-header">
             <h2>Order Receipt</h2>
-            <p>Order ID: ${checkout?.id}</p>
-            <p>Date: ${new Date().toLocaleDateString()}</p>
+            <p>Order ID: dz{checkout?.id}</p>
+            <p>Date: dz{new Date().toLocaleDateString()}</p>
           </div>
           <div>
             ${checkout?.items
@@ -267,9 +267,11 @@ const CheckoutPage = () => {
               .join("")}
           </div>
           <div class="receipt-total">
-            <div class="receipt-item"><span>Subtotal:</span><span>$${checkout?.totalAmount}</span></div>
-            <div class="receipt-item"><span>Shipping:</span><span>${shippingCost > 0 ? `$${shippingCost}` : "Free"}</span></div>
-            <div class="receipt-item" style="font-size: 20px;"><span>Total:</span><span>$${grandTotal}</span></div>
+            <div class="receipt-item"><span>Subtotal:</span><span>dz{checkout?.totalAmount}</span></div>
+            <div class="receipt-item"><span>Shipping:</span><span>${
+              shippingCost > 0 ? `dz ${shippingCost}` : "Free"
+            }</span></div>
+            <div class="receipt-item" style="font-size: 20px;"><span>Total:</span><span>dz ${grandTotal}</span></div>
           </div>
         </body>
       </html>
@@ -430,7 +432,6 @@ const CheckoutPage = () => {
 
       setSavingStatus("Processing order...");
 
-
       if (paymentMethod === "online") {
         const sessionRes = await createPaymentSession(paymentData).unwrap();
         if (sessionRes?.data?.redirectUrl) {
@@ -543,7 +544,9 @@ const CheckoutPage = () => {
 
               <Form.Item<FieldType>
                 label={
-                  <span className="dark:text-white">Apartment, floor, etc.</span>
+                  <span className="dark:text-white">
+                    Apartment, floor, etc.
+                  </span>
                 }
                 name="apartment"
               >
@@ -693,7 +696,10 @@ const CheckoutPage = () => {
                               }
                               name="shippingCity"
                               rules={[
-                                { required: true, message: "Please input city!" },
+                                {
+                                  required: true,
+                                  message: "Please input city!",
+                                },
                               ]}
                             >
                               <Input placeholder="City" />
@@ -836,7 +842,7 @@ const CheckoutPage = () => {
                           </div>
                         </div>
                         <span className="font-medium dark:text-white">
-                          ${item.product.price * item.quantity}
+                          dz {item.product.price * item.quantity}
                         </span>
                       </div>
                     ))}
@@ -873,7 +879,7 @@ const CheckoutPage = () => {
                                   {s.countryName} - {s.carrier}
                                 </span>
                                 <span className="text-primary font-bold">
-                                  ${s.cost}
+                                  dz {s.cost}
                                 </span>
                               </div>
                             ),
@@ -889,7 +895,7 @@ const CheckoutPage = () => {
                               {currentShipping.countryName}
                             </span>
                             <span className="text-lg font-bold text-green-700 dark:text-green-400">
-                              +${currentShipping.cost}
+                              +dz {currentShipping.cost}
                             </span>
                           </div>
                         </div>
@@ -903,7 +909,7 @@ const CheckoutPage = () => {
                         Subtotal:
                       </span>
                       <span className="font-medium dark:text-white">
-                        ${checkout.totalAmount}
+                        dz {checkout.totalAmount}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -921,7 +927,7 @@ const CheckoutPage = () => {
                         Total:
                       </span>
                       <span className="text-xl font-bold text-primary">
-                        ${calculateGrandTotal(checkout)}
+                        dz {calculateGrandTotal(checkout)}
                       </span>
                     </div>
                   </div>
@@ -936,7 +942,10 @@ const CheckoutPage = () => {
                         value="online"
                         className="w-4 h-4 accent-primary"
                       />
-                      <label htmlFor="online" className="dark:text-white flex-1 cursor-pointer">
+                      <label
+                        htmlFor="online"
+                        className="dark:text-white flex-1 cursor-pointer"
+                      >
                         <span className="font-medium">Online Payment</span>
                       </label>
                     </div>
@@ -949,7 +958,10 @@ const CheckoutPage = () => {
                         defaultChecked
                         className="w-4 h-4 accent-primary"
                       />
-                      <label htmlFor="cash" className="dark:text-white flex-1 cursor-pointer">
+                      <label
+                        htmlFor="cash"
+                        className="dark:text-white flex-1 cursor-pointer"
+                      >
                         <span className="font-medium">Cash on Delivery</span>
                       </label>
                     </div>

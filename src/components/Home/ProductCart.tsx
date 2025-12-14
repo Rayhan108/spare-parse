@@ -156,19 +156,19 @@ console.log("wishlist check--->",wishlist);
           {product.productName}
         </h2>
 
-        <div className="flex flex-col md:flex-row items-start md:text-lg md:items-center gap-0 md:gap-3 font-semibold">
+        <div className="flex flex-col md:flex-row items-start md:text-lg md:items-center gap-0 md:gap-2 font-semibold">
           {discountPercentage > 0 ? (
             <>
               <span className="text-xl font-bold text-orange-500">
-                ${price.toFixed(2)}
+                DZ {price.toFixed(2)}
               </span>
               <span className="ml-2 text-gray-500 line-through">
-                ${originalPrice.toFixed(2)}
+                DZ {originalPrice.toFixed(2)}
               </span>
             </>
           ) : (
             <span className="text-xl font-bold text-orange-500">
-              ${price.toFixed(2)}
+              DZ {price.toFixed(2)}
             </span>
           )}
 

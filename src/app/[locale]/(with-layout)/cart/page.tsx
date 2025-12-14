@@ -194,10 +194,10 @@ const Cart = () => {
                                         />
                                         <span className="dark:text-white">{item.product.productName}</span>
                                     </div>
-                                    <div className="w-24 text-center dark:text-white">${item.product.price}</div>
+                                    <div className="w-24 text-center dark:text-white">dz {item.product.price}</div>
                                     <div className="w-24 text-center dark:text-white">{item.quantity}</div>
                                     <div className="w-28 text-center dark:text-white">
-                                        ${(item.product.price * item.quantity).toFixed(2)}
+                                        dz {(item.product.price * item.quantity).toFixed(2)}
                                     </div>
                                     <div className="w-16 text-center">
                                         {contextHolder}
