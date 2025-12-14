@@ -213,6 +213,14 @@ export const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    registerSeller: builder.mutation({
+      query: (formData) => ({
+        url: "/users/seller-info",
+        method: "POST",
+        body: formData,
+      }),
+    }),
+     
 
     getUserProfile: builder.query({
       query: () => ({
@@ -237,4 +245,5 @@ export const {
   useGetUserProfileQuery,
   useEditUserProfileMutation,
   useUpdateProfileImageMutation,
+  useRegisterSellerMutation
 } = authApi;

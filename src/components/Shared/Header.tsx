@@ -30,8 +30,9 @@ import { useGetUserProfileQuery } from "@/redux/features/auth/authApi";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "@/utils/navigation";
 import { useTranslations } from "next-intl";
+import SellerRegistrationForm from "../Seller/SellerRegistrationForm/SellerRegistrationForm";
 
-//  Language configuration - Add all languages here
+// Language configuration
 const languages = [
   { code: "en", name: "English", flag: "🇺🇸" },
   { code: "ar", name: "العربية", flag: "🇸🇦" },
@@ -40,7 +41,6 @@ const languages = [
 
 type LanguageCode = (typeof languages)[number]["code"];
 
-// Helper to get language name from code
 const getLanguageByCode = (code: string) => {
   return languages.find((lang) => lang.code === code) || languages[0];
 };
@@ -53,15 +53,37 @@ const Header = ({ locale }: { locale: string }) => {
   const pathname = usePathname();
   const { message } = App.useApp();
 
+  // States
+  const [isSellerFormOpen, setIsSellerFormOpen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [subMenu, setSubMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Refs
+  const languageRef = useRef<HTMLDivElement>(null);
+  const subMenuRef = useRef<HTMLDivElement>(null);
+
+  // Redux & API
   const user = useSelector((state: RootState) => state.logInUser?.user);
   const { data: myProfile } = useGetUserProfileQuery(undefined);
   const userImg = myProfile?.data?.image;
+  const isSeller = myProfile?.data?.isSeller;
+console.log("is seller ----------->",isSeller);
+  const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
-  //  Language dropdown state
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-  const languageRef = useRef<HTMLDivElement>(null);
+  const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(
+    undefined,
+    { refetchOnMountOrArgChange: true }
+  );
+  const cartCount = cartData?.data?.length || 0;
 
-  //  Get current language from locale prop (NOT from state)
+  const { data: wishlistData, isLoading: isWishlistLoading } =
+    useGetWishlistQuery();
+  const wishlistCount = wishlistData?.length || 0;
+
   const currentLanguage = getLanguageByCode(locale);
 
   const token =
@@ -69,9 +91,7 @@ const Header = ({ locale }: { locale: string }) => {
       ? Cookies.get("hatem-ecommerce-token")
       : Cookies.get("hatem-seller-token");
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  //  Close language dropdown when clicking outside
+  // Effects
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -84,63 +104,6 @@ const Header = ({ locale }: { locale: string }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const toggleLanguageDropdown = () => {
-    setIsLanguageOpen((prev) => !prev);
-  };
-
-  //  Fixed language select handler
-  const handleLanguageSelect = (langCode: LanguageCode) => {
-    // Close dropdown first
-    setIsLanguageOpen(false);
-
-    // Don't navigate if same language
-    if (langCode === locale) {
-      return;
-    }
-
-    // Get current path without locale
-    // pathname from usePathname() might be "/en/about" or "/about" or "/"
-    let pathWithoutLocale = pathname;
-
-    // Remove current locale prefix if exists
-    const localePattern = new RegExp(`^/(${languages.map((l) => l.code).join("|")})`);
-    pathWithoutLocale = pathname.replace(localePattern, "") || "/";
-
-    // Build new path with new locale
-    const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
-
-    // Navigate
-    router.push(newPath);
-  };
-
-  // Dark mode initialization
-  useEffect(() => {
-    const storedMode = localStorage.getItem("darkMode");
-    if (storedMode === "true") {
-      setIsDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
-
-  const handleToggle = () => {
-    setIsDarkMode((prev) => {
-      const newMode = !prev;
-      document.documentElement.classList.toggle("dark", newMode);
-      localStorage.setItem("darkMode", String(newMode));
-      return newMode;
-    });
-  };
-
-  const [open, setOpen] = useState(false);
-  const showDrawer = () => setOpen(true);
-  const onClose = () => setOpen(false);
-
-  const [subMenu, setSubMenu] = useState(false);
-  const subMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -155,15 +118,46 @@ const Header = ({ locale }: { locale: string }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
-  const cartCount = cartData?.data?.length || 0;
+  useEffect(() => {
+    const storedMode = localStorage.getItem("darkMode");
+    if (storedMode === "true") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark");
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
 
-  const { data: wishlistData, isLoading: isWishlistLoading } =
-    useGetWishlistQuery();
-  const wishlistCount = wishlistData?.length || 0;
+  // Handlers
+  const toggleLanguageDropdown = () => {
+    setIsLanguageOpen((prev) => !prev);
+  };
+
+  const handleLanguageSelect = (langCode: LanguageCode) => {
+    setIsLanguageOpen(false);
+    if (langCode === locale) return;
+
+    let pathWithoutLocale = pathname;
+    const localePattern = new RegExp(
+      `^/(${languages.map((l) => l.code).join("|")})`
+    );
+    pathWithoutLocale = pathname.replace(localePattern, "") || "/";
+    const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+    router.push(newPath);
+  };
+
+  const handleToggle = () => {
+    setIsDarkMode((prev) => {
+      const newMode = !prev;
+      document.documentElement.classList.toggle("dark", newMode);
+      localStorage.setItem("darkMode", String(newMode));
+      return newMode;
+    });
+  };
+
+  const showDrawer = () => setOpen(true);
+  const onClose = () => setOpen(false);
 
   const handleLogOut = () => {
     dispatch(logout());
@@ -174,8 +168,6 @@ const Header = ({ locale }: { locale: string }) => {
     localStorage.removeItem("hatem-ecommerce-refreshToken");
     router.replace(`/${locale}/auth/login`);
   };
-
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleInputChange = (e: any) => {
     const value = e.target.value;
@@ -189,18 +181,30 @@ const Header = ({ locale }: { locale: string }) => {
     }
   };
 
-  // Modal for role switch
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const showModal = () => setIsModalVisible(true);
-  const handleCancel = () => setIsModalVisible(false);
+  //  Handle Switch Role Button Click
+  const handleSwitchRoleClick = () => {
+    setSubMenu(false); // Close submenu
 
-  const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
+    // Case 1: User is BUYER and NOT a registered seller
+    // → Show seller registration form
+    if (user?.role === "BUYER" && !isSeller) {
+      setIsSellerFormOpen(true);
+      return;
+    }
 
-  const handleOk = async () => {
-    await handleRoleSwitch();
+    // Case 2: User is BUYER and IS a registered seller
+    // OR User is SELLER (wants to switch to buyer)
+    // → Show confirmation modal
+    setIsModalVisible(true);
   };
 
-  const handleRoleSwitch = async () => {
+  //  Confirmation Modal Cancel
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  //  Confirmation Modal OK - Execute Role Switch
+  const handleConfirmSwitch = async () => {
     if (!user) return;
 
     try {
@@ -214,6 +218,7 @@ const Header = ({ locale }: { locale: string }) => {
 
       const accessToken = res.data.accessToken;
 
+      // Update cookies and localStorage
       if (newRole === "SELLER") {
         Cookies.remove("hatem-ecommerce-token");
         localStorage.removeItem("hatem-ecommerce-token");
@@ -226,6 +231,7 @@ const Header = ({ locale }: { locale: string }) => {
         localStorage.setItem("hatem-ecommerce-token", accessToken);
       }
 
+      // Update Redux state
       dispatch(
         setUser({
           user: { ...user, role: newRole },
@@ -235,8 +241,9 @@ const Header = ({ locale }: { locale: string }) => {
       );
 
       setIsModalVisible(false);
-      setSubMenu(false);
       message.success(res.message || "Role switched successfully!");
+
+      // Redirect to appropriate page
       router.replace(
         newRole === "SELLER"
           ? `/${locale}/seller/overview`
@@ -252,7 +259,16 @@ const Header = ({ locale }: { locale: string }) => {
     }
   };
 
-  const targetRole = user?.role === "BUYER" ?"seller" : "buyer";
+  //  After Seller Registration Success - Optionally auto-switch
+  const handleSellerRegistrationSuccess = () => {
+    setIsSellerFormOpen(false);
+
+    
+
+    setIsModalVisible(true);
+  };
+
+  const targetRole = user?.role === "BUYER" ? "Seller" : "Buyer";
 
   return (
     <header>
@@ -317,7 +333,7 @@ const Header = ({ locale }: { locale: string }) => {
               </Link>
             )}
 
-            {/*  Fixed Language Dropdown */}
+            {/* Language Dropdown */}
             <div className="relative" ref={languageRef}>
               <button
                 className="flex items-center text-orange-500 hover:text-orange-600 font-medium gap-1"
@@ -334,7 +350,7 @@ const Header = ({ locale }: { locale: string }) => {
 
               {isLanguageOpen && (
                 <div className="absolute top-full mt-2 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-600 w-40 rounded-lg text-sm z-50 overflow-hidden">
-                  {languages.map((lang:any) => (
+                  {languages.map((lang: any) => (
                     <button
                       key={lang.code}
                       onClick={() => handleLanguageSelect(lang.code)}
@@ -468,16 +484,17 @@ const Header = ({ locale }: { locale: string }) => {
                 </p>
               </Link>
 
-              {/* Switch Role */}
+              {/* ✅ Switch Role - Uses handleSwitchRoleClick */}
               <div
                 className="flex items-center gap-3 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={showModal}
+                onClick={handleSwitchRoleClick}
               >
                 {user?.role === "BUYER" ? (
                   <>
                     <GoVersions className="w-6 h-6 text-white dark:text-black" />
                     <p className="text-md text-white dark:text-black">
-                      {t("swithToSeller")}
+                      {/* Show different text based on isSeller */}
+                      {isSeller ? t("swithToSeller") : "Become a Seller"}
                     </p>
                   </>
                 ) : (
@@ -542,7 +559,7 @@ const Header = ({ locale }: { locale: string }) => {
         </div>
       </nav>
 
-      {/* Role Switch Modal */}
+      {/*  Role Switch Confirmation Modal - Only for registered sellers */}
       <Modal
         title={
           <div className="flex items-center gap-2">
@@ -551,12 +568,10 @@ const Header = ({ locale }: { locale: string }) => {
           </div>
         }
         open={isModalVisible}
-        onOk={handleOk}
+        onOk={handleConfirmSwitch}
         onCancel={handleCancel}
         confirmLoading={isLoading}
-        okText={
-          isLoading ? 'switching' : `Yes Switch To ${targetRole}`
-        }
+        okText={isLoading ? "Switching..." : `Yes, Switch to ${targetRole}`}
         cancelText={t("cancel")}
         okButtonProps={{
           className: "bg-[#df5800] hover:bg-[#c54d00]",
@@ -569,13 +584,19 @@ const Header = ({ locale }: { locale: string }) => {
       >
         <div className="py-4">
           <p className="text-gray-600 text-base">
-            Are you sure you want to switch your role from {
-            user?.role === "BUYER" ? t("buyer") : t("seller")
-            
-            }
+            Are you sure you want to switch your role from{" "}
+            <strong>{user?.role === "BUYER" ? t("buyer") : t("seller")}</strong>{" "}
+            to <strong>{targetRole}</strong>?
           </p>
         </div>
       </Modal>
+
+      {/*  Seller Registration Form Modal - Only for non-sellers */}
+      <SellerRegistrationForm
+        isOpen={isSellerFormOpen}
+        onClose={() => setIsSellerFormOpen(false)}
+        onSuccess={handleSellerRegistrationSuccess}
+      />
     </header>
   );
 };

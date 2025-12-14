@@ -30,53 +30,95 @@
 // import { ChevronDown } from "lucide-react";
 // import { usePathname } from "@/utils/navigation";
 // import { useTranslations } from "next-intl";
+// import SellerRegistrationForm from "../Seller/SellerRegistrationForm/SellerRegistrationForm";
+
+// //  Language configuration - Add all languages here
+// const languages = [
+//   { code: "en", name: "English", flag: "🇺🇸" },
+//   { code: "ar", name: "العربية", flag: "🇸🇦" },
+//   { code: "fr", name: "Français", flag: "🇫🇷" },
+// ] as const;
+
+// type LanguageCode = (typeof languages)[number]["code"];
+
+// // Helper to get language name from code
+// const getLanguageByCode = (code: string) => {
+//   return languages.find((lang) => lang.code === code) || languages[0];
+// };
 
 // const Header = ({ locale }: { locale: string }) => {
-//     const t = useTranslations("nav");
+//   const t = useTranslations("nav");
 
 //   const dispatch = useDispatch();
 //   const router = useRouter();
-  
 //   const pathname = usePathname();
 //   const { message } = App.useApp();
+//   const [isSellerFormOpen, setIsSellerFormOpen] = useState(false);
 //   const user = useSelector((state: RootState) => state.logInUser?.user);
+//   console.log("user---->",user);
 //   const { data: myProfile } = useGetUserProfileQuery(undefined);
 //   const userImg = myProfile?.data?.image;
-//     const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-//     const [selectedLanguage, setSelectedLanguage] = useState(
-//     locale === "en" ? "English" : "العربية"
-//   );
+//   const isSeller = myProfile?.data?.isSeller
+// ;
+// console.log("isSeller profile ------->",isSeller);
+//   //  Language dropdown state
+//   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+//   const languageRef = useRef<HTMLDivElement>(null);
+
+//   //  Get current language from locale prop (NOT from state)
+//   const currentLanguage = getLanguageByCode(locale);
+
 //   const token =
 //     user?.role === "BUYER"
 //       ? Cookies.get("hatem-ecommerce-token")
 //       : Cookies.get("hatem-seller-token");
 
 //   const [isDarkMode, setIsDarkMode] = useState(false);
-  
+
+//   //  Close language dropdown when clicking outside
+//   useEffect(() => {
+//     const handleClickOutside = (event: MouseEvent) => {
+//       if (
+//         languageRef.current &&
+//         !languageRef.current.contains(event.target as Node)
+//       ) {
+//         setIsLanguageOpen(false);
+//       }
+//     };
+//     document.addEventListener("mousedown", handleClickOutside);
+//     return () => document.removeEventListener("mousedown", handleClickOutside);
+//   }, []);
 
 //   const toggleLanguageDropdown = () => {
-//     setIsLanguageOpen(!isLanguageOpen);
- 
+//     setIsLanguageOpen((prev) => !prev);
 //   };
-//   //  Handle locale change manually (no next-intl/navigation)
-//   const handleLanguageSelect = (language: string) => {
-//     setSelectedLanguage(language);
+
+//   //  Fixed language select handler
+//   const handleLanguageSelect = (langCode: LanguageCode) => {
+//     // Close dropdown first
 //     setIsLanguageOpen(false);
 
-//     const newLocale = language === "English" ? "en" : "ar";
-
-//     // When you are on the root path
-//     if (!pathname.startsWith(`/${locale}`)) {
-//       router.push(`/${newLocale}`);
-//       router.refresh();
+//     // Don't navigate if same language
+//     if (langCode === locale) {
 //       return;
 //     }
 
-//     // Replace current locale in the path
-//     const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+//     // Get current path without locale
+//     // pathname from usePathname() might be "/en/about" or "/about" or "/"
+//     let pathWithoutLocale = pathname;
+
+//     // Remove current locale prefix if exists
+//     const localePattern = new RegExp(`^/(${languages.map((l) => l.code).join("|")})`);
+//     pathWithoutLocale = pathname.replace(localePattern, "") || "/";
+
+//     // Build new path with new locale
+//     const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+
+//     // Navigate
 //     router.push(newPath);
-//     router.refresh();
 //   };
+
+//   // Dark mode initialization
 //   useEffect(() => {
 //     const storedMode = localStorage.getItem("darkMode");
 //     if (storedMode === "true") {
@@ -119,9 +161,7 @@
 
 //   const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(
 //     undefined,
-//     {
-//       refetchOnMountOrArgChange: true,
-//     }
+//     { refetchOnMountOrArgChange: true }
 //   );
 //   const cartCount = cartData?.data?.length || 0;
 
@@ -136,7 +176,7 @@
 //     localStorage.removeItem("hatem-ecommerce-token");
 //     localStorage.removeItem("hatem-seller-token");
 //     localStorage.removeItem("hatem-ecommerce-refreshToken");
-//     router.replace("/auth/login");
+//     router.replace(`/${locale}/auth/login`);
 //   };
 
 //   const [searchQuery, setSearchQuery] = useState("");
@@ -153,28 +193,25 @@
 //     }
 //   };
 
-//   // Modal for role switch confirmation
+//   // Modal for role switch
 //   const [isModalVisible, setIsModalVisible] = useState(false);
+//   const showModal = () => setIsModalVisible(true);
+//   const handleCancel = () => setIsModalVisible(false);
 
-//   // Show the confirmation modal
-//   const showModal = () => {
-//     setIsModalVisible(true);
-//   };
+//   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
-//   // Handle the modal confirm action (switch role)
 //   const handleOk = async () => {
 //     await handleRoleSwitch();
 //   };
 
-//   // Handle modal cancel action (close modal)
-//   const handleCancel = () => {
-//     setIsModalVisible(false);
-//   };
-
-//   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
-
 //   const handleRoleSwitch = async () => {
 //     if (!user) return;
+//     if (user?.role === "BUYER" && !isSeller) {
+
+//       setIsSellerFormOpen(true);
+//       setSubMenu(false);
+//     }
+
 
 //     try {
 //       const newRole = user.role === "BUYER" ? "SELLER" : "BUYER";
@@ -190,15 +227,11 @@
 //       if (newRole === "SELLER") {
 //         Cookies.remove("hatem-ecommerce-token");
 //         localStorage.removeItem("hatem-ecommerce-token");
-//       } else {
-//         Cookies.remove("hatem-seller-token");
-//         localStorage.removeItem("hatem-seller-token");
-//       }
-
-//       if (newRole === "SELLER") {
 //         Cookies.set("hatem-seller-token", accessToken, { expires: 7 });
 //         localStorage.setItem("hatem-seller-token", accessToken);
 //       } else {
+//         Cookies.remove("hatem-seller-token");
+//         localStorage.removeItem("hatem-seller-token");
 //         Cookies.set("hatem-ecommerce-token", accessToken, { expires: 7 });
 //         localStorage.setItem("hatem-ecommerce-token", accessToken);
 //       }
@@ -211,13 +244,17 @@
 //         })
 //       );
 
-//       setIsModalVisible(false); // Close modal on success
-//       setSubMenu(false); // Close submenu
+//       setIsModalVisible(false);
+//       setSubMenu(false);
 //       message.success(res.message || "Role switched successfully!");
-//       router.replace(newRole === "SELLER" ? "/seller/overview" : "/myorder");
+//       router.replace(
+//         newRole === "SELLER"
+//           ? `/${locale}/seller/overview`
+//           : `/${locale}/myorder`
+//       );
 //     } catch (err: unknown) {
 //       console.error("Switch Role Error:", err);
-//       setIsModalVisible(false); // Close modal on error
+//       setIsModalVisible(false);
 //       message.error(
 //         (err as { data?: { message?: string } })?.data?.message ??
 //           "Failed to switch role"
@@ -225,17 +262,16 @@
 //     }
 //   };
 
-//   // Get the target role for display in modal
-//   const targetRole = user?.role === "BUYER" ? "Seller" : "Buyer";
+//   const targetRole = user?.role === "BUYER" ?"seller" : "buyer";
 
 //   return (
 //     <header>
 //       {/* Top Banner */}
 //       <div className="bg-[#df5800] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0">
-//         Summer Sale For All Parking Light And Free Express Delivery{" "}
-//         <Link href={`/product`}>
+//         {t("summerSale")}{" "}
+//         <Link href={`/${locale}/product`}>
 //           <span className="ml-2 font-semibold underline cursor-pointer">
-//             ShopNow
+//             {t("shopNow")}
 //           </span>
 //         </Link>
 //       </div>
@@ -244,7 +280,7 @@
 //       <nav className="border-b border-gray-200 dark:border-gray-600 dark:bg-black px-3 lg:px-0">
 //         <div className="container mx-auto py-4 flex items-center justify-between relative">
 //           {/* Logo */}
-//           <Link href="/">
+//           <Link href={`/${locale}`}>
 //             <Image
 //               className="w-42"
 //               src={isDarkMode ? darkLogo : logo}
@@ -256,65 +292,81 @@
 
 //           {/* Desktop Links */}
 //           <div className="hidden lg:flex items-center justify-between gap-12 text-black dark:text-white">
-//             <Link href="/" className="text-lg hover:text-primary no-underline">
-//             {t("home")}
+//             <Link
+//               href={`/${locale}`}
+//               className="text-lg hover:text-primary no-underline"
+//             >
+//               {t("home")}
 //             </Link>
 //             <Link
-//               href="/contact"
+//               href={`/${locale}/contact`}
 //               className="text-lg hover:text-primary no-underline"
 //             >
 //               {t("contact")}
 //             </Link>
 //             <Link
-//               href="/about"
+//               href={`/${locale}/about`}
 //               className="text-lg hover:text-primary no-underline"
 //             >
-//                {t("about")}
+//               {t("about")}
 //             </Link>
 //             {!token && (
 //               <Link
-//                 href="/auth/login"
+//                 href={`/${locale}/auth/login`}
 //                 className="text-lg hover:text-primary no-underline"
 //               >
-//                 Log In
+//                 {t("login")}
 //               </Link>
 //             )}
 //             {user?.role === "SELLER" && (
 //               <Link
-//                 href="/seller/overview"
+//                 href={`/${locale}/seller/overview`}
 //                 className="text-lg hover:text-primary no-underline"
 //               >
-//                 Dashboard
+//                 {t("dashboard")}
 //               </Link>
 //             )}
-//                   {/* Language */}
-//           <div className="relative">
-//             <button
-//               className="flex items-center text-orange-500 hover:text-orange-600 font-medium"
-//               onClick={toggleLanguageDropdown}
-//             >
-//               {selectedLanguage}
-//               <ChevronDown className="ml-1 h-4 w-4" />
-//             </button>
-//             {isLanguageOpen && (
-//               <div className="absolute bg-white shadow-lg border border-gray-200 mt-1 w-32 rounded-md text-sm text-gray-700">
-//                 <button
-//                   onClick={() => handleLanguageSelect("English")}
-//                   className="block px-3 py-2 hover:bg-gray-100"
-//                 >
-//                   English
-//                 </button>
-//                 <button
-//                   onClick={() => handleLanguageSelect("العربية")}
-//                   className="block px-3 py-2 hover:bg-gray-100"
-//                 >
-//                   العربية
-//                 </button>
-//               </div>
-//             )}
-//           </div>
+
+//             {/*  Fixed Language Dropdown */}
+//             <div className="relative" ref={languageRef}>
+//               <button
+//                 className="flex items-center text-orange-500 hover:text-orange-600 font-medium gap-1"
+//                 onClick={toggleLanguageDropdown}
+//               >
+//                 <span>{currentLanguage.flag}</span>
+//                 <span>{currentLanguage.name}</span>
+//                 <ChevronDown
+//                   className={`h-4 w-4 transition-transform duration-200 ${
+//                     isLanguageOpen ? "rotate-180" : ""
+//                   }`}
+//                 />
+//               </button>
+
+//               {isLanguageOpen && (
+//                 <div className="absolute top-full mt-2 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-600 w-40 rounded-lg text-sm z-50 overflow-hidden">
+//                   {languages.map((lang:any) => (
+//                     <button
+//                       key={lang.code}
+//                       onClick={() => handleLanguageSelect(lang.code)}
+//                       className={`w-full text-left px-4 py-3 flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+//                         locale === lang.code
+//                           ? "bg-orange-50 dark:bg-orange-900/20 text-orange-600 font-medium"
+//                           : "text-gray-700 dark:text-gray-200"
+//                       }`}
+//                     >
+//                       <span>{lang.flag}</span>
+//                       <span>{lang.name}</span>
+//                       {locale === lang.code && (
+//                         <span className="ml-auto text-orange-500">✓</span>
+//                       )}
+//                     </button>
+//                   ))}
+//                 </div>
+//               )}
+//             </div>
 //           </div>
 
+//           {/* Search & Icons */}
 //           <div className="hidden w-[380px] lg:flex items-center justify-between gap-4">
 //             <ConfigProvider
 //               theme={{
@@ -332,7 +384,7 @@
 //                 style={{ backgroundColor: "#f0f0f0" }}
 //                 suffix={<FiSearch className="text-black w-6 h-6" />}
 //                 className="w-[280px]"
-//                 placeholder="What are you looking for?"
+//                 placeholder={t("searchPlaceholder")}
 //                 value={searchQuery}
 //                 onChange={handleInputChange}
 //                 onPressEnter={handleSearch}
@@ -342,9 +394,8 @@
 //             {/* Wishlist & Cart only for Buyer */}
 //             {user?.role !== "SELLER" && (
 //               <>
-//                 {/* Wishlist */}
 //                 <div className="relative">
-//                   <Link href={`/wishlist`}>
+//                   <Link href={`/${locale}/wishlist`}>
 //                     <IoIosHeartEmpty className="w-8 h-8 cursor-pointer dark:text-white" />
 //                   </Link>
 //                   {!isWishlistLoading && wishlistCount > 0 && (
@@ -354,9 +405,8 @@
 //                   )}
 //                 </div>
 
-//                 {/* Cart */}
 //                 <div className="relative">
-//                   <Link href={`/cart`}>
+//                   <Link href={`/${locale}/cart`}>
 //                     <PiShoppingCartLight className="w-8 h-8 cursor-pointer dark:text-white" />
 //                   </Link>
 //                   {!isCartLoading && cartCount > 0 && (
@@ -368,22 +418,21 @@
 //               </>
 //             )}
 
-//             {/* User Submenu */}
-//        {/* User Submenu */}
-// {token && (
-//   <div
-//     onClick={() => setSubMenu(!subMenu)}
-//     className="cursor-pointer w-10 h-10 flex-shrink-0"  // Added fixed size
-//   >
-//     <Image
-//       alt="user"
-//       src={userImg ? userImg : avatar}
-//       width={40}
-//       height={40}
-//       className="object-cover w-10 h-10 rounded-full"  // Fixed size instead of w-full h-full
-//     />
-//   </div>
-// )}
+//             {/* User Avatar */}
+//             {token && (
+//               <div
+//                 onClick={() => setSubMenu(!subMenu)}
+//                 className="cursor-pointer w-10 h-10 flex-shrink-0"
+//               >
+//                 <Image
+//                   alt="user"
+//                   src={userImg ? userImg : avatar}
+//                   width={40}
+//                   height={40}
+//                   className="object-cover w-10 h-10 rounded-full"
+//                 />
+//               </div>
+//             )}
 //           </div>
 
 //           {/* Mobile Menu Icon */}
@@ -395,7 +444,7 @@
 //             />
 //           </div>
 
-//           {/* Submenu */}
+//           {/* User Submenu */}
 //           {token && subMenu && (
 //             <div
 //               ref={subMenuRef}
@@ -403,7 +452,7 @@
 //             >
 //               {/* Dark Mode */}
 //               <div className="flex items-center justify-between mb-5">
-//                 <p className="text-gray-200 dark:text-black">Dark Mode:</p>
+//                 <p className="text-gray-200 dark:text-black">{t("darkmode")}:</p>
 //                 <button
 //                   onClick={handleToggle}
 //                   className={`w-14 h-6 flex items-center rounded-full p-1 ${
@@ -418,31 +467,34 @@
 //                 </button>
 //               </div>
 
-//               {/* Account Links */}
-//               <Link href={`/myprofile`} className="flex items-center gap-3 mb-4">
+//               {/* Manage Account */}
+//               <Link
+//                 href={`/${locale}/myprofile`}
+//                 className="flex items-center gap-3 mb-4"
+//               >
 //                 <GoPerson className="w-6 h-6 text-white dark:text-black" />
 //                 <p className="text-md text-white dark:text-black">
-//                   Manage My Account
+//                   {t("manageAcount")}
 //                 </p>
 //               </Link>
 
-//               {/* Switch Role - NOW TRIGGERS MODAL */}
+//               {/* Switch Role */}
 //               <div
 //                 className="flex items-center gap-3 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
-//                 onClick={showModal} // Changed from handleRoleSwitch to showModal
+//                 onClick={showModal}
 //               >
 //                 {user?.role === "BUYER" ? (
 //                   <>
 //                     <GoVersions className="w-6 h-6 text-white dark:text-black" />
 //                     <p className="text-md text-white dark:text-black">
-//                       Switch to Seller
+//                       {t("swithToSeller")}
 //                     </p>
 //                   </>
 //                 ) : (
 //                   <>
 //                     <LuShoppingBag className="w-6 h-6 text-white dark:text-black" />
 //                     <p className="text-md text-white dark:text-black">
-//                       Switch to Buyer
+//                       {t("swithToBuyer")}
 //                     </p>
 //                   </>
 //                 )}
@@ -452,29 +504,33 @@
 //               {user?.role === "SELLER" ? (
 //                 <div className="flex flex-col gap-2 mb-4">
 //                   <Link
-//                     href={`/seller/myproduct`}
+//                     href={`/${locale}/seller/myproduct`}
 //                     className="flex items-center gap-3"
 //                   >
 //                     <LuShoppingBag className="w-6 h-6 text-white dark:text-black" />
 //                     <p className="text-md text-white dark:text-black">
-//                       My Products
+//                       {t("myProduct")}
 //                     </p>
 //                   </Link>
-
 //                   <Link
-//                     href={`/seller/overview`}
+//                     href={`/${locale}/seller/overview`}
 //                     className="flex items-center gap-3 mt-1"
 //                   >
 //                     <GoVersions className="w-6 h-6 text-white dark:text-black" />
 //                     <p className="text-md text-white dark:text-black">
-//                       Seller Overview
+//                       {t("sellerOverview")}
 //                     </p>
 //                   </Link>
 //                 </div>
 //               ) : (
-//                 <Link href={`/myorder`} className="flex items-center gap-3 mb-4">
+//                 <Link
+//                   href={`/${locale}/myorder`}
+//                   className="flex items-center gap-3 mb-4"
+//                 >
 //                   <LuShoppingBag className="w-6 h-6 text-white dark:text-black" />
-//                   <p className="text-md text-white dark:text-black">My Order</p>
+//                   <p className="text-md text-white dark:text-black">
+//                     {t("myOrder")}
+//                   </p>
 //                 </Link>
 //               )}
 
@@ -484,17 +540,19 @@
 //                 className="flex items-center gap-3 mb-2 cursor-pointer"
 //               >
 //                 <GoPerson className="w-6 h-6 text-white dark:text-black" />
-//                 <p className="text-md text-white dark:text-black">Logout</p>
+//                 <p className="text-md text-white dark:text-black">
+//                   {t("logout")}
+//                 </p>
 //               </div>
 //             </div>
 //           )}
 
 //           {/* Mobile Drawer */}
-//           <MobileMenu open={open} onClose={onClose} />
+//           <MobileMenu open={open} onClose={onClose} locale={locale} />
 //         </div>
 //       </nav>
 
-//       {/* Role Switch Confirmation Modal */}
+//       {/* Role Switch Modal */}
 //       <Modal
 //         title={
 //           <div className="flex items-center gap-2">
@@ -502,35 +560,37 @@
 //             <span>Confirm Role Switch</span>
 //           </div>
 //         }
-//         open={isModalVisible} // Changed from 'visible' to 'open'
+//         open={isModalVisible}
 //         onOk={handleOk}
 //         onCancel={handleCancel}
 //         confirmLoading={isLoading}
-//         okText={isLoading ? "Switching..." : `Yes, Switch to ${targetRole}`}
-//         cancelText="Cancel"
+//         okText={
+//           isLoading ? 'switching' : `Yes Switch To ${targetRole}`
+//         }
+//         cancelText={t("cancel")}
 //         okButtonProps={{
 //           className: "bg-[#df5800] hover:bg-[#c54d00]",
 //           disabled: isLoading,
 //         }}
-//         cancelButtonProps={{
-//           disabled: isLoading,
-//         }}
+//         cancelButtonProps={{ disabled: isLoading }}
 //         maskClosable={!isLoading}
 //         closable={!isLoading}
 //         centered
 //       >
 //         <div className="py-4">
 //           <p className="text-gray-600 text-base">
-//             Are you sure you want to switch your role from{" "}
-//             <span className="font-semibold text-gray-800">
-//               {user?.role === "BUYER" ? "Buyer" : "Seller"}
-//             </span>{" "}
-//             to{" "}
-//             <span className="font-semibold text-gray-800">{targetRole}</span>?
+//             Are you sure you want to switch your role from {
+//             user?.role === "BUYER" ? t("buyer") : t("seller")
+            
+//             }
 //           </p>
-        
 //         </div>
 //       </Modal>
+//             <SellerRegistrationForm
+//         isOpen={isSellerFormOpen}
+//         onClose={() => setIsSellerFormOpen(false)}
+       
+//       />
 //     </header>
 //   );
 // };

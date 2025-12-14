@@ -71,6 +71,7 @@ export default function LogInForm(): JSX.Element {
       email: data.data.email || "",
       role: data.data.role || data.data.roles?.[0] || "",
       image: data.data.image || "",
+      
     };
     const accessToken = data.data.accessToken || "";
     const refreshToken = data.data.refreshToken || "";
@@ -87,6 +88,8 @@ export default function LogInForm(): JSX.Element {
   const onFinish = async (values: LogInFormValues): Promise<void> => {
     try {
       const data = await logIn(values).unwrap();
+      // console.log("data---------->",data);
+      
       handleAuthSuccess(data);
 
       api.success({
@@ -131,7 +134,7 @@ console.log("google user--->",user);
         phoneNumber: "",
         address: "",
       }).unwrap();
-
+// console.log("data---------->",data);
       handleAuthSuccess(data);
 
       api.success({
