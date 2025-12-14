@@ -145,15 +145,15 @@ const ListedProductCart = ({ product }: ListedProductCartProps) => {
           {discountPercentage > 0 ? (
             <>
               <span className="text-xl font-bold text-orange-500">
-                ${price.toFixed(2)}
+                dz {price.toFixed(2)}
               </span>
               <span className="ml-2 text-gray-500 line-through">
-                ${originalPrice.toFixed(2)}
+                dz {originalPrice.toFixed(2)}
               </span>
             </>
           ) : (
             <span className="text-xl font-bold text-orange-500">
-              ${price.toFixed(2)}
+              dz {price.toFixed(2)}
             </span>
           )}
         </div>
