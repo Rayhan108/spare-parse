@@ -4,8 +4,8 @@ import type { RootState } from "../store";
 
 const baseQuery = fetchBaseQuery({
   // baseUrl: "https://fit-parts-ecommerce-for-vehicle-par.vercel.app/api/v1",
-  baseUrl: "http://10.10.20.26:7080/api/v1",
-  // baseUrl: "http://13.62.189.94:7080/api/v1",
+  // baseUrl: "http://10.10.20.26:7080/api/v1",
+  baseUrl: "http://13.62.189.94:7080/api/v1",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).logInUser?.accessToken;
 
