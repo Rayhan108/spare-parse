@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import ordersIcon from "../../../../../../public/seller/orders-icon.svg";
+import ordersIcon from "../../../../../../../public/seller/orders-icon.svg";
 import { useState, useEffect } from "react";
 import {Pagination, Select, Spin, message } from "antd";
 

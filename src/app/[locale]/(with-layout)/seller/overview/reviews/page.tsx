@@ -1,7 +1,7 @@
 "use client";
 
 import { FaStar } from "react-icons/fa6";
-import ordersIcon from "../../../../../../public/seller/orders-icon.svg";
+import ordersIcon from "../../../../../../../public/seller/orders-icon.svg";
 import Image from "next/image";
 import { Input, Pagination, Spin } from "antd";
 import { CiSearch } from "react-icons/ci";

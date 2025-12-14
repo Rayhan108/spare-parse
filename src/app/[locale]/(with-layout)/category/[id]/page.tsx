@@ -1,6 +1,6 @@
 "use client";
 import { IoArrowForward } from "react-icons/io5";
-import image from '../../../../../public/slide-image.png'
+import image from '../../../../../../public/slide-image.png'
 import ProductCart, { Product } from "@/components/Home/ProductCart";
 import 'swiper/css';
 import { useGetProductsByCategoryQuery } from "@/redux/features/categories/categoriesApi";
