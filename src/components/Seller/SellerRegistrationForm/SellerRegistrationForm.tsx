@@ -30,7 +30,7 @@ interface SellerFormData {
 interface SellerRegistrationFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: () => void; // Optional callback after successful registration
+  onSuccess?: () => void
 }
 
 const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
@@ -417,15 +417,15 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
             >
               Cancel
             </Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              size="large"
-              loading={isLoading}
+            <button
+             
+              type="submit"
+             
+            //   loading={isLoading}
               className="flex-1 h-12 rounded-lg font-semibold bg-gradient-to-r from-orange-500 to-orange-600 border-none hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-200"
             >
               {isLoading ? "Submitting..." : "Submit Application"}
-            </Button>
+            </button>
           </div>
         </form>
 

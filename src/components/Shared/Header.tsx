@@ -68,7 +68,7 @@ const Header = ({ locale }: { locale: string }) => {
 
   // Redux & API
   const user = useSelector((state: RootState) => state.logInUser?.user);
-  const { data: myProfile } = useGetUserProfileQuery(undefined);
+  const { data: myProfile,refetch} = useGetUserProfileQuery(undefined);
   const userImg = myProfile?.data?.image;
   const isSeller = myProfile?.data?.isSeller;
 console.log("is seller ----------->",isSeller);
@@ -182,21 +182,43 @@ console.log("is seller ----------->",isSeller);
   };
 
   //  Handle Switch Role Button Click
-  const handleSwitchRoleClick = () => {
-    setSubMenu(false); // Close submenu
+  // const handleSwitchRoleClick1 = () => {
+  //   refetch()
 
-    // Case 1: User is BUYER and NOT a registered seller
-    // → Show seller registration form
-    if (user?.role === "BUYER" && !isSeller) {
+
+  //   setSubMenu(false); 
+
+  //   if (user?.role === "BUYER" && !isSeller) {
+  //     setIsSellerFormOpen(true);
+  //     return;
+  //   }
+
+ 
+  //   setIsModalVisible(true);
+  // };
+
+const handleSwitchRoleClick = async () => {
+  setSubMenu(false);
+  
+  try {
+
+    const result = await refetch();
+    const currentIsSeller = result.data?.data?.isSeller;
+    
+    console.log("Fresh isSeller value:", currentIsSeller);
+
+    if (user?.role === "BUYER" && !currentIsSeller) {
       setIsSellerFormOpen(true);
       return;
     }
 
-    // Case 2: User is BUYER and IS a registered seller
-    // OR User is SELLER (wants to switch to buyer)
-    // → Show confirmation modal
     setIsModalVisible(true);
-  };
+  } catch (error) {
+    console.error("Failed to fetch profile:", error);
+    message.error("Failed to verify seller status");
+  }
+};
+
 
   //  Confirmation Modal Cancel
   const handleCancel = () => {
@@ -205,6 +227,8 @@ console.log("is seller ----------->",isSeller);
 
   //  Confirmation Modal OK - Execute Role Switch
   const handleConfirmSwitch = async () => {
+       refetch()
+    if (isLoading) return;
     if (!user) return;
 
     try {
@@ -264,8 +288,8 @@ console.log("is seller ----------->",isSeller);
     setIsSellerFormOpen(false);
 
     
-
-    setIsModalVisible(true);
+    // setIsModalVisible(true);
+    refetch()
   };
 
   const targetRole = user?.role === "BUYER" ? "Seller" : "Buyer";
@@ -484,7 +508,7 @@ console.log("is seller ----------->",isSeller);
                 </p>
               </Link>
 
-              {/* ✅ Switch Role - Uses handleSwitchRoleClick */}
+              {/*  Switch Role - Uses handleSwitchRoleClick */}
               <div
                 className="flex items-center gap-3 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={handleSwitchRoleClick}
