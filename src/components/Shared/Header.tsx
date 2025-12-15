@@ -518,7 +518,7 @@ const handleSwitchRoleClick = async () => {
                     <GoVersions className="w-6 h-6 text-white dark:text-black" />
                     <p className="text-md text-white dark:text-black">
                       {/* Show different text based on isSeller */}
-                      {isSeller ? t("swithToSeller") : "Become a Seller"}
+                      {isSeller ? t("swithToSeller") :` ${t("becomeASeller")}`}
                     </p>
                   </>
                 ) : (
