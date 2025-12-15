@@ -15,22 +15,29 @@ import {
 import ProductSkeleton from "@/utils/ProductSkeleton";
 import { useTranslations } from "next-intl";
 
-
 const CategoryComponent = () => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const { data: categoryData, isLoading: catLoading, isError: catError } = useGetAllCategoriesQuery();
-  const { data: productData, isLoading: prodLoading } = useGetProductsByCategoryQuery(
-    selectedCategoryId!,
-    { skip: !selectedCategoryId }
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
   );
-const t = useTranslations('categories')
+  const {
+    data: categoryData,
+    isLoading: catLoading,
+    isError: catError,
+  } = useGetAllCategoriesQuery();
+  const { data: productData, isLoading: prodLoading } =
+    useGetProductsByCategoryQuery(selectedCategoryId!, {
+      skip: !selectedCategoryId,
+    });
+  const t = useTranslations("categories");
   const categories: Category[] = categoryData?.data ?? [];
   const products: Product[] = productData?.data ?? [];
 
   useEffect(() => {
-    if (selectedCategoryId) console.log("Selected Category ID:", selectedCategoryId);
-    if (productData?.data) console.log("Products for selected category:", productData.data);
+    if (selectedCategoryId)
+      console.log("Selected Category ID:", selectedCategoryId);
+    if (productData?.data)
+      console.log("Products for selected category:", productData.data);
   }, [selectedCategoryId, productData]);
 
   return (
@@ -38,18 +45,24 @@ const t = useTranslations('categories')
       {/* Header */}
       <div className="flex gap-2 items-center mb-5">
         <span className="bg-primary h-10 px-[10px] rounded-md"></span>
-        <p className="text-primary font-semibold text-lg">{t('title')}</p>
+        <p className="text-primary font-semibold text-lg">{t("title")}</p>
       </div>
 
       <div className="flex justify-between items-center mb-16">
         <h2 className="text-2xl md:text-3xl lg:text-5xl dark:text-white">
-      {t('browseByCategory')}
+          {t("browseByCategory")}
         </h2>
         <div className="flex items-center gap-4">
-          <button className="bg-[#f5f5f5] p-2 rounded-full" onClick={() => swiper?.slidePrev()}>
+          <button
+            className="bg-[#f5f5f5] p-2 rounded-full"
+            onClick={() => swiper?.slidePrev()}
+          >
             <FiArrowLeft className="cursor-pointer w-6 md:w-8 h-6 md:h-8" />
           </button>
-          <button className="bg-[#f5f5f5] p-2 rounded-full" onClick={() => swiper?.slideNext()}>
+          <button
+            className="bg-[#f5f5f5] p-2 rounded-full"
+            onClick={() => swiper?.slideNext()}
+          >
             <FiArrowRight className="cursor-pointer w-6 md:w-8 h-6 md:h-8" />
           </button>
         </div>
@@ -73,8 +86,9 @@ const t = useTranslations('categories')
           <SwiperSlide key={item.id}>
             <div
               onClick={() => setSelectedCategoryId(item.id)}
-              className={`${item.id === selectedCategoryId ? "bg-primary" : ""
-                } border flex flex-col items-center justify-center h-[170px] rounded cursor-pointer transition dark:border-gray-100`}
+              className={`${
+                item.id === selectedCategoryId ? "bg-primary" : ""
+              } border flex flex-col items-center justify-center h-[170px] rounded cursor-pointer transition dark:border-gray-100`}
             >
               <Image
                 src={item.iconUrl}
@@ -83,11 +97,12 @@ const t = useTranslations('categories')
                 height={500}
                 className="w-16 dark:filter dark:invert dark:brightness-0.5 dark:sepia dark:saturate-200 dark:hue-rotate-90"
               />
-              <h3 className="text-xl text-center mt-4 dark:text-white">{item.name}</h3>
+              <h3 className="text-xl text-center mt-4 dark:text-white">
+                {item.name}
+              </h3>
             </div>
           </SwiperSlide>
         ))}
-
 
         {catLoading &&
           Array.from({ length: 6 }).map((_, index) => (
@@ -95,16 +110,14 @@ const t = useTranslations('categories')
               <div className="border border-gray-200 flex flex-col items-center justify-center h-[170px] rounded animate-pulse bg-gray-200 dark:bg-gray-700">
                 <div className="h-24 w-24 bg-gray-300 rounded mb-2"></div>
                 <div className="h-4 w-3/4 bg-gray-300 rounded mb-1"></div>
-
               </div>
             </SwiperSlide>
           ))}
 
-
         {catError && (
           <SwiperSlide>
             <div className="border flex flex-col items-center justify-center h-[170px] rounded opacity-60">
-              <p className="text-gray-400 text-sm">{t('failedToLoad')}</p>
+              <p className="text-gray-400 text-sm">{t("failedToLoad")}</p>
             </div>
           </SwiperSlide>
         )}
@@ -113,7 +126,6 @@ const t = useTranslations('categories')
       {/* Products Section */}
       {selectedCategoryId && (
         <div className="mt-16">
-
           {prodLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <ProductSkeleton />
@@ -128,7 +140,7 @@ const t = useTranslations('categories')
               ))}
             </div>
           ) : (
-            <p className="text-gray-400">{t('failedToLoad')}</p>
+            <p className="text-gray-400">{t("failedToLoad")}</p>
           )}
         </div>
       )}
