@@ -71,6 +71,6 @@ jobs:
           ssh $EC2_USER@$EC2_HOST "export NVM_DIR=\$HOME/.nvm && [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh && cd ~/applications/hatem_website && pm2 delete hatem_website || true"
 
           # Start the application with PM2
-          ssh $EC2_USER@$EC2_HOST "export NVM_DIR=\$HOME/.nvm && [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh && cd ~/applicationshatem_website && pm2 start npm --name hatem_website -- run start"
+          ssh $EC2_USER@$EC2_HOST "export NVM_DIR=\$HOME/.nvm && [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh && cd ~/applications/hatem_website && pm2 start npm --name hatem_website -- run start"
   
   
