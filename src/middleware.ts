@@ -47,7 +47,7 @@ export const config = {
         // - _next (Next.js internals)
         // - Static files
         '/',
-        '/(en|ar|fr)/:path*',  //  Make sure 'fr' is included
+        '/(fr|en|ar)/:path*',  //  Make sure 'fr' is included
         '/((?!api|_next|_vercel|.*\\..*).*)'
     ],
 };
