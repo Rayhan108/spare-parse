@@ -21,8 +21,16 @@ export function middleware(request: NextRequest) {
         const token = request.cookies.get('hatem-ecommerce-token');
         
         if (!token) {
-            // Get the locale from the pathname
-            const locale = pathname.startsWith('/en') ? 'en' : 'ar';
+            //  Updated: Get the locale from the pathname, default to 'fr'
+            let locale = 'fr'; // Default locale
+            if (pathname.startsWith('/en')) {
+                locale = 'en';
+            } else if (pathname.startsWith('/ar')) {
+                locale = 'ar';
+            } else if (pathname.startsWith('/fr')) {
+                locale = 'fr';
+            }
+            
             const redirectUrl = `/${locale}/auth/login`;
             return NextResponse.redirect(new URL(redirectUrl, request.url));
         }
@@ -39,7 +47,7 @@ export const config = {
         // - _next (Next.js internals)
         // - Static files
         '/',
-        '/(en|ar)/:path*',
+        '/(en|ar|fr)/:path*',  //  Make sure 'fr' is included
         '/((?!api|_next|_vercel|.*\\..*).*)'
     ],
 };

@@ -9,9 +9,9 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "@/utils/navigation";
 
 const languages = [
+  { code: "fr", name: "Français", flag: "🇫🇷" },
   { code: "en", name: "English", flag: "🇺🇸" },
   { code: "ar", name: "العربية", flag: "🇸🇦" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
 ] as const;
 
 type LanguageCode = (typeof languages)[number]["code"];

@@ -2,9 +2,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link, useRouter, usePathname } from "@/i18n/navigation";
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { ConfigProvider, Input, Modal } from "antd";
@@ -28,15 +28,15 @@ import { RootState } from "@/redux/store";
 import { App } from "antd";
 import { useGetUserProfileQuery } from "@/redux/features/auth/authApi";
 import { ChevronDown } from "lucide-react";
-import { usePathname } from "@/utils/navigation";
+
 import { useTranslations } from "next-intl";
 import SellerRegistrationForm from "../Seller/SellerRegistrationForm/SellerRegistrationForm";
 
 // Language configuration
 const languages = [
+  { code: "fr", name: "Français", flag: "🇫🇷" },
   { code: "en", name: "English", flag: "🇺🇸" },
   { code: "ar", name: "العربية", flag: "🇸🇦" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
 ] as const;
 
 type LanguageCode = (typeof languages)[number]["code"];
@@ -134,17 +134,25 @@ console.log("is seller ----------->",isSeller);
     setIsLanguageOpen((prev) => !prev);
   };
 
+  // const handleLanguageSelect = (langCode: LanguageCode) => {
+  //   setIsLanguageOpen(false);
+  //   if (langCode === locale) return;
+
+  //   let pathWithoutLocale = pathname;
+  //   const localePattern = new RegExp(
+  //     `^/(${languages.map((l) => l.code).join("|")})`
+  //   );
+  //   pathWithoutLocale = pathname.replace(localePattern, "") || "/";
+  //   const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+  //   router.push(newPath);
+  // };
+  // ✅ SIMPLIFIED: Language selection with next-intl router
   const handleLanguageSelect = (langCode: LanguageCode) => {
     setIsLanguageOpen(false);
     if (langCode === locale) return;
-
-    let pathWithoutLocale = pathname;
-    const localePattern = new RegExp(
-      `^/(${languages.map((l) => l.code).join("|")})`
-    );
-    pathWithoutLocale = pathname.replace(localePattern, "") || "/";
-    const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
-    router.push(newPath);
+    
+    // ✅ Use next-intl router - it handles locale automatically
+    router.replace(pathname, { locale: langCode });
   };
 
   const handleToggle = () => {
@@ -268,10 +276,13 @@ const handleSwitchRoleClick = async () => {
       message.success(res.message || "Role switched successfully!");
 
       // Redirect to appropriate page
-      router.replace(
-        newRole === "SELLER"
-          ? `/${locale}/seller/overview`
-          : `/${locale}/myorder`
+      // router.replace(
+      //   newRole === "SELLER"
+      //     ? `/${locale}/seller/overview`
+      //     : `/${locale}/myorder`
+      // );
+            router.replace(
+        newRole === "SELLER" ? "/seller/overview" : "/myorder"
       );
     } catch (err: unknown) {
       console.error("Switch Role Error:", err);
@@ -299,7 +310,8 @@ const handleSwitchRoleClick = async () => {
       {/* Top Banner */}
       <div className="bg-[#df5800] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0">
         {t("summerSale")}{" "}
-        <Link href={`/${locale}/product`}>
+        {/* <Link href={`/${locale}/product`}> */}
+        <Link href={`/product`}>
           <span className="ml-2 font-semibold underline cursor-pointer">
             {t("shopNow")}
           </span>
@@ -310,7 +322,8 @@ const handleSwitchRoleClick = async () => {
       <nav className="border-b border-gray-200 dark:border-gray-600 dark:bg-black px-3 lg:px-0">
         <div className="container mx-auto py-4 flex items-center justify-between relative">
           {/* Logo */}
-          <Link href={`/${locale}`}>
+          {/* <Link href={`/${locale}`}> */}
+          <Link href={`/`}>
             <Image
               className="w-42"
               src={isDarkMode ? darkLogo : logo}
@@ -323,26 +336,26 @@ const handleSwitchRoleClick = async () => {
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center justify-between gap-12 text-black dark:text-white">
             <Link
-              href={`/${locale}`}
+              href={`/`}
               className="text-lg hover:text-primary no-underline"
             >
               {t("home")}
             </Link>
             <Link
-              href={`/${locale}/contact`}
+              href={`/contact`}
               className="text-lg hover:text-primary no-underline"
             >
               {t("contact")}
             </Link>
             <Link
-              href={`/${locale}/about`}
+              href={`/about`}
               className="text-lg hover:text-primary no-underline"
             >
               {t("about")}
             </Link>
             {!token && (
               <Link
-                href={`/${locale}/auth/login`}
+                href={`/auth/login`}
                 className="text-lg hover:text-primary no-underline"
               >
                 {t("login")}
@@ -425,7 +438,7 @@ const handleSwitchRoleClick = async () => {
             {user?.role !== "SELLER" && (
               <>
                 <div className="relative">
-                  <Link href={`/${locale}/wishlist`}>
+                  <Link href={`/wishlist`}>
                     <IoIosHeartEmpty className="w-8 h-8 cursor-pointer dark:text-white" />
                   </Link>
                   {!isWishlistLoading && wishlistCount > 0 && (
@@ -436,7 +449,7 @@ const handleSwitchRoleClick = async () => {
                 </div>
 
                 <div className="relative">
-                  <Link href={`/${locale}/cart`}>
+                  <Link href={`/cart`}>
                     <PiShoppingCartLight className="w-8 h-8 cursor-pointer dark:text-white" />
                   </Link>
                   {!isCartLoading && cartCount > 0 && (
@@ -499,7 +512,7 @@ const handleSwitchRoleClick = async () => {
 
               {/* Manage Account */}
               <Link
-                href={`/${locale}/myprofile`}
+                href={`/myprofile`}
                 className="flex items-center gap-3 mb-4"
               >
                 <GoPerson className="w-6 h-6 text-white dark:text-black" />
@@ -535,7 +548,7 @@ const handleSwitchRoleClick = async () => {
               {user?.role === "SELLER" ? (
                 <div className="flex flex-col gap-2 mb-4">
                   <Link
-                    href={`/${locale}/seller/myproduct`}
+                    href={`/seller/myproduct`}
                     className="flex items-center gap-3"
                   >
                     <LuShoppingBag className="w-6 h-6 text-white dark:text-black" />
@@ -544,7 +557,7 @@ const handleSwitchRoleClick = async () => {
                     </p>
                   </Link>
                   <Link
-                    href={`/${locale}/seller/overview`}
+                    href={`/seller/overview`}
                     className="flex items-center gap-3 mt-1"
                   >
                     <GoVersions className="w-6 h-6 text-white dark:text-black" />
@@ -555,7 +568,7 @@ const handleSwitchRoleClick = async () => {
                 </div>
               ) : (
                 <Link
-                  href={`/${locale}/myorder`}
+                  href={`/myorder`}
                   className="flex items-center gap-3 mb-4"
                 >
                   <LuShoppingBag className="w-6 h-6 text-white dark:text-black" />
