@@ -52,25 +52,25 @@ jobs:
          ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
           # Create Deployment Directory
-          ssh $EC2_USER@$EC2_HOST "mkdir -p ~/hatem_website"
+          ssh $EC2_USER@$EC2_HOST "mkdir -p ~/applications/hatem_website"
 
           # Copy Files to EC2 instances
           rsync -avz \
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='.github' \
-            . $EC2_USER@$EC2_HOST:~/hatem_website/
+            . $EC2_USER@$EC2_HOST:~/applications/hatem_website/
           
           # ✅ Create .env file on EC2 from the single GitHub secret
-          ssh $EC2_USER@$EC2_HOST "echo \"$ENV_FILE\" > ~/hatem_website/.env"
+          ssh $EC2_USER@$EC2_HOST "echo \"$ENV_FILE\" > ~/applications/hatem_website/.env"
           
           # install production dependencies on EC2
-          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=\$PATH:/home/ubuntu/.local/share/fnm/aliases/default/bin && npm install --frozen-lockfile"
+          ssh $EC2_USER@$EC2_HOST "export NVM_DIR=\$HOME/.nvm && [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh && cd ~/applications/hatem_website && npm install --frozen-lockfile"
           
           # Stop existing PM2 process if it exists
-          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=\$PATH:/home/ubuntu/.local/share/fnm/aliases/default/bin && pm2 delete hatem_website || true"
+          ssh $EC2_USER@$EC2_HOST "export NVM_DIR=\$HOME/.nvm && [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh && cd ~/applications/hatem_website && pm2 delete hatem_website || true"
 
           # Start the application with PM2
-          ssh $EC2_USER@$EC2_HOST "cd ~/hatem_website && export PATH=\$PATH:/home/ubuntu/.local/share/fnm/aliases/default/bin && pm2 start npm --name hatem_website -- run start"
+          ssh $EC2_USER@$EC2_HOST "export NVM_DIR=\$HOME/.nvm && [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh && cd ~/applications/hatem_website && pm2 start npm --name hatem_website -- run start"
   
   
