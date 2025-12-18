@@ -62,7 +62,7 @@ export default function LogInForm(): JSX.Element {
   }, [router]);
 
   const handleAuthSuccess = (data: AuthResponseData): void => {
-    console.log("data from auth success------>",data);
+    // console.log("data from auth success------>",data);
     if (!data?.data) return;
 
     const userData = {
@@ -75,8 +75,8 @@ export default function LogInForm(): JSX.Element {
     };
     const accessToken = data.data.accessToken || "";
     const refreshToken = data.data.refreshToken || "";
-    console.log("access token from login page--->",accessToken);
-    console.log("refresh token from login page--->",refreshToken);
+    // console.log("access token from login page--->",accessToken);
+    // console.log("refresh token from login page--->",refreshToken);
 
     dispatch(setUser({ user: userData, accessToken, refreshToken }));
     Cookies.set("hatem-ecommerce-token", accessToken, { expires: 7 });
@@ -116,7 +116,7 @@ export default function LogInForm(): JSX.Element {
   const handleGoogleLogin = async (): Promise<void> => {
     try {
       const user = await signInWithGoogle();
-console.log("google user--->",user);
+// console.log("google user--->",user);
       if (!user) {
         api.warning({
           message: "Cancelled",

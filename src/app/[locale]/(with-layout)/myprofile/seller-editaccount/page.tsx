@@ -163,7 +163,7 @@ const EditAccount = () => {
 
   const { data: userData, isLoading: isLoadingProfile, isError } = useGetUserProfileQuery(undefined);
   const [editProfile, { isLoading: isUpdating }] = useEditUserProfileMutation();
-  console.log("User data:", userData);
+  // console.log("User data:", userData);
 
   // Populate form when user data is loaded
   useEffect(() => {

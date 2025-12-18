@@ -34,7 +34,7 @@ export default function OtpVerify(): JSX.Element {
     const token = localStorage.getItem("otpToken");
     setOtpToken(token);
   }, []);
-  console.log("OTP Token:", otpToken);
+  // console.log("OTP Token:", otpToken);
 
   useEffect(() => {
     if (timer > 0) {

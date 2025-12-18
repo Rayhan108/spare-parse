@@ -283,9 +283,9 @@ const CheckoutPage = () => {
 
   // ============ MAIN FORM SUBMIT ============
   const onFinish = async (values: FieldType) => {
-    console.log("=".repeat(50));
-    console.log(" CHECKOUT FORM SUBMITTED");
-    console.log("=".repeat(50));
+    // console.log("=".repeat(50));
+    // console.log(" CHECKOUT FORM SUBMITTED");
+    // console.log("=".repeat(50));
 
     const { name, street, apartment, city, phone, email, save } = values;
 
@@ -352,7 +352,7 @@ const CheckoutPage = () => {
       // ---------- 1st API Call: BILLING ----------
       if (save) {
         setSavingStatus("Saving billing address...");
-        console.log(" ========== BILLING ADDRESS API CALL ==========");
+        // console.log(" ========== BILLING ADDRESS API CALL ==========");
 
         const billingData = {
           addressLine: street!,
@@ -363,7 +363,7 @@ const CheckoutPage = () => {
           type: "BILLING" as const,
         };
 
-        console.log(" BILLING Data:", billingData);
+        // console.log(" BILLING Data:", billingData);
 
         if (billingAddress?.id) {
           const res = await updateAddress({
@@ -382,7 +382,7 @@ const CheckoutPage = () => {
       // ---------- 2nd API Call: SHIPPING ----------
       if (shippingValues.saveShipping) {
         setSavingStatus("Saving shipping address...");
-        console.log("\n2️ ========== SHIPPING ADDRESS API CALL ==========");
+        // console.log("\n2️ ========== SHIPPING ADDRESS API CALL ==========");
 
         let shippingData;
 
@@ -406,7 +406,7 @@ const CheckoutPage = () => {
           };
         }
 
-        console.log(" SHIPPING Data:", shippingData);
+        // console.log(" SHIPPING Data:", shippingData);
 
         if (shippingAddressData?.id) {
           const res = await updateAddress({
@@ -422,7 +422,7 @@ const CheckoutPage = () => {
         }
       }
 
-      console.log("========== BOTH API CALLS COMPLETED ==========\n");
+      // console.log("========== BOTH API CALLS COMPLETED ==========\n");
 
       // ========================================
       //  SAME API CALLED TWICE - END

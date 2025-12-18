@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -120,17 +121,17 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
   const [modelId, setModelId] = useState<string>();
   const [modelName, setModelName] = useState<string>();
   const [hp, setHp] = useState<string>();
-  console.log("brand id ", brandId);
-  console.log(brandName);
-  console.log(modelName);
+  // console.log("brand id ", brandId);
+  // console.log(brandName);
+  // console.log(modelName);
 
   const [engineId, setEngineId] = useState<string>();
 
   const [fitVehicles, setFitVehicles] = useState<string[]>([]);
 
-  console.log("fitengineid", fitVehicles);
+  // console.log("fitengineid", fitVehicles);
 
-  console.log("engineid ", engineId);
+  // console.log("engineid ", engineId);
 
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: currentYear - 1976 + 1 }, (_, i) => {
@@ -407,7 +408,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
 
       // Step 1: Collect form values
       const values = { ...formData, ...form.getFieldsValue() };
-      console.log("Form values:", values);
+      // console.log("Form values:", values);
 
       // Step 2: Process sections and fields
       const updatedSections = sections.map((section, sIndex) => {
@@ -491,7 +492,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
       if (profilePic) formDataToSend.append("productImages", profilePic); // If there is a profile picture, include it
 
       // Step 5: Log the final payload for debugging before sending the request
-      console.log("Final payload before upload:");
+      // console.log("Final payload before upload:");
       formDataToSend.forEach((v, k) => console.log(k, v));
 
       // Step 6: Send the product data to the API for uploading

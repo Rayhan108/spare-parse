@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage, isSupported } from "firebase/messaging";
@@ -26,14 +27,14 @@ export const requestForToken = async (): Promise<string | null> => {
     });
 
     if (token) {
-      console.log("✅ FCM Token:", token);
+      // console.log(" FCM Token:", token);
       return token;
     } else {
-      console.warn("⚠️ No registration token available. Request permission first.");
+      // console.warn("No registration token available. Request permission first.");
       return null;
     }
   } catch (err) {
-    console.error("❌ Error getting FCM token:", err);
+    // console.error(" Error getting FCM token:", err);
     return null;
   }
 };

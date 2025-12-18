@@ -201,14 +201,14 @@ export default function SellerSignUp(): JSX.Element {
                 <div className="mt-4">
                     <button
                         className=" w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md mb-4 cursor-pointer"
-                        onClick={(): void => console.log("Google sign up clicked")}
+                        // onClick={(): void => console.log("Google sign up clicked")}
                     >
                         <FcGoogle size={25} className="mr-2" /> Sign up with Google
                     </button>
 
                     <button
                         className=" w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md cursor-pointer "
-                        onClick={(): void => console.log("Facebook sign up clicked")}
+                        // onClick={(): void => console.log("Facebook sign up clicked")}
                     >
                         <FaFacebook size={25} className="mr-2 text-[#0689ff]" /> Sign up with Facebook
                     </button>

@@ -20,7 +20,7 @@ const AccountDetails = () => {
     (state) => state.logInUser.user
   );
   const {data:myProfile}=useGetUserProfileQuery(undefined)
-  console.log("my profile -->",myProfile);
+  // console.log("my profile -->",myProfile);
   const { data: addressData, isLoading: loadingAddresses } = useGetAddressesQuery();
   const shippingAddress = addressData?.data.find((addr) => addr.type === "SHIPPING");
 

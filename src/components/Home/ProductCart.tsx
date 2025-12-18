@@ -49,7 +49,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
   const [addToWishlist] = useAddToWishlistMutation();
   const [deleteWishlistItem] = useDeleteWishlistItemMutation();
   const [api, contextHolder] = notification.useNotification();
-console.log("wishlist check--->",wishlist);
+// console.log("wishlist check--->",wishlist);
   const wishlistItem: WishlistItem | undefined = wishlist?.find(
     (item: WishlistItem) => item.productId === product.id
   );

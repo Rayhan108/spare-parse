@@ -148,7 +148,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
           >
             <button
               type="button"
-              onClick={() => console.log("Camera clicked")}
+              // onClick={() => console.log("Camera clicked")}
               className="flex items-center justify-center"
             >
               <FaCamera className="text-white mt-[5px] w-6" />

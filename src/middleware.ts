@@ -10,7 +10,7 @@ const protectedRoutes = ['/checkout'];
 
 export function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
-    console.log("midleware");
+    // console.log("midleware");
     // Check if it's a protected route (accounting for locale prefix)
     const isProtectedRoute = protectedRoutes.some(route => 
         pathname.includes(route)
@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
             }
             
             const redirectUrl = `/${locale}/auth/login`;
-            console.log("locale from middleware-------->",locale);
+            // console.log("locale from middleware-------->",locale);
             return NextResponse.redirect(new URL(redirectUrl, request.url));
         }
     }

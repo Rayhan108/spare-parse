@@ -412,7 +412,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 // Log formData
 // eslint-disable-next-line prefer-const
 for (let [key, value] of formData.entries()) {
-  console.log(`${key}:`, value);
+  // console.log(`${key}:`, value);
 }
 
 

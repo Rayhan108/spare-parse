@@ -71,7 +71,7 @@ const Header = ({ locale }: { locale: string }) => {
   const { data: myProfile,refetch} = useGetUserProfileQuery(undefined);
   const userImg = myProfile?.data?.image;
   const isSeller = myProfile?.data?.isSeller;
-console.log("is seller ----------->",isSeller);
+// console.log("is seller ----------->",isSeller);
   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
   const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(
@@ -213,7 +213,7 @@ const handleSwitchRoleClick = async () => {
     const result = await refetch();
     const currentIsSeller = result.data?.data?.isSeller;
     
-    console.log("Fresh isSeller value:", currentIsSeller);
+    // console.log("Fresh isSeller value:", currentIsSeller);
 
     if (user?.role === "BUYER" && !currentIsSeller) {
       setIsSellerFormOpen(true);
