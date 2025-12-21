@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse, NextRequest } from "next/server";
 import createIntlMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
@@ -31,7 +32,7 @@ export function middleware(request: NextRequest) {
                 locale = 'fr';
             }
             
-            const redirectUrl = `/${locale}/auth/login`;
+            const redirectUrl = `/auth/login`;
             // console.log("locale from middleware-------->",locale);
             return NextResponse.redirect(new URL(redirectUrl, request.url));
         }

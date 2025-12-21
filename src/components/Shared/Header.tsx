@@ -174,7 +174,7 @@ const Header = ({ locale }: { locale: string }) => {
     localStorage.removeItem("hatem-ecommerce-token");
     localStorage.removeItem("hatem-seller-token");
     localStorage.removeItem("hatem-ecommerce-refreshToken");
-    router.replace(`/${locale}/auth/login`);
+    router.replace(`/auth/login`);
   };
 
   const handleInputChange = (e: any) => {
