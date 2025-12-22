@@ -363,7 +363,7 @@ const handleSwitchRoleClick = async () => {
             )}
             {user?.role === "SELLER" && (
               <Link
-                href={`/${locale}/seller/overview`}
+                href={`/seller/overview`}
                 className="text-lg hover:text-primary no-underline"
               >
                 {t("dashboard")}
