@@ -14,7 +14,6 @@ import {
 } from "@ant-design/icons";
 import type { UploadFile, UploadProps } from "antd";
 import Image from "next/image";
-import { useTranslations } from "next-intl"; // Import translations
 
 import { useGetUserProfileQuery } from "@/redux/features/auth/authApi";
 import { useRegisterSellerMutation } from "@/redux/features/seller/profile/ProfileApi";
@@ -31,7 +30,7 @@ interface SellerFormData {
 interface SellerRegistrationFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: () => void;
+  onSuccess?: () => void
 }
 
 const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
@@ -39,9 +38,8 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const t = useTranslations("SellerForm"); // Hook for translations
   const { message } = App.useApp();
-
+  
   // API Hooks
   const [registerSeller, { isLoading }] = useRegisterSellerMutation();
   const { refetch: refetchProfile } = useGetUserProfileQuery(undefined);
@@ -70,10 +68,10 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
     if (file) {
       // Validate file size (2MB limit)
       if (file.originFileObj && file.originFileObj.size > 2 * 1024 * 1024) {
-        message.error(t("logo.errorSize"));
+        message.error("Logo file size must be less than 2MB!");
         return;
       }
-
+      
       setLogoFile(file);
       if (file.originFileObj) {
         const reader = new FileReader();
@@ -92,7 +90,7 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
   const handleFormSubmit = async (data: SellerFormData) => {
     // Validate logo
     if (!logoFile?.originFileObj) {
-      message.error(t("logo.errorRequired"));
+      message.error("Please upload your company logo!");
       return;
     }
 
@@ -111,24 +109,25 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
 
     try {
       const res = await registerSeller(formData).unwrap();
-
-      message.success(res?.message || t("messages.success"));
-
+      
+      message.success(res?.message || "Seller registration successful! 🎉");
+      
       // Refresh profile to update isSeller status
       await refetchProfile();
-
+      
       // Reset form and close modal
       handleReset();
       onClose();
-
+      
       // Call optional success callback
       onSuccess?.();
+      
     } catch (error: any) {
       console.error("Seller registration error:", error);
       message.error(
-        error?.data?.message ||
-          error?.message ||
-          t("messages.errorDefault")
+        error?.data?.message || 
+        error?.message || 
+        "Failed to register as seller. Please try again."
       );
     }
   };
@@ -171,9 +170,9 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
               <ShopOutlined className="text-2xl" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold m-0">{t("title")}</h2>
+              <h2 className="text-2xl font-bold m-0">Become a Seller</h2>
               <p className="text-orange-100 m-0 text-sm">
-                {t("subtitle")}
+                Complete your seller profile to start selling
               </p>
             </div>
           </div>
@@ -184,7 +183,7 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
           {/* Logo Upload Section */}
           <div className="mb-8">
             <label className="block text-gray-700 font-semibold mb-3 text-base">
-              {t("logo.label")} <span className="text-red-500">*</span>
+              Company Logo <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center gap-6">
               {/* Logo Preview */}
@@ -199,7 +198,7 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
                 ) : (
                   <div className="text-center p-2">
                     <CloudUploadOutlined className="text-4xl text-orange-400" />
-                    <p className="text-xs text-gray-500 mt-1">{t("logo.uploadText")}</p>
+                    <p className="text-xs text-gray-500 mt-1">Upload Logo</p>
                   </div>
                 )}
               </div>
@@ -221,11 +220,11 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
                     disabled={isLoading}
                     className="border-orange-400 text-orange-600 hover:bg-orange-50 hover:border-orange-500 h-12 px-6 font-medium"
                   >
-                    {logoFile ? t("logo.change") : t("logo.choose")}
+                    {logoFile ? "Change Logo" : "Choose Logo"}
                   </Button>
                 </Upload>
                 <p className="text-gray-400 text-xs mt-2">
-                  {t("logo.formats")}
+                  PNG, JPG or WEBP (Max 2MB)
                 </p>
               </div>
             </div>
@@ -236,29 +235,29 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
             {/* Company Name */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
-                {t("fields.companyName.label")} <span className="text-red-500">*</span>
+                Company Name <span className="text-red-500">*</span>
               </label>
               <Controller
                 name="companyName"
                 control={control}
                 rules={{
-                  required: t("fields.companyName.errorRequired"),
+                  required: "Company name is required",
                   minLength: {
                     value: 2,
-                    message: t("fields.companyName.errorMin"),
+                    message: "Company name must be at least 2 characters",
                   },
                   maxLength: {
                     value: 100,
-                    message: t("fields.companyName.errorMax"),
+                    message: "Company name must be less than 100 characters",
                   },
                 }}
                 render={({ field }) => (
                   <Input
                     {...field}
                     prefix={
-                      <ShopOutlined className="text-orange-400 text-lg mx-2" />
+                      <ShopOutlined className="text-orange-400 text-lg mr-2" />
                     }
-                    placeholder={t("fields.companyName.placeholder")}
+                    placeholder="Enter your company name"
                     size="large"
                     disabled={isLoading}
                     status={errors.companyName ? "error" : ""}
@@ -276,25 +275,25 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
             {/* Contact Info */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
-                {t("fields.contactInfo.label")} <span className="text-red-500">*</span>
+                Contact Information <span className="text-red-500">*</span>
               </label>
               <Controller
                 name="contactInfo"
                 control={control}
                 rules={{
-                  required: t("fields.contactInfo.errorRequired"),
+                  required: "Contact information is required",
                   minLength: {
                     value: 5,
-                    message: t("fields.contactInfo.errorValid"),
+                    message: "Please provide valid contact information",
                   },
                 }}
                 render={({ field }) => (
                   <Input
                     {...field}
                     prefix={
-                      <PhoneOutlined className="text-orange-400 text-lg mx-2" />
+                      <PhoneOutlined className="text-orange-400 text-lg mr-2" />
                     }
-                    placeholder={t("fields.contactInfo.placeholder")}
+                    placeholder="Email, Phone (e.g., support@company.com, +1-xxx-xxx-xxxx)"
                     size="large"
                     disabled={isLoading}
                     status={errors.contactInfo ? "error" : ""}
@@ -312,22 +311,22 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
             {/* Address */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
-                {t("fields.address.label")} <span className="text-red-500">*</span>
+                Business Address <span className="text-red-500">*</span>
               </label>
               <Controller
                 name="address"
                 control={control}
                 rules={{
-                  required: t("fields.address.errorRequired"),
+                  required: "Address is required",
                   minLength: {
                     value: 10,
-                    message: t("fields.address.errorValid"),
+                    message: "Please enter a complete address",
                   },
                 }}
                 render={({ field }) => (
                   <TextArea
                     {...field}
-                    placeholder={t("fields.address.placeholder")}
+                    placeholder="Enter your full business address"
                     rows={3}
                     disabled={isLoading}
                     status={errors.address ? "error" : ""}
@@ -344,7 +343,7 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
               <div className="flex items-center gap-1 mt-1 text-gray-400">
                 <HomeOutlined className="text-sm" />
                 <span className="text-xs">
-                  {t("fields.address.hint")}
+                  Include street, city, state, and country
                 </span>
               </div>
             </div>
@@ -352,22 +351,22 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
             {/* Payout Info */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
-                {t("fields.payoutInfo.label")} <span className="text-red-500">*</span>
+                Payout Information <span className="text-red-500">*</span>
               </label>
               <Controller
                 name="payoutInfo"
                 control={control}
                 rules={{
-                  required: t("fields.payoutInfo.errorRequired"),
+                  required: "Payout information is required",
                   minLength: {
                     value: 10,
-                    message: t("fields.payoutInfo.errorValid"),
+                    message: "Please provide complete payout details",
                   },
                 }}
                 render={({ field }) => (
                   <TextArea
                     {...field}
-                    placeholder={t("fields.payoutInfo.placeholder")}
+                    placeholder="Bank Transfer - Account No: XXXXXXXXX, Routing No: XXXXXXXXX"
                     rows={3}
                     disabled={isLoading}
                     status={errors.payoutInfo ? "error" : ""}
@@ -384,7 +383,7 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
               <div className="flex items-center gap-1 mt-1 text-gray-400">
                 <BankOutlined className="text-sm" />
                 <span className="text-xs">
-                  {t("fields.payoutInfo.hint")}
+                  Your earnings will be transferred to this account
                 </span>
               </div>
             </div>
@@ -395,18 +394,15 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
             <div className="flex items-start gap-3">
               <CheckCircleOutlined className="text-blue-500 text-lg mt-0.5" />
               <p className="text-gray-600 text-sm m-0">
-                {t.rich("terms.text", {
-                  terms: (chunks) => (
-                    <span className="text-orange-600 font-medium cursor-pointer hover:underline">
-                      {chunks}
-                    </span>
-                  ),
-                  privacy: (chunks) => (
-                    <span className="text-orange-600 font-medium cursor-pointer hover:underline">
-                      {chunks}
-                    </span>
-                  ),
-                })}
+                By submitting this form, you agree to our{" "}
+                <span className="text-orange-600 font-medium cursor-pointer hover:underline">
+                  Seller Terms & Conditions
+                </span>{" "}
+                and{" "}
+                <span className="text-orange-600 font-medium cursor-pointer hover:underline">
+                  Privacy Policy
+                </span>
+                .
               </p>
             </div>
           </div>
@@ -419,14 +415,16 @@ const SellerRegistrationForm: React.FC<SellerRegistrationFormProps> = ({
               disabled={isLoading}
               className="flex-1 h-12 rounded-lg font-semibold text-gray-600 border-gray-300 hover:border-gray-400"
             >
-              {t("buttons.cancel")}
+              Cancel
             </Button>
             <button
+             
               type="submit"
-              className="flex-1 h-12 rounded-lg font-semibold bg-gradient-to-r from-orange-500 to-orange-600 border-none hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-200 text-white cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-              disabled={isLoading}
+             
+            //   loading={isLoading}
+              className="flex-1 h-12 rounded-lg font-semibold bg-gradient-to-r from-orange-500 to-orange-600 border-none hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-200"
             >
-              {isLoading ? t("buttons.submitting") : t("buttons.submit")}
+              {isLoading ? "Submitting..." : "Submit Application"}
             </button>
           </div>
         </form>

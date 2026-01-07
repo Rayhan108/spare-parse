@@ -169,6 +169,62 @@
       "location": "Emplacement"
     },
     "profileName": "{fullName}"
+  },
+  
+  "SellerForm": {
+    "title": "Devenir Vendeur",
+    "subtitle": "Complétez votre profil de vendeur pour commencer à vendre",
+    "logo": {
+      "label": "Logo de l'entreprise",
+      "uploadText": "Télécharger le logo",
+      "change": "Changer le logo",
+      "choose": "Choisir le logo",
+      "formats": "PNG, JPG ou WEBP (Max 2Mo)",
+      "errorSize": "La taille du fichier doit être inférieure à 2Mo !",
+      "errorRequired": "Veuillez télécharger le logo de votre entreprise !"
+    },
+    "fields": {
+      "companyName": {
+        "label": "Nom de l'entreprise",
+        "placeholder": "Entrez le nom de votre entreprise",
+        "errorRequired": "Le nom de l'entreprise est requis",
+        "errorMin": "Le nom doit comporter au moins 2 caractères",
+        "errorMax": "Le nom doit comporter moins de 100 caractères"
+      },
+      "contactInfo": {
+        "label": "Coordonnées",
+        "placeholder": "Email, Téléphone ",
+        "errorRequired": "Les coordonnées sont requises",
+        "errorValid": "Veuillez fournir des coordonnées valides"
+      },
+      "address": {
+        "label": "Adresse professionnelle",
+        "placeholder": "Entrez votre adresse professionnelle complète",
+        "hint": "Inclure rue, ville, région et pays",
+        "errorRequired": "L'adresse est requise",
+        "errorValid": "Veuillez entrer une adresse complète"
+      },
+      "payoutInfo": {
+        "label": "Informations de paiement",
+        "placeholder": "Virement bancaire - N° Compte : XXXXXXXXX, Code Banque : XXXXXXXXX",
+        "hint": "Vos gains seront transférés sur ce compte",
+        "errorRequired": "Les informations de paiement sont requises",
+        "errorValid": "Veuillez fournir des détails de paiement complets"
+      }
+    },
+    "terms": {
+      "text": "En soumettant ce formulaire, vous acceptez nos <terms>Conditions Générales de Vente</terms> et notre <privacy>Politique de Confidentialité</privacy>."
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "submit": "Soumettre la candidature",
+      "submitting": "Envoi en cours..."
+    },
+    "messages": {
+      "success": "Inscription vendeur réussie ! 🎉",
+      "errorDefault": "Échec de l'inscription en tant que vendeur. Veuillez réessayer."
+    }
   }
-
 }
+
+

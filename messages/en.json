@@ -174,13 +174,68 @@
       "location": "Location"
     },
     "profileName": "{fullName}"
+  },
+
+
+  "SellerForm": {
+    "title": "Become a Seller",
+    "subtitle": "Complete your seller profile to start selling",
+    "logo": {
+      "label": "Company Logo",
+      "uploadText": "Upload Logo",
+      "change": "Change Logo",
+      "choose": "Choose Logo",
+      "formats": "PNG, JPG or WEBP (Max 2MB)",
+      "errorSize": "Logo file size must be less than 2MB!",
+      "errorRequired": "Please upload your company logo!"
+    },
+    "fields": {
+      "companyName": {
+        "label": "Company Name",
+        "placeholder": "Enter your company name",
+        "errorRequired": "Company name is required",
+        "errorMin": "Company name must be at least 2 characters",
+        "errorMax": "Company name must be less than 100 characters"
+      },
+      "contactInfo": {
+        "label": "Contact Information",
+        "placeholder": "Email, Phone ",
+        "errorRequired": "Contact information is required",
+        "errorValid": "Please provide valid contact information"
+      },
+      "address": {
+        "label": "Business Address",
+        "placeholder": "Enter your full business address",
+        "hint": "Include street, city, state, and country",
+        "errorRequired": "Address is required",
+        "errorValid": "Please enter a complete address"
+      },
+      "payoutInfo": {
+        "label": "Payout Information",
+        "placeholder": "Bank Transfer - Account No: XXXXXXXXX, Routing No: XXXXXXXXX",
+        "hint": "Your earnings will be transferred to this account",
+        "errorRequired": "Payout information is required",
+        "errorValid": "Please provide complete payout details"
+      }
+    },
+    "terms": {
+      "text": "By submitting this form, you agree to our <terms>Seller Terms & Conditions</terms> and <privacy>Privacy Policy</privacy>."
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "submit": "Submit Application",
+      "submitting": "Submitting..."
+    },
+    "messages": {
+      "success": "Seller registration successful! 🎉",
+      "errorDefault": "Failed to register as seller. Please try again."
+    }
   }
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
