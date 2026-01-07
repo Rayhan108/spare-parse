@@ -17,7 +17,7 @@ export default async function LngLayout({ children, params }: {
         return notFound()
     }
     return (
-        <div lang={locale}>
+        <div lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
             <NextIntlClientProvider>
                 {children}
             </NextIntlClientProvider>
