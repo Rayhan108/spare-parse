@@ -139,7 +139,7 @@ const Orders = () => {
                         {firstProduct?.productName || "-"}
                       </p>
                       <p className="text-gray-500 text-sm truncate">
-                        {`Price: $${firstProduct?.price || 0}`}
+                        {`Price: dz ${firstProduct?.price || 0}`}
                       </p>
                     </div>
                   </div>

@@ -282,7 +282,7 @@ const handleSwitchRoleClick = async () => {
       //     : `/${locale}/myorder`
       // );
             router.replace(
-        newRole === "SELLER" ? "/seller/overview" : "/myorder"
+        newRole === "SELLER" ? "/seller/overview/orders" : "/myorder"
       );
     } catch (err: unknown) {
       console.error("Switch Role Error:", err);
@@ -363,7 +363,7 @@ const handleSwitchRoleClick = async () => {
             )}
             {user?.role === "SELLER" && (
               <Link
-                href={`/seller/overview`}
+                href={`/seller/overview/orders`}
                 className="text-lg hover:text-primary no-underline"
               >
                 {t("dashboard")}
@@ -557,7 +557,7 @@ const handleSwitchRoleClick = async () => {
                     </p>
                   </Link>
                   <Link
-                    href={`/seller/overview`}
+                    href={`/seller/overview/orders`}
                     className="flex items-center gap-3 mt-1"
                   >
                     <GoVersions className="w-6 h-6 text-white dark:text-black" />

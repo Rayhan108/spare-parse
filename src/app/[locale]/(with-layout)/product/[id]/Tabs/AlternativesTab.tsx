@@ -115,7 +115,7 @@ export default function AlternativesTab({ similarProducts }: AlternativesTabProp
 
               <div className="flex flex-col items-end justify-between gap-4" onClick={(e) => e.stopPropagation()}>
                 <div className="text-right">
-                  <p className="text-lg font-semibold text-foreground">€{alt.price.toFixed(2)}</p>
+                  <p className="text-lg font-semibold text-foreground">dz {alt.price.toFixed(2)}</p>
                   {alt.dispatch && <p className="text-sm text-green-600 font-medium">{alt.dispatch}</p>}
                 </div>
 
