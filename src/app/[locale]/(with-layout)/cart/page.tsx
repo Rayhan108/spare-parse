@@ -163,7 +163,7 @@ const Cart = () => {
                         </div>
 
                         {/* Table Body */}
-                        {cartItems.map((item: CartItem) => {
+                        {cartItems?.map((item: CartItem) => {
                             const checked = selectedIds.includes(item.id);
                             return (
                                 <div

@@ -12,7 +12,7 @@ const CategoryProductCart = () => {
             <div className='mt-6 pb-5'>
                 <h2 className=' text-md md:text-xl mb-4 font-semibold dark:text-white'>Curology Product Set</h2>
                 <div className=' flex flex-col md:flex-row items-start  md:text-lg md:items-center gap-3 font-semibold'>
-                    <p className=' text-primary'>$500</p>
+                    <p className=' text-primary'>dz500</p>
                     <Rate disabled defaultValue={4} />
                     <p className=' dark:text-white'>(120)</p>
                 </div>

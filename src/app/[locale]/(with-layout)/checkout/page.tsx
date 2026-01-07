@@ -251,23 +251,23 @@ const CheckoutPage = () => {
         <body>
           <div class="receipt-header">
             <h2>Order Receipt</h2>
-            <p>Order ID: dz{checkout?.id}</p>
-            <p>Date: dz{new Date().toLocaleDateString()}</p>
+            <p>Order ID: dz${checkout?.id}</p>
+            <p>Date: dz${new Date().toLocaleDateString()}</p>
           </div>
           <div>
             ${checkout?.items
               .map(
                 (item: CheckoutItem) => `
               <div class="item-row">
-                <div>${item.product.productName} x ${item.quantity}</div>
-                <div>$${item.product.price * item.quantity}</div>
+                <div>dz{item.product.productName} x dz{item.quantity}</div>
+                <div>dz${item.product.price * item.quantity}</div>
               </div>
             `
               )
               .join("")}
           </div>
           <div class="receipt-total">
-            <div class="receipt-item"><span>Subtotal:</span><span>dz{checkout?.totalAmount}</span></div>
+            <div class="receipt-item"><span>Subtotal:</span><span>dz${checkout?.totalAmount}</span></div>
             <div class="receipt-item"><span>Shipping:</span><span>${
               shippingCost > 0 ? `dz ${shippingCost}` : "Free"
             }</span></div>
@@ -918,7 +918,7 @@ const CheckoutPage = () => {
                       </span>
                       <span className="font-medium dark:text-white">
                         {calculateShippingCost(checkout.id) > 0
-                          ? `$${calculateShippingCost(checkout.id)}`
+                          ? `dz${calculateShippingCost(checkout.id)}`
                           : "Select shipping"}
                       </span>
                     </div>

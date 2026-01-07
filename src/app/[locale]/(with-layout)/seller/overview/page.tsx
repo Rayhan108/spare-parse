@@ -87,10 +87,10 @@ const t = useTranslations('sellerOverview')
       return {
         id: order.orderId,
         customerName: order.customerName || "Unknown",
-        customerImage: order.customerImage || "https://via.placeholder.com/40",
+        customerImage: order.customerImage ,
         createdAt: order.createdAt,
         productName: firstProduct?.productName || "-",
-        productDescription: `Price: $${firstProduct?.price || 0}`,
+        productDescription: `Price: dz${firstProduct?.price || 0}`,
         productImages: firstProduct?.productImages || [],
         timeAgo: getTimeAgo(order.createdAt),
         status: order.status || "PENDING",
@@ -104,10 +104,10 @@ const t = useTranslations('sellerOverview')
       id: index + 1,
       name: review.customerName || "Unknown User",
       date: new Date(review.createdAt).toLocaleDateString(),
-      userImage: review.customerImage || "https://via.placeholder.com/40",
+      userImage: review.customerImage ,
       productName: review.productName || "Product Name",
       productDescription: review.comment || "",
-      productImage: review.productImages?.[0] || "https://via.placeholder.com/60",
+      productImage: review.productImages?.[0] ,
       timeAgo: getTimeAgo(review.createdAt),
     }))
     : [];

@@ -788,7 +788,7 @@ for (let [key, value] of formData.entries()) {
                     >
                       <span>
                         {ship.countryName} ({ship.countryCode}) - {ship.carrier}{" "}
-                        - ${ship.cost}
+                        - dz{ship.cost}
                       </span>
                       <button
                         onClick={() => handleRemoveShipping(idx)}
