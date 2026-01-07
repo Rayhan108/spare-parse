@@ -97,7 +97,7 @@ const NotFound = () => {
            <span className="text-white"> 🏠 Back to Home</span>
           </Link>
           <Link 
-            href="/shop" 
+            href="/product" 
             className="flex items-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-full bg-white hover:text-gray-900 transition-all duration-300"
           >
           <span className="text-white">  🛒 Browse Parts</span>

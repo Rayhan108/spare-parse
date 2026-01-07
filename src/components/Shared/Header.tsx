@@ -146,12 +146,12 @@ const Header = ({ locale }: { locale: string }) => {
   //   const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
   //   router.push(newPath);
   // };
-  // ✅ SIMPLIFIED: Language selection with next-intl router
+  //  SIMPLIFIED: Language selection with next-intl router
   const handleLanguageSelect = (langCode: LanguageCode) => {
     setIsLanguageOpen(false);
     if (langCode === locale) return;
     
-    // ✅ Use next-intl router - it handles locale automatically
+    //  Use next-intl router - it handles locale automatically
     router.replace(pathname, { locale: langCode });
   };
 
