@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { message, Spin } from "antd";
 import { useState } from "react";
+import { MdFavorite } from "react-icons/md";
 
 
 export interface WishlistItem {
@@ -17,6 +18,7 @@ export interface WishlistItem {
 }
 
 const Wishlist = () => {
+  
   const { data: wishlist, isLoading, isError } = useGetWishlistQuery();
   // const [deleteWishlistItem] = useDeleteWishlistItemMutation();
   const [deleteAllWishlistItem] = useDeleteAllWishlistItemMutation();
@@ -50,17 +52,26 @@ const Wishlist = () => {
     );
   }
 
-  if (isError) {
-    return (
-      <p className="text-center py-16 text-red-500">
-        Failed to load wishlist.
-      </p>
-    );
-  }
+ if (isError) {
+  return (
+    <div className="flex justify-center items-center py-16 px-4">
+      <div className="bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-400 p-6 rounded-lg shadow-lg max-w-lg w-full text-center">
+        <div className="flex justify-center mb-4">
+         <MdFavorite size={24}/>
+        </div>
+        <p className="text-xl font-semibold mb-4">Oops! Something went wrong</p>
+        <p className="text-lg">
+          You are not signed in. Please sign in to view your wishlist.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 
   return (
     <div className="container mx-auto py-16 px-3 md:px-0">
-      {!wishlist || wishlist.length === 0 ? (
+      {!wishlist || wishlist.length === 0  ? (
         <div className="flex flex-col items-center justify-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md">
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
             Your Wishlist is Empty
