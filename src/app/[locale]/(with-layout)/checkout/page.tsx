@@ -259,15 +259,15 @@ const CheckoutPage = () => {
               .map(
                 (item: CheckoutItem) => `
               <div class="item-row">
-                <div>dz{item.product.productName} x dz{item.quantity}</div>
-                <div>dz${item.product.price * item.quantity}</div>
+                <div> ${item.product.productName} x dz ${item.quantity}</div>
+                <div>dz ${item.product.price * item.quantity}</div>
               </div>
             `
               )
               .join("")}
           </div>
           <div class="receipt-total">
-            <div class="receipt-item"><span>Subtotal:</span><span>dz${checkout?.totalAmount}</span></div>
+            <div class="receipt-item"><span>Subtotal:</span><span>dz ${checkout?.totalAmount}</span></div>
             <div class="receipt-item"><span>Shipping:</span><span>${
               shippingCost > 0 ? `dz ${shippingCost}` : "Free"
             }</span></div>
