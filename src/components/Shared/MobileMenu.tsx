@@ -204,7 +204,7 @@ const MobileMenu = ({ open, onClose, locale }: MobileMenuProps) => {
 
       // Redirect
       router.replace(
-        newRole === "SELLER" ? "/seller/overview/orders" : "/myorder"
+        newRole === "SELLER" ? "/seller/overview" : "/myorder"
       );
     } catch (err: unknown) {
       console.error("Switch Role Error:", err);
@@ -397,7 +397,7 @@ const MobileMenu = ({ open, onClose, locale }: MobileMenuProps) => {
                   {user?.role === "SELLER" && (
                     <>
                       <Link
-                        href="/seller/overview/orders"
+                        href="/seller/overview"
                         onClick={handleNavClick}
                         className={linkClass}
                       >
