@@ -842,7 +842,8 @@ const CheckoutPage = () => {
                           </div>
                         </div>
                         <span className="font-medium dark:text-white">
-                          dz {item.product.price * item.quantity}
+                          {/* dz {item.product.price * item.quantity} */}
+                          dz {item?.product?.afterDiscount}
                         </span>
                       </div>
                     ))}

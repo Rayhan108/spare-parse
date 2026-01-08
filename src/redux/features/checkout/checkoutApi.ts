@@ -17,6 +17,8 @@ export interface CheckoutItem {
     productName: string;
     price: number;
     discount: number;
+    afterDiscount: number;
+
     productImages: string[];
   };
 }
