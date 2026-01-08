@@ -1,14 +1,15 @@
 "use client";
 
-import { Breadcrumb, message, notification } from "antd";
+import { Breadcrumb, Checkbox, ConfigProvider, message, notification } from "antd";
 import Link from "next/link";
 import Image from "next/image";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDeleteCartItemMutation, useGetCartQuery } from "@/redux/features/cart/cartApi";
 import { useCreateCheckoutMutation } from "@/redux/features/checkout/checkoutApi";
 import type { CartItem as ApiCartItem } from "@/redux/features/cart/cartApi";
 import { useRouter } from "next/navigation";
+
 
 interface CartItem extends ApiCartItem {
     quantity: number;
@@ -20,17 +21,13 @@ interface ApiError {
 }
 
 const Cart = () => {
-    const { data, isLoading, refetch } = useGetCartQuery();
+    const { data, isLoading } = useGetCartQuery();
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [deleteCartItem] = useDeleteCartItemMutation();
     const [createCheckout] = useCreateCheckoutMutation();
     const [api, contextHolder] = notification.useNotification();
     const router = useRouter();
     const [isProcessing, setIsProcessing] = useState(false);
-
-    // Refetch cart data when page loads
-    useEffect(() => {
-        refetch();
-    }, [refetch]);
 
     if (isLoading) {
         return (
@@ -45,18 +42,20 @@ const Cart = () => {
         quantity: item.quantity ?? 1,
     }));
 
-    // Calculate total price
-    const totalPrice = cartItems.reduce(
-        (sum, item) => sum + item.product.price * item.quantity,
-        0
-    );
+    const handleSelect = (id: string, checked: boolean) => {
+        setSelectedIds((prev) =>
+            checked ? [...prev, id] : prev.filter((itemId) => itemId !== id)
+        );
+    };
+
+    const selectedItems = cartItems.filter((item) => selectedIds.includes(item.id));
 
     const handleCheckout = async () => {
-        if (cartItems.length === 0) {
+        if (selectedItems.length === 0) {
             api.open({
                 type: "warning",
-                message: "Cart is empty",
-                description: "Please add products to your cart before checkout!",
+                message: "No product is selected",
+                description: "Please select at least one product to checkout!",
                 placement: "topRight",
             });
             return;
@@ -64,9 +63,8 @@ const Cart = () => {
 
         setIsProcessing(true);
 
-        // Checkout all cart items
         const checkoutPayload = {
-            productIds: cartItems.map((item) => item.productId),
+            productIds: selectedItems.map((item) => item.productId),
         };
 
         try {
@@ -107,7 +105,7 @@ const Cart = () => {
                 placement: "topRight",
             });
         } catch (err: unknown) {
-            console.error("Delete error:", err);
+            console.error(" Delete error:", err);
 
             let errorMessage = "Failed to delete cart item";
             const apiError = err as ApiError;
@@ -129,7 +127,6 @@ const Cart = () => {
 
     return (
         <div className="container mx-auto py-16 px-3 md:px-0">
-            {contextHolder}
             <Breadcrumb
                 items={[
                     { title: <Link href="/"><p className="dark:text-white">Home</p></Link> },
@@ -157,7 +154,7 @@ const Cart = () => {
                     {/* Table Header */}
                     <div className="mt-8 overflow-x-auto">
                         <div className="w-full shadow px-4 py-3 rounded flex items-center bg-gray-100 dark:bg-gray-800">
-                            <div className="w-12 text-center dark:text-white">#</div>
+                            <div className="w-16 text-center dark:text-white">Select</div>
                             <div className="flex-1 text-left dark:text-white">Product</div>
                             <div className="w-24 text-center dark:text-white">Price</div>
                             <div className="w-24 text-center dark:text-white">Quantity</div>
@@ -166,63 +163,63 @@ const Cart = () => {
                         </div>
 
                         {/* Table Body */}
-                        {cartItems?.map((item: CartItem, index: number) => (
-                            <div
-                                key={item.id}
-                                className="w-full shadow-[0px_5px_5px_rgba(0,0,0,0.03)] dark:shadow-[2px_2px_10px_2px_rgba(255,255,255,0.1)] px-4 py-3 rounded flex items-center mt-2 bg-white dark:bg-transparent"
-                            >
-                                <div className="w-12 text-center dark:text-white font-medium">
-                                    {index + 1}
+                        {cartItems?.map((item: CartItem) => {
+                            const checked = selectedIds.includes(item.id);
+                            return (
+                                <div
+                                    key={item.id}
+                                    className={`w-full shadow-[0px_5px_5px_rgba(0,0,0,0.03)] dark:shadow-[2px_2px_10px_2px_rgba(255,255,255,0.1)] px-4 py-3 rounded flex items-center mt-2 ${checked ? "bg-gray-50 dark:bg-gray-900" : "bg-white dark:bg-transparent"
+                                        }`}
+                                >
+                                    <div className="w-16 text-center">
+                                        <ConfigProvider
+                                            theme={{
+                                                token: { colorPrimary: "#ec5f00" },
+                                                components: { Checkbox: { colorPrimary: "#ec5f00" } },
+                                            }}
+                                        >
+                                            <Checkbox
+                                                checked={checked}
+                                                onChange={(e) => handleSelect(item.id, e.target.checked)}
+                                            />
+                                        </ConfigProvider>
+                                    </div>
+                                    <div className="flex-1 flex items-center gap-4">
+                                        <Image
+                                            src={item.product.productImages?.[0] || "/no-image.jpg"}
+                                            alt={item.product.productName}
+                                            width={60}
+                                            height={60}
+                                            className="rounded-md"
+                                        />
+                                        <span className="dark:text-white">{item.product.productName}</span>
+                                    </div>
+                                    <div className="w-24 text-center dark:text-white">dz {item.product.price}</div>
+                                    <div className="w-24 text-center dark:text-white">{item.quantity}</div>
+                                    <div className="w-28 text-center dark:text-white">
+                                        dz {(item.product.price * item.quantity).toFixed(2)}
+                                    </div>
+                                    <div className="w-16 text-center">
+                                        {contextHolder}
+                                        <RiDeleteBin6Line
+                                            onClick={() => handleDelete(item.productId)}
+                                            size={22}
+                                            className="cursor-pointer dark:text-white"
+                                        />
+                                    </div>
                                 </div>
-                                <div className="flex-1 flex items-center gap-4">
-                                    <Image
-                                        src={item.product.productImages?.[0] || "/no-image.jpg"}
-                                        alt={item.product.productName}
-                                        width={60}
-                                        height={60}
-                                        className="rounded-md"
-                                    />
-                                    <span className="dark:text-white">{item.product.productName}</span>
-                                </div>
-                                <div className="w-24 text-center dark:text-white">
-                                    dz {item.product.price}
-                                </div>
-                                <div className="w-24 text-center dark:text-white">
-                                    {item.quantity}
-                                </div>
-                                <div className="w-28 text-center dark:text-white">
-                                    dz {(item.product.price * item.quantity).toFixed(2)}
-                                </div>
-                                <div className="w-16 text-center">
-                                    <RiDeleteBin6Line
-                                        onClick={() => handleDelete(item.productId)}
-                                        size={22}
-                                        className="cursor-pointer dark:text-white hover:text-red-500 dark:hover:text-red-500 transition-colors"
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
-                    {/* Footer with Total and Checkout */}
-                    <div className="mt-6 flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <div className="text-lg dark:text-white">
-                            <span className="font-medium">Total Items: </span>
-                            <span className="text-primary font-bold">{cartItems.length}</span>
-                            <span className="mx-4">|</span>
-                            <span className="font-medium">Total Price: </span>
-                            <span className="text-primary font-bold">dz {totalPrice.toFixed(2)}</span>
-                        </div>
+                    {/* Footer */}
+                    <div className="mt-6 flex justify-end">
                         <button
                             onClick={handleCheckout}
                             disabled={isProcessing}
-                            className={`w-full md:w-48 py-3 rounded font-medium text-white transition-all ${
-                                isProcessing 
-                                    ? "bg-gray-400 cursor-not-allowed" 
-                                    : "bg-primary hover:bg-[#ec5f00]"
-                            }`}
+                            className={`w-48 py-3 rounded font-medium text-white ${isProcessing ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}`}
                         >
-                            {isProcessing ? "Processing..." : "Proceed to Checkout"}
+                            {isProcessing ? "Processing..." : "Proceed with Selected"}
                         </button>
                     </div>
                 </>

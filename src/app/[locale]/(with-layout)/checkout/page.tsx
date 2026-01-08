@@ -251,7 +251,7 @@ const CheckoutPage = () => {
         <body>
           <div class="receipt-header">
             <h2>Order Receipt</h2>
-            <p>Order ID: dz${checkout?.id}</p>
+      
             <p>Date: dz${new Date().toLocaleDateString()}</p>
           </div>
           <div>

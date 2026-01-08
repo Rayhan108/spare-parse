@@ -74,10 +74,14 @@ const Header = ({ locale }: { locale: string }) => {
 // console.log("is seller ----------->",isSeller);
   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
-  const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(
+  const { data: cartData, isLoading: isCartLoading,refetch: refetchCart} = useGetCartQuery(
     undefined,
     { refetchOnMountOrArgChange: true }
   );
+      // Refetch cart data when page loads
+      useEffect(() => {
+          refetchCart();
+      }, [refetchCart]);
   const cartCount = cartData?.data?.length || 0;
 
   const { data: wishlistData, isLoading: isWishlistLoading } =

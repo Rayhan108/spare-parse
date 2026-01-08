@@ -88,7 +88,7 @@ export default function ShippingRates({ shippings }: ShippingRatesProps) {
                     <td className="p-4 text-sm text-foreground">
                       {shipping.deliveryMin}-{shipping.deliveryMax} days
                     </td>
-                    <td className="p-4 text-sm text-foreground">€{shipping.cost.toFixed(2)}</td>
+                    <td className="p-4 text-sm text-foreground">dz {shipping.cost.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
