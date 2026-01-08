@@ -443,7 +443,7 @@ const CheckoutPage = () => {
       } else {
         await placeOrder(orderData).unwrap();
         message.success("Order placed successfully!");
-        router.push("/order-success");
+        router.push("/payment-success");
       }
     } catch (error) {
       console.error(" Checkout Error:", error);

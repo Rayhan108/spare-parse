@@ -167,7 +167,8 @@ const Header = ({ locale }: { locale: string }) => {
       return newMode;
     });
   };
-
+const isHomePage = pathname === "/";
+const isProductPage = pathname === "/product";
   const showDrawer = () => setOpen(true);
   const onClose = () => setOpen(false);
 
@@ -414,73 +415,80 @@ const handleSwitchRoleClick = async () => {
           </div>
 
           {/* Search & Icons */}
-          <div className="hidden w-[380px] lg:flex items-center justify-between gap-4">
-            <ConfigProvider
-              theme={{
-                components: {
-                  Input: {
-                    activeBorderColor: "transparent",
-                    hoverBorderColor: "transparent",
-                    colorBorder: "transparent",
-                    controlHeight: 36,
-                  },
-                },
-              }}
-            >
-              <Input
-                style={{ backgroundColor: "#f0f0f0" }}
-                suffix={<FiSearch className="text-black w-6 h-6" />}
-                className="w-[280px]"
-                placeholder={t("searchPlaceholder")}
-                value={searchQuery}
-                onChange={handleInputChange}
-                onPressEnter={handleSearch}
-              />
-            </ConfigProvider>
+    {/* Search & Icons */}
+<div className={`hidden lg:flex items-center gap-4 ${
+  (isHomePage || isProductPage) 
+    ? "w-[380px] justify-between" 
+    : "justify-end"
+}`}>
+  {(isHomePage || isProductPage) && (
+    <ConfigProvider
+      theme={{
+        components: {
+          Input: {
+            activeBorderColor: "transparent",
+            hoverBorderColor: "transparent",
+            colorBorder: "transparent",
+            controlHeight: 36,
+          },
+        },
+      }}
+    >
+      <Input
+        style={{ backgroundColor: "#f0f0f0" }}
+        suffix={<FiSearch className="text-black w-6 h-6" />}
+        className="w-[280px]"
+        placeholder={t("searchPlaceholder")}
+        value={searchQuery}
+        onChange={handleInputChange}
+        onPressEnter={handleSearch}
+      />
+    </ConfigProvider>
+  )}
 
-            {/* Wishlist & Cart only for Buyer */}
-            {user?.role !== "SELLER" && (
-              <>
-                <div className="relative">
-                  <Link href={`/wishlist`}>
-                    <IoIosHeartEmpty className="w-8 h-8 cursor-pointer dark:text-white" />
-                  </Link>
-                  {!isWishlistLoading && wishlistCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
-                      {wishlistCount}
-                    </span>
-                  )}
-                </div>
+  {/* Wishlist & Cart only for Buyer */}
+  {user?.role !== "SELLER" && (
+    <>
+      <div className="relative">
+        <Link href={`/wishlist`}>
+          <IoIosHeartEmpty className="w-8 h-8 cursor-pointer dark:text-white" />
+        </Link>
+        {!isWishlistLoading && wishlistCount > 0 && (
+          <span className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
+            {wishlistCount}
+          </span>
+        )}
+      </div>
 
-                <div className="relative">
-                  <Link href={`/cart`}>
-                    <PiShoppingCartLight className="w-8 h-8 cursor-pointer dark:text-white" />
-                  </Link>
-                  {!isCartLoading && cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
-                      {cartCount}
-                    </span>
-                  )}
-                </div>
-              </>
-            )}
+      <div className="relative">
+        <Link href={`/cart`}>
+          <PiShoppingCartLight className="w-8 h-8 cursor-pointer dark:text-white" />
+        </Link>
+        {!isCartLoading && cartCount > 0 && (
+          <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
+            {cartCount}
+          </span>
+        )}
+      </div>
+    </>
+  )}
 
-            {/* User Avatar */}
-            {token && (
-              <div
-                onClick={() => setSubMenu(!subMenu)}
-                className="cursor-pointer w-10 h-10 flex-shrink-0"
-              >
-                <Image
-                  alt="user"
-                  src={userImg ? userImg : avatar}
-                  width={40}
-                  height={40}
-                  className="object-cover w-10 h-10 rounded-full"
-                />
-              </div>
-            )}
-          </div>
+  {/* User Avatar */}
+  {token && (
+    <div
+      onClick={() => setSubMenu(!subMenu)}
+      className="cursor-pointer w-10 h-10 flex-shrink-0"
+    >
+      <Image
+        alt="user"
+        src={userImg ? userImg : avatar}
+        width={40}
+        height={40}
+        className="object-cover w-10 h-10 rounded-full"
+      />
+    </div>
+  )}
+</div>
 
           {/* Mobile Menu Icon */}
           <div className="block lg:hidden">

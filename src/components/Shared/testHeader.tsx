@@ -2,9 +2,9 @@
 // "use client";
 
 // import Image from "next/image";
-// import Link from "next/link";
+// import { Link, useRouter, usePathname } from "@/i18n/navigation";
 // import { useState, useEffect, useRef } from "react";
-// import { useRouter } from "next/navigation";
+
 // import { useDispatch, useSelector } from "react-redux";
 // import Cookies from "js-cookie";
 // import { ConfigProvider, Input, Modal } from "antd";
@@ -28,20 +28,19 @@
 // import { App } from "antd";
 // import { useGetUserProfileQuery } from "@/redux/features/auth/authApi";
 // import { ChevronDown } from "lucide-react";
-// import { usePathname } from "@/utils/navigation";
+
 // import { useTranslations } from "next-intl";
 // import SellerRegistrationForm from "../Seller/SellerRegistrationForm/SellerRegistrationForm";
 
-// //  Language configuration - Add all languages here
+// // Language configuration
 // const languages = [
+//   { code: "fr", name: "Français", flag: "🇫🇷" },
 //   { code: "en", name: "English", flag: "🇺🇸" },
 //   { code: "ar", name: "العربية", flag: "🇸🇦" },
-//   { code: "fr", name: "Français", flag: "🇫🇷" },
 // ] as const;
 
 // type LanguageCode = (typeof languages)[number]["code"];
 
-// // Helper to get language name from code
 // const getLanguageByCode = (code: string) => {
 //   return languages.find((lang) => lang.code === code) || languages[0];
 // };
@@ -53,19 +52,42 @@
 //   const router = useRouter();
 //   const pathname = usePathname();
 //   const { message } = App.useApp();
-//   const [isSellerFormOpen, setIsSellerFormOpen] = useState(false);
-//   const user = useSelector((state: RootState) => state.logInUser?.user);
-//   console.log("user---->",user);
-//   const { data: myProfile } = useGetUserProfileQuery(undefined);
-//   const userImg = myProfile?.data?.image;
-//   const isSeller = myProfile?.data?.isSeller
-// ;
-// console.log("isSeller profile ------->",isSeller);
-//   //  Language dropdown state
-//   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-//   const languageRef = useRef<HTMLDivElement>(null);
 
-//   //  Get current language from locale prop (NOT from state)
+//   // States
+//   const [isSellerFormOpen, setIsSellerFormOpen] = useState(false);
+//   const [isModalVisible, setIsModalVisible] = useState(false);
+//   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+//   const [isDarkMode, setIsDarkMode] = useState(false);
+//   const [open, setOpen] = useState(false);
+//   const [subMenu, setSubMenu] = useState(false);
+//   const [searchQuery, setSearchQuery] = useState("");
+
+//   // Refs
+//   const languageRef = useRef<HTMLDivElement>(null);
+//   const subMenuRef = useRef<HTMLDivElement>(null);
+
+//   // Redux & API
+//   const user = useSelector((state: RootState) => state.logInUser?.user);
+//   const { data: myProfile,refetch} = useGetUserProfileQuery(undefined);
+//   const userImg = myProfile?.data?.image;
+//   const isSeller = myProfile?.data?.isSeller;
+// // console.log("is seller ----------->",isSeller);
+//   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
+
+//   const { data: cartData, isLoading: isCartLoading,refetch: refetchCart} = useGetCartQuery(
+//     undefined,
+//     { refetchOnMountOrArgChange: true }
+//   );
+//       // Refetch cart data when page loads
+//       useEffect(() => {
+//           refetchCart();
+//       }, [refetchCart]);
+//   const cartCount = cartData?.data?.length || 0;
+
+//   const { data: wishlistData, isLoading: isWishlistLoading } =
+//     useGetWishlistQuery();
+//   const wishlistCount = wishlistData?.length || 0;
+
 //   const currentLanguage = getLanguageByCode(locale);
 
 //   const token =
@@ -73,9 +95,7 @@
 //       ? Cookies.get("hatem-ecommerce-token")
 //       : Cookies.get("hatem-seller-token");
 
-//   const [isDarkMode, setIsDarkMode] = useState(false);
-
-//   //  Close language dropdown when clicking outside
+//   // Effects
 //   useEffect(() => {
 //     const handleClickOutside = (event: MouseEvent) => {
 //       if (
@@ -88,63 +108,6 @@
 //     document.addEventListener("mousedown", handleClickOutside);
 //     return () => document.removeEventListener("mousedown", handleClickOutside);
 //   }, []);
-
-//   const toggleLanguageDropdown = () => {
-//     setIsLanguageOpen((prev) => !prev);
-//   };
-
-//   //  Fixed language select handler
-//   const handleLanguageSelect = (langCode: LanguageCode) => {
-//     // Close dropdown first
-//     setIsLanguageOpen(false);
-
-//     // Don't navigate if same language
-//     if (langCode === locale) {
-//       return;
-//     }
-
-//     // Get current path without locale
-//     // pathname from usePathname() might be "/en/about" or "/about" or "/"
-//     let pathWithoutLocale = pathname;
-
-//     // Remove current locale prefix if exists
-//     const localePattern = new RegExp(`^/(${languages.map((l) => l.code).join("|")})`);
-//     pathWithoutLocale = pathname.replace(localePattern, "") || "/";
-
-//     // Build new path with new locale
-//     const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
-
-//     // Navigate
-//     router.push(newPath);
-//   };
-
-//   // Dark mode initialization
-//   useEffect(() => {
-//     const storedMode = localStorage.getItem("darkMode");
-//     if (storedMode === "true") {
-//       setIsDarkMode(true);
-//       document.documentElement.classList.add("dark");
-//     } else {
-//       setIsDarkMode(false);
-//       document.documentElement.classList.remove("dark");
-//     }
-//   }, []);
-
-//   const handleToggle = () => {
-//     setIsDarkMode((prev) => {
-//       const newMode = !prev;
-//       document.documentElement.classList.toggle("dark", newMode);
-//       localStorage.setItem("darkMode", String(newMode));
-//       return newMode;
-//     });
-//   };
-
-//   const [open, setOpen] = useState(false);
-//   const showDrawer = () => setOpen(true);
-//   const onClose = () => setOpen(false);
-
-//   const [subMenu, setSubMenu] = useState(false);
-//   const subMenuRef = useRef<HTMLDivElement>(null);
 
 //   useEffect(() => {
 //     const handleClickOutside = (event: MouseEvent) => {
@@ -159,15 +122,55 @@
 //     return () => document.removeEventListener("mousedown", handleClickOutside);
 //   }, []);
 
-//   const { data: cartData, isLoading: isCartLoading } = useGetCartQuery(
-//     undefined,
-//     { refetchOnMountOrArgChange: true }
-//   );
-//   const cartCount = cartData?.data?.length || 0;
+//   useEffect(() => {
+//     const storedMode = localStorage.getItem("darkMode");
+//     if (storedMode === "true") {
+//       setIsDarkMode(true);
+//       document.documentElement.classList.add("dark");
+//     } else {
+//       setIsDarkMode(false);
+//       document.documentElement.classList.remove("dark");
+//     }
+//   }, []);
 
-//   const { data: wishlistData, isLoading: isWishlistLoading } =
-//     useGetWishlistQuery();
-//   const wishlistCount = wishlistData?.length || 0;
+//   // Handlers
+//   const toggleLanguageDropdown = () => {
+//     setIsLanguageOpen((prev) => !prev);
+//   };
+
+//   // const handleLanguageSelect = (langCode: LanguageCode) => {
+//   //   setIsLanguageOpen(false);
+//   //   if (langCode === locale) return;
+
+//   //   let pathWithoutLocale = pathname;
+//   //   const localePattern = new RegExp(
+//   //     `^/(${languages.map((l) => l.code).join("|")})`
+//   //   );
+//   //   pathWithoutLocale = pathname.replace(localePattern, "") || "/";
+//   //   const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
+//   //   router.push(newPath);
+//   // };
+//   //  SIMPLIFIED: Language selection with next-intl router
+//   const handleLanguageSelect = (langCode: LanguageCode) => {
+//     setIsLanguageOpen(false);
+//     if (langCode === locale) return;
+    
+//     //  Use next-intl router - it handles locale automatically
+//     router.replace(pathname, { locale: langCode });
+//   };
+
+//   const handleToggle = () => {
+//     setIsDarkMode((prev) => {
+//       const newMode = !prev;
+//       document.documentElement.classList.toggle("dark", newMode);
+//       localStorage.setItem("darkMode", String(newMode));
+//       return newMode;
+//     });
+//   };
+// const isHomePage = pathname === "/";
+// const isProductPage = pathname === "/product";
+//   const showDrawer = () => setOpen(true);
+//   const onClose = () => setOpen(false);
 
 //   const handleLogOut = () => {
 //     dispatch(logout());
@@ -176,10 +179,8 @@
 //     localStorage.removeItem("hatem-ecommerce-token");
 //     localStorage.removeItem("hatem-seller-token");
 //     localStorage.removeItem("hatem-ecommerce-refreshToken");
-//     router.replace(`/${locale}/auth/login`);
+//     router.replace(`/auth/login`);
 //   };
-
-//   const [searchQuery, setSearchQuery] = useState("");
 
 //   const handleInputChange = (e: any) => {
 //     const value = e.target.value;
@@ -193,25 +194,55 @@
 //     }
 //   };
 
-//   // Modal for role switch
-//   const [isModalVisible, setIsModalVisible] = useState(false);
-//   const showModal = () => setIsModalVisible(true);
-//   const handleCancel = () => setIsModalVisible(false);
+//   //  Handle Switch Role Button Click
+//   // const handleSwitchRoleClick1 = () => {
+//   //   refetch()
 
-//   const [switchUserRole, { isLoading }] = useSwitchUserRoleMutation();
 
-//   const handleOk = async () => {
-//     await handleRoleSwitch();
-//   };
+//   //   setSubMenu(false); 
 
-//   const handleRoleSwitch = async () => {
-//     if (!user) return;
-//     if (user?.role === "BUYER" && !isSeller) {
+//   //   if (user?.role === "BUYER" && !isSeller) {
+//   //     setIsSellerFormOpen(true);
+//   //     return;
+//   //   }
 
+ 
+//   //   setIsModalVisible(true);
+//   // };
+
+// const handleSwitchRoleClick = async () => {
+//   setSubMenu(false);
+  
+//   try {
+
+//     const result = await refetch();
+//     const currentIsSeller = result.data?.data?.isSeller;
+    
+//     // console.log("Fresh isSeller value:", currentIsSeller);
+
+//     if (user?.role === "BUYER" && !currentIsSeller) {
 //       setIsSellerFormOpen(true);
-//       setSubMenu(false);
+//       return;
 //     }
 
+//     setIsModalVisible(true);
+//   } catch (error) {
+//     console.error("Failed to fetch profile:", error);
+//     message.error("Failed to verify seller status");
+//   }
+// };
+
+
+//   //  Confirmation Modal Cancel
+//   const handleCancel = () => {
+//     setIsModalVisible(false);
+//   };
+
+//   //  Confirmation Modal OK - Execute Role Switch
+//   const handleConfirmSwitch = async () => {
+//        refetch()
+//     if (isLoading) return;
+//     if (!user) return;
 
 //     try {
 //       const newRole = user.role === "BUYER" ? "SELLER" : "BUYER";
@@ -224,6 +255,7 @@
 
 //       const accessToken = res.data.accessToken;
 
+//       // Update cookies and localStorage
 //       if (newRole === "SELLER") {
 //         Cookies.remove("hatem-ecommerce-token");
 //         localStorage.removeItem("hatem-ecommerce-token");
@@ -236,6 +268,7 @@
 //         localStorage.setItem("hatem-ecommerce-token", accessToken);
 //       }
 
+//       // Update Redux state
 //       dispatch(
 //         setUser({
 //           user: { ...user, role: newRole },
@@ -245,12 +278,16 @@
 //       );
 
 //       setIsModalVisible(false);
-//       setSubMenu(false);
 //       message.success(res.message || "Role switched successfully!");
-//       router.replace(
-//         newRole === "SELLER"
-//           ? `/${locale}/seller/overview`
-//           : `/${locale}/myorder`
+
+//       // Redirect to appropriate page
+//       // router.replace(
+//       //   newRole === "SELLER"
+//       //     ? `/${locale}/seller/overview`
+//       //     : `/${locale}/myorder`
+//       // );
+//             router.replace(
+//         newRole === "SELLER" ? "/seller/overview/orders" : "/myorder"
 //       );
 //     } catch (err: unknown) {
 //       console.error("Switch Role Error:", err);
@@ -262,14 +299,24 @@
 //     }
 //   };
 
-//   const targetRole = user?.role === "BUYER" ?"seller" : "buyer";
+//   //  After Seller Registration Success - Optionally auto-switch
+//   const handleSellerRegistrationSuccess = () => {
+//     setIsSellerFormOpen(false);
+
+    
+//     // setIsModalVisible(true);
+//     refetch()
+//   };
+
+//   const targetRole = user?.role === "BUYER" ? "Seller" : "Buyer";
 
 //   return (
 //     <header>
 //       {/* Top Banner */}
 //       <div className="bg-[#df5800] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0">
 //         {t("summerSale")}{" "}
-//         <Link href={`/${locale}/product`}>
+//         {/* <Link href={`/${locale}/product`}> */}
+//         <Link href={`/product`}>
 //           <span className="ml-2 font-semibold underline cursor-pointer">
 //             {t("shopNow")}
 //           </span>
@@ -280,7 +327,8 @@
 //       <nav className="border-b border-gray-200 dark:border-gray-600 dark:bg-black px-3 lg:px-0">
 //         <div className="container mx-auto py-4 flex items-center justify-between relative">
 //           {/* Logo */}
-//           <Link href={`/${locale}`}>
+//           {/* <Link href={`/${locale}`}> */}
+//           <Link href={`/`}>
 //             <Image
 //               className="w-42"
 //               src={isDarkMode ? darkLogo : logo}
@@ -293,26 +341,26 @@
 //           {/* Desktop Links */}
 //           <div className="hidden lg:flex items-center justify-between gap-12 text-black dark:text-white">
 //             <Link
-//               href={`/${locale}`}
+//               href={`/`}
 //               className="text-lg hover:text-primary no-underline"
 //             >
 //               {t("home")}
 //             </Link>
 //             <Link
-//               href={`/${locale}/contact`}
+//               href={`/contact`}
 //               className="text-lg hover:text-primary no-underline"
 //             >
 //               {t("contact")}
 //             </Link>
 //             <Link
-//               href={`/${locale}/about`}
+//               href={`/about`}
 //               className="text-lg hover:text-primary no-underline"
 //             >
 //               {t("about")}
 //             </Link>
 //             {!token && (
 //               <Link
-//                 href={`/${locale}/auth/login`}
+//                 href={`/auth/login`}
 //                 className="text-lg hover:text-primary no-underline"
 //               >
 //                 {t("login")}
@@ -320,14 +368,14 @@
 //             )}
 //             {user?.role === "SELLER" && (
 //               <Link
-//                 href={`/${locale}/seller/overview`}
+//                 href={`/seller/overview/orders`}
 //                 className="text-lg hover:text-primary no-underline"
 //               >
 //                 {t("dashboard")}
 //               </Link>
 //             )}
 
-//             {/*  Fixed Language Dropdown */}
+//             {/* Language Dropdown */}
 //             <div className="relative" ref={languageRef}>
 //               <button
 //                 className="flex items-center text-orange-500 hover:text-orange-600 font-medium gap-1"
@@ -344,7 +392,7 @@
 
 //               {isLanguageOpen && (
 //                 <div className="absolute top-full mt-2 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-600 w-40 rounded-lg text-sm z-50 overflow-hidden">
-//                   {languages.map((lang:any) => (
+//                   {languages.map((lang: any) => (
 //                     <button
 //                       key={lang.code}
 //                       onClick={() => handleLanguageSelect(lang.code)}
@@ -368,34 +416,36 @@
 
 //           {/* Search & Icons */}
 //           <div className="hidden w-[380px] lg:flex items-center justify-between gap-4">
-//             <ConfigProvider
-//               theme={{
-//                 components: {
-//                   Input: {
-//                     activeBorderColor: "transparent",
-//                     hoverBorderColor: "transparent",
-//                     colorBorder: "transparent",
-//                     controlHeight: 36,
-//                   },
-//                 },
-//               }}
-//             >
-//               <Input
-//                 style={{ backgroundColor: "#f0f0f0" }}
-//                 suffix={<FiSearch className="text-black w-6 h-6" />}
-//                 className="w-[280px]"
-//                 placeholder={t("searchPlaceholder")}
-//                 value={searchQuery}
-//                 onChange={handleInputChange}
-//                 onPressEnter={handleSearch}
-//               />
-//             </ConfigProvider>
+//           {(isHomePage || isProductPage) && (
+//   <ConfigProvider
+//     theme={{
+//       components: {
+//         Input: {
+//           activeBorderColor: "transparent",
+//           hoverBorderColor: "transparent",
+//           colorBorder: "transparent",
+//           controlHeight: 36,
+//         },
+//       },
+//     }}
+//   >
+//     <Input
+//       style={{ backgroundColor: "#f0f0f0" }}
+//       suffix={<FiSearch className="text-black w-6 h-6" />}
+//       className="w-[280px]"
+//       placeholder={t("searchPlaceholder")}
+//       value={searchQuery}
+//       onChange={handleInputChange}
+//       onPressEnter={handleSearch}
+//     />
+//   </ConfigProvider>
+// )}
 
 //             {/* Wishlist & Cart only for Buyer */}
 //             {user?.role !== "SELLER" && (
 //               <>
 //                 <div className="relative">
-//                   <Link href={`/${locale}/wishlist`}>
+//                   <Link href={`/wishlist`}>
 //                     <IoIosHeartEmpty className="w-8 h-8 cursor-pointer dark:text-white" />
 //                   </Link>
 //                   {!isWishlistLoading && wishlistCount > 0 && (
@@ -406,7 +456,7 @@
 //                 </div>
 
 //                 <div className="relative">
-//                   <Link href={`/${locale}/cart`}>
+//                   <Link href={`/cart`}>
 //                     <PiShoppingCartLight className="w-8 h-8 cursor-pointer dark:text-white" />
 //                   </Link>
 //                   {!isCartLoading && cartCount > 0 && (
@@ -469,7 +519,7 @@
 
 //               {/* Manage Account */}
 //               <Link
-//                 href={`/${locale}/myprofile`}
+//                 href={`/myprofile`}
 //                 className="flex items-center gap-3 mb-4"
 //               >
 //                 <GoPerson className="w-6 h-6 text-white dark:text-black" />
@@ -478,16 +528,17 @@
 //                 </p>
 //               </Link>
 
-//               {/* Switch Role */}
+//               {/*  Switch Role - Uses handleSwitchRoleClick */}
 //               <div
 //                 className="flex items-center gap-3 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
-//                 onClick={showModal}
+//                 onClick={handleSwitchRoleClick}
 //               >
 //                 {user?.role === "BUYER" ? (
 //                   <>
 //                     <GoVersions className="w-6 h-6 text-white dark:text-black" />
 //                     <p className="text-md text-white dark:text-black">
-//                       {t("swithToSeller")}
+//                       {/* Show different text based on isSeller */}
+//                       {isSeller ? t("swithToSeller") :` ${t("becomeASeller")}`}
 //                     </p>
 //                   </>
 //                 ) : (
@@ -504,7 +555,7 @@
 //               {user?.role === "SELLER" ? (
 //                 <div className="flex flex-col gap-2 mb-4">
 //                   <Link
-//                     href={`/${locale}/seller/myproduct`}
+//                     href={`/seller/myproduct`}
 //                     className="flex items-center gap-3"
 //                   >
 //                     <LuShoppingBag className="w-6 h-6 text-white dark:text-black" />
@@ -513,7 +564,7 @@
 //                     </p>
 //                   </Link>
 //                   <Link
-//                     href={`/${locale}/seller/overview`}
+//                     href={`/seller/overview/orders`}
 //                     className="flex items-center gap-3 mt-1"
 //                   >
 //                     <GoVersions className="w-6 h-6 text-white dark:text-black" />
@@ -524,7 +575,7 @@
 //                 </div>
 //               ) : (
 //                 <Link
-//                   href={`/${locale}/myorder`}
+//                   href={`/myorder`}
 //                   className="flex items-center gap-3 mb-4"
 //                 >
 //                   <LuShoppingBag className="w-6 h-6 text-white dark:text-black" />
@@ -552,7 +603,7 @@
 //         </div>
 //       </nav>
 
-//       {/* Role Switch Modal */}
+//       {/*  Role Switch Confirmation Modal - Only for registered sellers */}
 //       <Modal
 //         title={
 //           <div className="flex items-center gap-2">
@@ -561,12 +612,10 @@
 //           </div>
 //         }
 //         open={isModalVisible}
-//         onOk={handleOk}
+//         onOk={handleConfirmSwitch}
 //         onCancel={handleCancel}
 //         confirmLoading={isLoading}
-//         okText={
-//           isLoading ? 'switching' : `Yes Switch To ${targetRole}`
-//         }
+//         okText={isLoading ? "Switching..." : `Yes, Switch to ${targetRole}`}
 //         cancelText={t("cancel")}
 //         okButtonProps={{
 //           className: "bg-[#df5800] hover:bg-[#c54d00]",
@@ -579,17 +628,18 @@
 //       >
 //         <div className="py-4">
 //           <p className="text-gray-600 text-base">
-//             Are you sure you want to switch your role from {
-//             user?.role === "BUYER" ? t("buyer") : t("seller")
-            
-//             }
+//             Are you sure you want to switch your role from{" "}
+//             <strong>{user?.role === "BUYER" ? t("buyer") : t("seller")}</strong>{" "}
+//             to <strong>{targetRole}</strong>?
 //           </p>
 //         </div>
 //       </Modal>
-//             <SellerRegistrationForm
+
+//       {/*  Seller Registration Form Modal - Only for non-sellers */}
+//       <SellerRegistrationForm
 //         isOpen={isSellerFormOpen}
 //         onClose={() => setIsSellerFormOpen(false)}
-       
+//         onSuccess={handleSellerRegistrationSuccess}
 //       />
 //     </header>
 //   );
