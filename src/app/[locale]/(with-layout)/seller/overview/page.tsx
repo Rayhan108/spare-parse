@@ -90,7 +90,7 @@ const t = useTranslations('sellerOverview')
         customerImage: order.customerImage ,
         createdAt: order.createdAt,
         productName: firstProduct?.productName || "-",
-        productDescription: `Price: dz${firstProduct?.price || 0}`,
+        productDescription: `Price: dzd${firstProduct?.price || 0}`,
         productImages: firstProduct?.productImages || [],
         timeAgo: getTimeAgo(order.createdAt),
         status: order.status || "PENDING",

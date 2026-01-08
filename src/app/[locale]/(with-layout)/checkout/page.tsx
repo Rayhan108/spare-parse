@@ -252,26 +252,26 @@ const CheckoutPage = () => {
           <div class="receipt-header">
             <h2>Order Receipt</h2>
       
-            <p>Date: dz${new Date().toLocaleDateString()}</p>
+            <p>Date: dzd${new Date().toLocaleDateString()}</p>
           </div>
           <div>
             ${checkout?.items
               .map(
                 (item: CheckoutItem) => `
               <div class="item-row">
-                <div> ${item.product.productName} x dz ${item.quantity}</div>
-                <div>dz ${item.product.price * item.quantity}</div>
+                <div> ${item.product.productName} x dzd ${item.quantity}</div>
+                <div>dzd ${item.product.price * item.quantity}</div>
               </div>
             `
               )
               .join("")}
           </div>
           <div class="receipt-total">
-            <div class="receipt-item"><span>Subtotal:</span><span>dz ${checkout?.totalAmount}</span></div>
+            <div class="receipt-item"><span>Subtotal:</span><span>dzd ${checkout?.totalAmount}</span></div>
             <div class="receipt-item"><span>Shipping:</span><span>${
-              shippingCost > 0 ? `dz ${shippingCost}` : "Free"
+              shippingCost > 0 ? `dzd ${shippingCost}` : "Free"
             }</span></div>
-            <div class="receipt-item" style="font-size: 20px;"><span>Total:</span><span>dz ${grandTotal}</span></div>
+            <div class="receipt-item" style="font-size: 20px;"><span>Total:</span><span>dzd ${grandTotal}</span></div>
           </div>
         </body>
       </html>
@@ -491,12 +491,12 @@ const CheckoutPage = () => {
         ]}
       />
 
-      <div className="flex flex-col lg:flex-row items-start justify-between gap-20 mt-8">
+      <div className="flex flex-col lg:flex-row items-start gap-6 md:gap-8 lg:gap-12 mt-8">
         {/* Billing & Shipping Forms */}
-        <div className="w-full sm:w-[500px]">
-          <h1 className="text-3xl md:text-4xl font-semibold mb-5 dark:text-white">
-            Billing Details
-          </h1>
+ <div className="w-full lg:flex-1">
+  <h1 className="text-3xl md:text-4xl font-semibold mb-5 dark:text-white">
+    Billing Details
+  </h1>
           <ConfigProvider
             theme={{
               components: {
@@ -794,10 +794,10 @@ const CheckoutPage = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="w-full sm:w-[480px] p-6 space-y-6">
-          <div className="flex justify-end">
-            <button
-              onClick={handlePrint}
+      <div className="w-full lg:flex-1 p-6 space-y-6">
+  <div className="flex justify-end">
+    <button
+      onClick={handlePrint}
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               <FiPrinter className="w-5 h-5 dark:text-white" />
@@ -842,8 +842,8 @@ const CheckoutPage = () => {
                           </div>
                         </div>
                         <span className="font-medium dark:text-white">
-                          {/* dz {item.product.price * item.quantity} */}
-                          dz {item?.product?.afterDiscount}
+                          {/* dzd {item.product.price * item.quantity} */}
+                          dzd {item?.product?.afterDiscount}
                         </span>
                       </div>
                     ))}
@@ -880,7 +880,7 @@ const CheckoutPage = () => {
                                   {s.countryName} - {s.carrier}
                                 </span>
                                 <span className="text-primary font-bold">
-                                  dz {s.cost}
+                                  dzd {s.cost}
                                 </span>
                               </div>
                             ),
@@ -896,7 +896,7 @@ const CheckoutPage = () => {
                               {currentShipping.countryName}
                             </span>
                             <span className="text-lg font-bold text-green-700 dark:text-green-400">
-                              +dz {currentShipping.cost}
+                              +dzd {currentShipping.cost}
                             </span>
                           </div>
                         </div>
@@ -910,7 +910,7 @@ const CheckoutPage = () => {
                         Subtotal:
                       </span>
                       <span className="font-medium dark:text-white">
-                        dz {checkout.totalAmount}
+                        dzd {checkout.totalAmount}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -919,7 +919,7 @@ const CheckoutPage = () => {
                       </span>
                       <span className="font-medium dark:text-white">
                         {calculateShippingCost(checkout.id) > 0
-                          ? `dz${calculateShippingCost(checkout.id)}`
+                          ? `dzd${calculateShippingCost(checkout.id)}`
                           : "Select shipping"}
                       </span>
                     </div>
@@ -928,7 +928,7 @@ const CheckoutPage = () => {
                         Total:
                       </span>
                       <span className="text-xl font-bold text-primary">
-                        dz {calculateGrandTotal(checkout)}
+                        dzd {calculateGrandTotal(checkout)}
                       </span>
                     </div>
                   </div>

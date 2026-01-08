@@ -118,8 +118,8 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
       <div className="p-4">
         <h3 className="text-lg font-bold text-gray-900">{name}</h3>
         <div className="mt-1 flex items-center">
-          <span className="text-xl font-bold text-orange-500">dz {discountedPrice.toFixed(2)}</span>
-          {discount > 0 && <span className="ml-2 text-gray-500 line-through">dz {price.toFixed(2)}</span>}
+          <span className="text-xl font-bold text-orange-500">dzd {discountedPrice.toFixed(2)}</span>
+          {discount > 0 && <span className="ml-2 text-gray-500 line-through">dzd {price.toFixed(2)}</span>}
         </div>
         <p className="mt-1 text-sm text-gray-600">Stock: {stock}</p>
         {!isVisible && <p className="text-sm text-red-500 mt-1">Not Visible</p>}

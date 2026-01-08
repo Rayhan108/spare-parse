@@ -185,13 +185,13 @@ const Cart = () => {
                                     <span className="dark:text-white">{item.product.productName}</span>
                                 </div>
                                 <div className="w-24 text-center dark:text-white">
-                                    dz {item.product.price}
+                                    dzd {item.product.price}
                                 </div>
                                 <div className="w-24 text-center dark:text-white">
                                     {item.quantity}
                                 </div>
                                 <div className="w-28 text-center dark:text-white">
-                                    dz {(item.product.price * item.quantity).toFixed(2)}
+                                    dzd {(item.product.price * item.quantity).toFixed(2)}
                                 </div>
                                 <div className="w-16 text-center">
                                     <RiDeleteBin6Line
@@ -211,7 +211,7 @@ const Cart = () => {
                             <span className="text-primary font-bold">{cartItems.length}</span>
                             <span className="mx-4">|</span>
                             <span className="font-medium">Total Price: </span>
-                            <span className="text-primary font-bold">dz {totalPrice.toFixed(2)}</span>
+                            <span className="text-primary font-bold">dzd {totalPrice.toFixed(2)}</span>
                         </div>
                         <button
                             onClick={handleCheckout}
