@@ -28,7 +28,7 @@ const t=useTranslations('exploreProducts')
 // console.log("query--->",encodeURIComponent(query||""));
 
   return (
-    <div className="container mx-auto pb-20">
+    <div className="container mx-auto pb-20" id="our-products">
       <div className="flex gap-2 items-center mb-5">
         <span className="bg-primary h-10 px-10 rounded-md"></span>
         <p className="text-primary font-semibold text-lg">{t('title')}</p>

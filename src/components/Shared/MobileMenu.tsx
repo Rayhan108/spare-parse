@@ -386,7 +386,7 @@ const MobileMenu = ({ open, onClose, locale }: MobileMenuProps) => {
                   {/* My Order - For Buyer */}
                   {user?.role !== "SELLER" && (
                     <Link href="/myorder" onClick={handleNavClick} className={linkClass}>
-                      <LuShoppingBag className={`w-5 h-5 ${styles.iconColor}`} />
+                      <LuShoppingBag className={`w-5 h-5 ${styles.iconColor}`}/>
                       <span className={`text-base font-medium ${styles.text}`}>
                         {t("myOrder")}
                       </span>
@@ -401,7 +401,7 @@ const MobileMenu = ({ open, onClose, locale }: MobileMenuProps) => {
                         onClick={handleNavClick}
                         className={linkClass}
                       >
-                        <GoVersions className={`w-5 h-5 ${styles.iconColor}`} />
+                        <GoVersions className={`w-5 h-5 ${styles.iconColor}`}/>
                         <span className={`text-base font-medium ${styles.text}`}>
                           {t("dashboard")}
                         </span>

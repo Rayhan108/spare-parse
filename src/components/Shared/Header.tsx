@@ -138,18 +138,7 @@ const Header = ({ locale }: { locale: string }) => {
     setIsLanguageOpen((prev) => !prev);
   };
 
-  // const handleLanguageSelect = (langCode: LanguageCode) => {
-  //   setIsLanguageOpen(false);
-  //   if (langCode === locale) return;
 
-  //   let pathWithoutLocale = pathname;
-  //   const localePattern = new RegExp(
-  //     `^/(${languages.map((l) => l.code).join("|")})`
-  //   );
-  //   pathWithoutLocale = pathname.replace(localePattern, "") || "/";
-  //   const newPath = `/${langCode}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`;
-  //   router.push(newPath);
-  // };
   //  SIMPLIFIED: Language selection with next-intl router
   const handleLanguageSelect = (langCode: LanguageCode) => {
     setIsLanguageOpen(false);
@@ -182,33 +171,44 @@ const isProductPage = pathname === "/product";
     router.replace(`/auth/login`);
   };
 
-  const handleInputChange = (e: any) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    router.push(`?query=${encodeURIComponent(value)}`);
-  };
+let debounceTimeout: NodeJS.Timeout | null = null;
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      router.push(`?query=${searchQuery}`);
+const debounceScroll = () => {
+  // Clear previous timeout if there was one
+  if (debounceTimeout) {
+    clearTimeout(debounceTimeout);
+  }
+
+
+  debounceTimeout = setTimeout(() => {
+    const productSection = document.getElementById("our-products");
+    if (productSection) {
+      productSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
+  }, 2000); 
+};
+const handleInputChange = (e: any) => {
+  const value = e.target.value;
+  setSearchQuery(value);
+
+  if (isHomePage || isProductPage) {
+    router.push(`?query=${encodeURIComponent(value)}`);
+    
+    // Call the debounce function to handle scrolling after 1 second
+    debounceScroll();
+  }
+};
+  const handleSearch = () => {
+   if (searchQuery.trim()) {
+
+    router.push(`/product?query=${encodeURIComponent(searchQuery)}`);
+  }
   };
 
-  //  Handle Switch Role Button Click
-  // const handleSwitchRoleClick1 = () => {
-  //   refetch()
 
-
-  //   setSubMenu(false); 
-
-  //   if (user?.role === "BUYER" && !isSeller) {
-  //     setIsSellerFormOpen(true);
-  //     return;
-  //   }
-
- 
-  //   setIsModalVisible(true);
-  // };
 
 const handleSwitchRoleClick = async () => {
   setSubMenu(false);
@@ -218,7 +218,7 @@ const handleSwitchRoleClick = async () => {
     const result = await refetch();
     const currentIsSeller = result.data?.data?.isSeller;
     
-    // console.log("Fresh isSeller value:", currentIsSeller);
+
 
     if (user?.role === "BUYER" && !currentIsSeller) {
       setIsSellerFormOpen(true);
@@ -226,8 +226,9 @@ const handleSwitchRoleClick = async () => {
     }
 
     setIsModalVisible(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("Failed to fetch profile:", error);
+
     message.error("Failed to verify seller status");
   }
 };
@@ -280,17 +281,12 @@ const handleSwitchRoleClick = async () => {
       setIsModalVisible(false);
       message.success(res.message || "Role switched successfully!");
 
-      // Redirect to appropriate page
-      // router.replace(
-      //   newRole === "SELLER"
-      //     ? `/${locale}/seller/overview`
-      //     : `/${locale}/myorder`
-      // );
+     
             router.replace(
         newRole === "SELLER" ? "/seller/overview" : "/myorder"
       );
     } catch (err: unknown) {
-      console.error("Switch Role Error:", err);
+
       setIsModalVisible(false);
       message.error(
         (err as { data?: { message?: string } })?.data?.message ??
@@ -315,7 +311,7 @@ const handleSwitchRoleClick = async () => {
       {/* Top Banner */}
       <div className="bg-[#df5800] h-12 text-sm md:text-md text-center text-white flex items-center justify-center px-3 md:px-0">
         {t("summerSale")}{" "}
-        {/* <Link href={`/${locale}/product`}> */}
+
         <Link href={`/product`}>
           <span className="ml-2 font-semibold underline cursor-pointer">
             {t("shopNow")}
@@ -327,7 +323,7 @@ const handleSwitchRoleClick = async () => {
       <nav className="border-b border-gray-200 dark:border-gray-600 dark:bg-black px-3 lg:px-0">
         <div className="container mx-auto py-4 flex items-center justify-between relative">
           {/* Logo */}
-          {/* <Link href={`/${locale}`}> */}
+
           <Link href={`/`}>
             <Image
               className="w-42"
@@ -422,27 +418,30 @@ const handleSwitchRoleClick = async () => {
     : "justify-end"
 }`}>
   {(isHomePage || isProductPage) && (
-    <ConfigProvider
-      theme={{
-        components: {
-          Input: {
-            activeBorderColor: "transparent",
-            hoverBorderColor: "transparent",
-            colorBorder: "transparent",
-            controlHeight: 36,
-          },
-        },
-      }}
-    >
-      <Input
-        style={{ backgroundColor: "#f0f0f0" }}
-        suffix={<FiSearch className="text-black w-6 h-6" />}
-        className="w-[280px]"
-        placeholder={t("searchPlaceholder")}
-        value={searchQuery}
-        onChange={handleInputChange}
-        onPressEnter={handleSearch}
-      />
+   <ConfigProvider
+  theme={{
+    components: {
+      Input: {
+        activeBorderColor: isDarkMode ? "#4B5563" : "transparent",
+        hoverBorderColor: isDarkMode ? "#4B5563" : "transparent",
+        colorBorder: "transparent",
+        controlHeight: 36,
+        // Dark mode text color
+        colorText: isDarkMode ? "#ffffff" : "#000000",
+        colorTextPlaceholder: isDarkMode ? "#9CA3AF" : "#6B7280",
+      },
+    },
+  }}
+>
+    <Input
+    style={{ backgroundColor: isDarkMode ? "#24292E" : "#f0f0f0" }}
+    suffix={<FiSearch className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-black"}`} />}
+    className={`w-[280px] ${isDarkMode ? "text-black placeholder:text-white" : ""}`}
+    placeholder={t("searchPlaceholder")}
+    value={searchQuery}
+    onChange={handleInputChange}
+    onPressEnter={handleSearch}
+  />
     </ConfigProvider>
   )}
 
@@ -484,7 +483,8 @@ const handleSwitchRoleClick = async () => {
         src={userImg ? userImg : avatar}
         width={40}
         height={40}
-        className="object-cover w-10 h-10 rounded-full"
+            className={` ${isDarkMode ? "object-cover w-10 h-10 rounded-full bg-gray-800" : "object-cover w-10 h-10 rounded-full"}`}
+  
       />
     </div>
   )}
