@@ -95,7 +95,7 @@ const CategoryComponent = () => {
                 alt={item.name}
                 width={500}
                 height={500}
-                className="w-16 dark:filter dark:invert dark:brightness-0.5 dark:sepia dark:saturate-200 dark:hue-rotate-90"
+                className="w-16 "
               />
               <h3 className="text-xl text-center mt-4 dark:text-white">
                 {item.name}
