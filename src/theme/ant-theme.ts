@@ -1,3 +1,37 @@
+// export const mainTheme = {
+//     token: {
+//         primaryColor: "#f56100",
+//     },
+//     components: {
+//         Select: {
+//             activeBorderColor: "rgb(245,97,0)",
+//             activeOutlineColor: "rgb(245,97,0)",
+//             hoverBorderColor: "rgb(245,97,0)",
+//             optionSelectedBg: "rgba(245,98,0,0.22)",
+//             colorPrimary: "rgb(245,97,0)",
+//             borderRadius: 0,
+//             borderRadiusLG: 0,
+//             borderRadiusSM: 0,
+//             borderRadiusXS: 0,
+//             controlOutlineWidth: 0,
+//             colorBorder: "rgb(223,88,0)",
+//             controlHeight: 44
+//         },
+//         "Input": {
+//             "activeBorderColor": "rgb(245,97,0)",
+//             "hoverBorderColor": "rgb(245,97,0)",
+//             "colorBorder": "rgb(245,97,0)",
+//             "borderRadius": -1,
+//             "controlHeight": 40
+//         },
+//         "Pagination": {
+//             "colorPrimary": "rgb(223,88,0)",
+//             "colorPrimaryBorder": "rgb(223,88,0)",
+//             "colorPrimaryHover": "rgb(223,88,0)"
+//         }
+//     },
+// };
+// src/theme/ant-theme.ts
 
 
 
@@ -42,6 +76,8 @@ export const mainTheme: ThemeConfig = {
 
 
 
+
+// ✅ Dark Mode ONLY Theme
 export const darkTheme: ThemeConfig = {
   token: {
     colorPrimary: "#f56100",
@@ -57,19 +93,21 @@ export const darkTheme: ThemeConfig = {
     colorTextQuaternary: "#4B5563",
   },
   components: {
+    // ... other components same as before ...
 
+    // ✅ Input Component - Updated bg color
     Input: {
       activeBorderColor: "rgb(245,97,0)",
       hoverBorderColor: "#6B7280",
       colorBorder: "#4B5563",
       borderRadius: 0,
       controlHeight: 40,
-      colorBgContainer: "#24292E", 
+      colorBgContainer: "#24292E",  // ✅ Changed
       colorText: "#ffffff",
       colorTextPlaceholder: "#9CA3AF",
     },
 
-  
+    // ✅ Select Component - Updated bg color
     Select: {
       activeBorderColor: "rgb(245,97,0)",
       activeOutlineColor: "rgb(245,97,0)",

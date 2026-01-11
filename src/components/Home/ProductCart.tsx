@@ -160,15 +160,15 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
           {discountPercentage > 0 ? (
             <>
               <span className="text-xl font-bold text-orange-500">
-                DZ {price.toFixed(2)}
+                DZD {price.toFixed(2)}
               </span>
               <span className="ml-2 text-gray-500 line-through">
-                DZ {originalPrice.toFixed(2)}
+                DZD {originalPrice.toFixed(2)}
               </span>
             </>
           ) : (
             <span className="text-xl font-bold text-orange-500">
-              DZ {price.toFixed(2)}
+              DZD {price.toFixed(2)}
             </span>
           )}
 
