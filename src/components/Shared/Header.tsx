@@ -354,6 +354,25 @@ const handleSwitchRoleClick = async () => {
             >
               {t("about")}
             </Link>
+    {/* dark toggle */}
+              <div className="flex items-center justify-between mb-5">
+                <p className="text-gray-200 dark:text-black">{t("darkmode")}:</p>
+                <button
+                  onClick={handleToggle}
+                  className={`w-14 h-6 flex items-center rounded-full p-1 ${
+                    isDarkMode ? "bg-gray-700" : "bg-gray-300"
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 bg-white rounded-full transition-all ${
+                      isDarkMode ? "translate-x-8" : ""
+                    }`}
+                  ></div>
+                </button>
+              </div>
+
+
+
             {!token && (
               <Link
                 href={`/auth/login`}
@@ -506,7 +525,7 @@ const handleSwitchRoleClick = async () => {
               className="absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl z-50"
             >
               {/* Dark Mode */}
-              <div className="flex items-center justify-between mb-5">
+              {/* <div className="flex items-center justify-between mb-5">
                 <p className="text-gray-200 dark:text-black">{t("darkmode")}:</p>
                 <button
                   onClick={handleToggle}
@@ -520,7 +539,7 @@ const handleSwitchRoleClick = async () => {
                     }`}
                   ></div>
                 </button>
-              </div>
+              </div> */}
 
               {/* Manage Account */}
               <Link

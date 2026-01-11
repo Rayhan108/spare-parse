@@ -158,7 +158,7 @@ export default function LogInForm(): JSX.Element {
     <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
       {contextHolder}
       <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14 py-10 rounded-lg">
-        <h1 className="text-2xl font-semibold text-center mb-6">Log In</h1>
+        <h1 className="text-2xl text-black dark:text-white font-semibold text-center mb-6">Log In</h1>
 
         {/* Email/Password Login field */}
         <Form form={form} layout="vertical" onFinish={onFinish}>
@@ -170,7 +170,7 @@ export default function LogInForm(): JSX.Element {
               { type: "email", message: "Enter a valid email!" },
             ]}
           >
-            <Input placeholder="Enter your email" className="h-10"/>
+            <Input placeholder="Enter your email" className="h-10 "/>
           </Form.Item>
 
           <Form.Item
@@ -181,7 +181,7 @@ export default function LogInForm(): JSX.Element {
             <Input.Password placeholder="Enter your password" className="h-10" />
           </Form.Item>
 
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-end mb-6 text-black dark:text-white">
             <Link href="/auth/forget-password" className="text-black">
               Forgot Password?
             </Link>
@@ -190,7 +190,7 @@ export default function LogInForm(): JSX.Element {
           <Form.Item>
             <button
               disabled={isLoading}
-              className="bg-primary w-full py-2 rounded-md text-white"
+              className="bg-primary w-full py-2 rounded-md text-black dark:text-white"
             >
               {isLoading ? "Loading..." : "Log In"}
             </button>
