@@ -236,7 +236,7 @@ const SelectYourVehicle = () => {
                                 key={product.id}
                                 className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                             >
-                                <div className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors">
+                                <div className="w-full px-6 py-4 flex items-center justify-between bg-white dark:bg-[#24292E] transition-colors">
                                     <div className="flex items-center gap-4 flex-1">
                                         {product.brandImage ? (
                                             <Image
@@ -252,8 +252,8 @@ const SelectYourVehicle = () => {
                                             </div>
                                         )}
                                         <div className="text-left">
-                                            <h3 className="font-semibold text-gray-900">{product.brandName}</h3>
-                                            <p className="text-sm text-gray-600">
+                                            <h3 className="font-semibold text-black dark:text-white">{product.brandName}</h3>
+                                            <p className="text-sm  text-black dark:text-white">
                                                 {product.modelName} {product.generationName}
                                             </p>
                                         </div>
@@ -261,23 +261,23 @@ const SelectYourVehicle = () => {
                                 </div>
 
                                 {/* Display all car details directly */}
-                                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                                <div className="px-6 py-4 bg-gray-50 dark:bg-[#24292E]  border-t border-gray-200">
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         <div>
-                                            <p className="text-xs text-gray-500 uppercase">Power</p>
-                                            <p className="text-lg font-semibold text-gray-900">{product.kw} (KW)</p>
+                                            <p className="text-xs text-black dark:text-white uppercase">Power</p>
+                                            <p className="text-lg font-semibold text-black dark:text-white">{product.kw} (KW)</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500 uppercase">Displacement</p>
-                                            <p className="text-lg font-semibold text-gray-900">{product.ccm} (CCM)</p>
+                                            <p className="text-xs text-black dark:text-white uppercase">Displacement</p>
+                                            <p className="text-lg font-semibold text-black dark:text-white">{product.ccm} (CCM)</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500 uppercase">Horsepower</p>
-                                            <p className="text-lg font-semibold text-gray-900">{product.hp} (HP)</p>
+                                            <p className="text-xs text-black dark:text-white uppercase">Horsepower</p>
+                                            <p className="text-lg font-semibold text-black dark:text-white">{product.hp} (HP)</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500 uppercase">Year Range</p>
-                                            <p className="text-lg font-semibold text-gray-900">{product.yearRange}</p>
+                                            <p className="text-xs text-black dark:text-white uppercase">Year Range</p>
+                                            <p className="text-lg font-semibold text-black dark:text-white">{product.yearRange}</p>
                                         </div>
                                     </div>
                                 </div>
