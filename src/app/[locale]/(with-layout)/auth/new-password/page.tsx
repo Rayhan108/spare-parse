@@ -98,11 +98,11 @@ export default function UpdatePasswordForm(): JSX.Element {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
       {contextHolder}
-      <div className="w-full max-w-lg shadow-md bg-white px-6 md:px-14 py-10 rounded-lg">
+      <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-6 md:px-14 py-10 rounded-lg">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-semibold">Update Password</h1>
+          <h1 className="text-2xl text-black dark:text-white font-semibold">Update Password</h1>
         </div>
 
         <Form<UpdatePasswordFormValues>
@@ -131,7 +131,7 @@ export default function UpdatePasswordForm(): JSX.Element {
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-primary w-full py-2 rounded-md text-white cursor-pointer hover:bg-primary/90 transition"
+              className="bg-primary w-full py-2 rounded-md text-black dark:text-white cursor-pointer hover:bg-primary/90 transition"
             >
               {isLoading ? "Updating..." : "Update Password"}
             </button>

@@ -61,9 +61,9 @@ export default function SignUpForm(): JSX.Element {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+        <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
             {contextHolder}
-            <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14 py-10 rounded-lg">
+            <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-10 rounded-lg">
                 <div className="text-center mb-6">
                     <h1 className="text-2xl font-semibold">SIGN UP</h1>
                 </div>
@@ -188,7 +188,7 @@ export default function SignUpForm(): JSX.Element {
                     <Form.Item className="mt-6">
                         <button
                             disabled={isLoading}
-                            className="bg-primary w-full py-2 rounded-md cursor-pointer text-white"
+                            className="bg-primary w-full py-2 rounded-md cursor-pointer text-black dark:text-white"
                         >
                             {isLoading ? "Loading..." : "SIGN UP"}
                         </button>

@@ -74,12 +74,12 @@ const ResetPassword: FC = (): JSX.Element => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+        <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
             {contextHolder}
-            <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14 py-10 rounded-lg">
+            <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-10 rounded-lg">
                 <div className="text-center mb-6">
                     <h1 className="text-2xl font-semibold">Reset Password</h1>
-                    <p className="mt-2 text-gray-500">
+                    <p className="mt-2 text-black dark:text-white">
                         Create a new password. Ensure it differs from previous ones for security
                     </p>
                 </div>
@@ -119,7 +119,7 @@ const ResetPassword: FC = (): JSX.Element => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="bg-primary w-full py-2 rounded-md cursor-pointer text-white mt-3"
+                            className="bg-primary w-full py-2 rounded-md cursor-pointer text-black dark:text-white mt-3"
                         >
                             {isLoading ? "Processing..." : "RESET PASSWORD"}
                         </button>

@@ -142,12 +142,12 @@ const handleResend = () => {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
       {contextHolder}
-      <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14 py-14 rounded-lg">
+      <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-14 rounded-lg">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-semibold">Verification</h1>
-          <p className="mt-2 text-gray-500">
+          <h1 className="text-2xl text-black dark:text-white font-semibold">Verification</h1>
+          <p className="mt-2 text-black dark:text-white">
             Enter the 6-digit code sent to your email
           </p>
         </div>
@@ -172,7 +172,7 @@ const handleResend = () => {
         <button
           disabled={isLoading}
           onClick={onFinish}
-          className="bg-primary w-full py-2 rounded-md text-white disabled:opacity-50"
+          className="bg-primary w-full py-2 rounded-md text-black dark:text-white disabled:opacity-50"
         >
           {isLoading ? "Verifying..." : "VERIFY"}
         </button>
@@ -181,14 +181,14 @@ const handleResend = () => {
           <p className="text-gray-600">
             Didn’t get the email?{" "}
             {timer > 0 ? (
-              <span className="text-gray-400">
+              <span className="text-black dark:text-white">
                 Resend in <span className="font-semibold">{timer}s</span>
               </span>
             ) : (
               <button
                 onClick={handleResend}
                 disabled={resendLoading}
-                className="text-primary font-semibold hover:underline disabled:opacity-50"
+                className="text-black dark:text-white font-semibold hover:underline disabled:opacity-50"
               >
                 {resendLoading ? "Sending..." : "Resend Code"}
               </button>

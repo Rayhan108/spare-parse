@@ -79,11 +79,11 @@ export default function SellerSignUp(): JSX.Element {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+        <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
             {contextHolder}
-            <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14  py-10 rounded-lg">
+            <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14  py-10 rounded-lg">
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl font-semibold">SIGN UP AS A SELLER</h1>
+                    <h1 className="text-2xl font-semibold text-black dark:text-white">SIGN UP AS A SELLER</h1>
                 </div>
 
                 <Form<SignUpFormValues> form={form} name="signup" layout="vertical" onFinish={onFinish} autoComplete="off">
@@ -191,7 +191,7 @@ export default function SellerSignUp(): JSX.Element {
 
                     <Form.Item className="mt-6">
                         <button
-                            className=" bg-primary  w-full py-2 rounded-md cursor-pointer text-white"
+                            className=" bg-primary  w-full py-2 rounded-md cursor-pointer text-black dark:text-white"
                         >
                             {isLoading ? "Loading..." : "SIGN UP"}
                         </button>
@@ -203,21 +203,21 @@ export default function SellerSignUp(): JSX.Element {
                         className=" w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md mb-4 cursor-pointer"
                         // onClick={(): void => console.log("Google sign up clicked")}
                     >
-                        <FcGoogle size={25} className="mr-2" /> Sign up with Google
+                        <FcGoogle size={25} className="mr-2 text-black dark:text-white" /> Sign up with Google
                     </button>
 
                     <button
                         className=" w-full flex items-center justify-center border border-[#00000066] py-1 rounded-md cursor-pointer "
                         // onClick={(): void => console.log("Facebook sign up clicked")}
                     >
-                        <FaFacebook size={25} className="mr-2 text-[#0689ff]" /> Sign up with Facebook
+                        <FaFacebook size={25} className="mr-2 text-[#0689ff] " /> Sign up with Facebook
                     </button>
                 </div>
 
                 <div className="text-center mt-4">
-                    <span className="text-sm">
+                    <span className="text-sm text-black dark:text-white">
                         Already have an account?
-                        <Link href="/auth/login" className="text-primary ml-1">
+                        <Link href="/auth/login" className="text-black dark:text-white ml-1">
                             Log in
                         </Link>
                     </span>
