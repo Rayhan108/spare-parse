@@ -24,14 +24,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <ConfigProvider
-        theme={{
-          components: {
-            "Input": {
-              "activeBorderColor": "rgb(245,97,0)",
-              "hoverBorderColor": "rgb(245,97,0)",
-            }
-          },
-        }}
+      
       >
 
         {children}
