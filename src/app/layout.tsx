@@ -53,7 +53,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/utils/ClientProviders";
 
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast"; 
 import { ThemeProvider } from "@/Providers/ThemeProviders";
 
 const inter = Inter({
@@ -62,8 +62,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Hatem E-commerce",
-  description: "E-commerce platform with social login",
+  title: "SpareDoc",
+  description: "Spare parse for vehicles",
 };
 
 // Prevent flash - only apply dark if stored

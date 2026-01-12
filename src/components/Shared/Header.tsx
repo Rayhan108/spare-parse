@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { ConfigProvider, Input, Modal } from "antd";
-import { FiSearch } from "react-icons/fi";
+import { FiMoon, FiSearch, FiSun } from "react-icons/fi";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { GoPerson, GoVersions } from "react-icons/go";
@@ -354,22 +354,7 @@ const handleSwitchRoleClick = async () => {
             >
               {t("about")}
             </Link>
-    {/* dark toggle */}
-              <div className="flex items-center justify-between mb-5">
-                <p className="text-gray-200 dark:text-black">{t("darkmode")}:</p>
-                <button
-                  onClick={handleToggle}
-                  className={`w-14 h-6 flex items-center rounded-full p-1 ${
-                    isDarkMode ? "bg-gray-700" : "bg-gray-300"
-                  }`}
-                >
-                  <div
-                    className={`w-4 h-4 bg-white rounded-full transition-all ${
-                      isDarkMode ? "translate-x-8" : ""
-                    }`}
-                  ></div>
-                </button>
-              </div>
+
 
 
 
@@ -454,7 +439,7 @@ const handleSwitchRoleClick = async () => {
 >
     <Input
     style={{ backgroundColor: isDarkMode ? "#24292E" : "#f0f0f0" }}
-    suffix={<FiSearch className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-black"}`} />}
+    suffix={<FiSearch className={`${!token ? "w-4 h-4" : "w-6 h-6"} ${isDarkMode ? "text-white" : "text-black"}`} />}
     className={`w-[280px] ${isDarkMode ? "text-black placeholder:text-white" : ""}`}
     placeholder={t("searchPlaceholder")}
     value={searchQuery}
@@ -465,7 +450,7 @@ const handleSwitchRoleClick = async () => {
   )}
 
   {/* Wishlist & Cart only for Buyer */}
-  {user?.role !== "SELLER" && (
+  {(user?.role !== "SELLER" ) && (
     <>
       <div className="relative">
         <Link href={`/wishlist`}>
@@ -507,6 +492,33 @@ const handleSwitchRoleClick = async () => {
       />
     </div>
   )}
+  {
+    !token && (
+    <div className="flex items-center justify-between ">
+                {isDarkMode ? (
+                               <FiMoon className={`w-5 h-5 text-white mr-1`} />
+                             ) : (
+                               <FiSun className={`w-5 h-5 text-black mr-1`} />
+                             )}
+                <button
+                  onClick={handleToggle}
+                  className={`w-14 h-6 flex items-center rounded-full p-1 ${
+                    isDarkMode ? "bg-gray-700" : "bg-gray-300"
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 bg-white rounded-full transition-all ${
+                      isDarkMode ? "translate-x-8" : ""
+                    }`}
+                  ></div>
+                </button>
+              </div>
+    )
+  }
+          
+
+
+
 </div>
 
           {/* Mobile Menu Icon */}

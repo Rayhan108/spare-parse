@@ -55,6 +55,7 @@ export default function LogInForm(): JSX.Element {
   const { signInWithGoogle, loading: googleLoading } = useGoogleAuth();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [socialLogin, { isLoading: socialLoading }] = useSocialLoginMutation();
+  
   useEffect(() => {
     const token = Cookies.get("hatem-ecommerce-token");
     const user = localStorage.getItem("hatem-ecommerce-user");
@@ -155,14 +156,14 @@ export default function LogInForm(): JSX.Element {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
       {contextHolder}
-      <div className="w-full max-w-lg shadow-md bg-white px-4 md:px-14 py-10 rounded-lg">
+      <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-10 rounded-lg">
         <h1 className="text-2xl text-black dark:text-white font-semibold text-center mb-6">Log In</h1>
 
         {/* Email/Password Login field */}
         <Form form={form} layout="vertical" onFinish={onFinish}>
-          <Form.Item
+           <Form.Item
             label="Email"
             name="email"
             rules={[
@@ -211,7 +212,7 @@ export default function LogInForm(): JSX.Element {
              <button
       onClick={handleGoogleLogin}
       disabled={googleLoading}
-      className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+      className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-[#32373b] text-black dark:text-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
     >
       {googleLoading ? (
         <AiOutlineLoading3Quarters className="w-5 h-5 animate-spin" />
@@ -224,7 +225,7 @@ export default function LogInForm(): JSX.Element {
 
 
 
-        <p className="text-center mt-4 text-sm">
+        <p className="text-center dark:text-white text-black mt-4 text-sm">
           Don’t have an account?{" "}
           <Link href="/auth/sign-up" className="text-primary">
             Sign Up
