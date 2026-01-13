@@ -89,7 +89,7 @@ const Header = ({ locale }: { locale: string }) => {
   const wishlistCount = wishlistData?.length || 0;
 
   const currentLanguage = getLanguageByCode(locale);
-
+const isRTL = locale === "ar";
   const token =
     user?.role === "BUYER"
       ? Cookies.get("hatem-ecommerce-token")
@@ -534,7 +534,10 @@ const handleSwitchRoleClick = async () => {
           {token && subMenu && (
             <div
               ref={subMenuRef}
-              className="absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl z-50"
+              // className="absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl z-50"
+                  className={`absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] top-[80px] px-8 py-5 rounded-lg shadow-2xl z-50 ${
+      isRTL ? "left-0" : "right-0"
+    }`}
             >
               {/* Dark Mode */}
               <div className="flex items-center justify-between mb-5">
