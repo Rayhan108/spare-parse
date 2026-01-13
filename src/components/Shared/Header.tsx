@@ -537,7 +537,7 @@ const handleSwitchRoleClick = async () => {
               className="absolute w-[250px] bg-[#444444] dark:bg-[#c5c5c5] right-0 top-[80px] px-8 py-5 rounded-lg shadow-2xl z-50"
             >
               {/* Dark Mode */}
-              {/* <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center justify-between mb-5">
                 <p className="text-gray-200 dark:text-black">{t("darkmode")}:</p>
                 <button
                   onClick={handleToggle}
@@ -551,7 +551,7 @@ const handleSwitchRoleClick = async () => {
                     }`}
                   ></div>
                 </button>
-              </div> */}
+              </div>
 
               {/* Manage Account */}
               <Link

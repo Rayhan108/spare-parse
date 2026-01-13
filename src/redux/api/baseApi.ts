@@ -3,8 +3,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
 
-// const BASE_URL = "https://backend.sparedoc.com/api/v1";
-const BASE_URL = "http://10.10.20.26:7080/api/v1";
+const BASE_URL = "https://backend.sparedoc.com/api/v1";
+// const BASE_URL = "http://10.10.20.26:7080/api/v1";
 
 
 let csrfToken: string | null = null;
