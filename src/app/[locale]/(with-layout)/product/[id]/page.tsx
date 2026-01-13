@@ -132,6 +132,9 @@ export default function SingleProduct() {
 
   const product: Product = data.data;
   const role = user?.role;
+const removeHTMLTags = (input: string) => {
+  return input.replace(/<\/?[^>]+(>|$)/g, ""); // Remove HTML tags
+};
 
   const handleAddToCart = async () => {
     try {
@@ -286,7 +289,7 @@ export default function SingleProduct() {
                       whiteSpace: "pre-wrap",
                     }}
                   >
-                    {product.description}
+                {removeHTMLTags(product.description)}
                   </div>
                 </div>
               </div>

@@ -376,9 +376,9 @@ const handleSwitchRoleClick = async () => {
             )}
 
             {/* Language Dropdown */}
-            <div className="relative" ref={languageRef}>
+            <div className="relative cursor-pointer" ref={languageRef}>
               <button
-                className="flex items-center text-orange-500 hover:text-orange-600 font-medium gap-1"
+                className="flex items-center text-orange-500 hover:text-orange-600 font-medium gap-1 cursor-pointer"
                 onClick={toggleLanguageDropdown}
               >
                 <span>{currentLanguage.flag}</span>
@@ -391,12 +391,12 @@ const handleSwitchRoleClick = async () => {
               </button>
 
               {isLanguageOpen && (
-                <div className="absolute top-full mt-2 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-600 w-40 rounded-lg text-sm z-50 overflow-hidden">
+                <div className="absolute top-full mt-2 bg-white dark:bg-gray-800 shadow-lg border cursor-pointer border-gray-200 dark:border-gray-600 w-40 rounded-lg text-sm z-50 overflow-hidden">
                   {languages.map((lang: any) => (
                     <button
                       key={lang.code}
                       onClick={() => handleLanguageSelect(lang.code)}
-                      className={`w-full text-left px-4 py-3 flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                      className={`w-full text-left px-4 py-3 flex items-center gap-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-700 transition-colors ${
                         locale === lang.code
                           ? "bg-orange-50 dark:bg-orange-900/20 text-orange-600 font-medium"
                           : "text-gray-700 dark:text-gray-200"
