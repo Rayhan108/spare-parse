@@ -2,6 +2,7 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
+import { logout, updateTokens } from "../features/auth/authSlice";
 
 const BASE_URL = "https://backend.sparedoc.com/api/v1";
 // const BASE_URL = "http://10.10.20.26:7080/api/v1";
@@ -95,6 +96,45 @@ const baseQueryWithCsrf = async (
     clearCsrfToken();
     await ensureCsrfToken();
     result = await baseQuery(args, api, extraOptions);
+  }
+
+  if(result.error && result.error.status === 401){ 
+
+    const {data } = await baseQuery({
+      url: `/auth/refresh-token`, method: "POST"
+    }, api, extraOptions);
+
+    interface IRefreshPayload { 
+      data: {
+
+        accessToken: string; 
+        refreshToken: string;
+      }
+
+    }
+
+     if (data as IRefreshPayload) {
+         // Refresh Successful
+         const newToken = (data as IRefreshPayload)?.data?.accessToken;
+        //  const newRefreshToken = (data as IRefreshPayload)?.data
+        //     ?.refreshToken;
+
+         // Update local storage
+         updateTokens({ 
+          accessToken: newToken, 
+          // refreshToken: newRefreshToken
+         });
+         
+
+         // Retry the original failed request with the new Access Token
+         result = await baseQuery(args, api, extraOptions);
+      } else {
+         // Refresh Failed (Refresh Token invalid or expired)
+         logout();
+      }
+
+  
+
   }
 
   return result;

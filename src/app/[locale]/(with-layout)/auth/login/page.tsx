@@ -80,7 +80,8 @@ export default function LogInForm(): JSX.Element {
     // console.log("refresh token from login page--->",refreshToken);
 
     dispatch(setUser({ user: userData, accessToken, refreshToken }));
-    Cookies.set("hatem-ecommerce-token", accessToken, { expires: 7 });
+    Cookies.set("hatem-ecommerce-token", accessToken);
+    Cookies.set("hatem-ecommerce-refreshToken", refreshToken);
     localStorage.setItem("hatem-ecommerce-refreshToken", refreshToken);
     localStorage.setItem("hatem-ecommerce-user", JSON.stringify(userData));
   };

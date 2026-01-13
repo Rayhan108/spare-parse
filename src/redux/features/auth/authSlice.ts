@@ -1,12 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
 export interface User {
   email: string;
   role: string;
-  image:string
+  image: string;
 }
-
 
 interface AuthState {
   user: User | null;
@@ -14,13 +12,11 @@ interface AuthState {
   refreshToken: string | null;
 }
 
-
 const initialState: AuthState = {
   user: null,
   accessToken: null,
   refreshToken: null,
 };
-
 
 export const authSlice = createSlice({
   name: "auth",
@@ -39,6 +35,25 @@ export const authSlice = createSlice({
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
     },
+    
+
+    updateTokens: (
+      state,
+      action: PayloadAction<{
+        accessToken: string;
+        refreshToken?: string;
+      }>
+    ) => {
+      if(action.payload.accessToken){
+        state.accessToken = action.payload.accessToken;
+
+      }
+      if(action.payload.refreshToken){
+
+        state.refreshToken = action.payload.refreshToken as string;
+      }
+    },
+    
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
@@ -47,8 +62,16 @@ export const authSlice = createSlice({
   },
 });
 
+export const { setUser, updateTokens, logout } = authSlice.actions;
 
-export const { setUser, logout } = authSlice.actions;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const selectCurrentUser = (state: any) => state.logInUser.user;
+// Selectors
+export const selectCurrentUser = (state: { logInUser: AuthState }) =>
+  state.logInUser.user;
+export const selectAccessToken = (state: { logInUser: AuthState }) =>
+  state.logInUser.accessToken;
+export const selectRefreshToken = (state: { logInUser: AuthState }) =>
+  state.logInUser.refreshToken;
+export const selectIsAuthenticated = (state: { logInUser: AuthState }) =>
+  !!state.logInUser.accessToken;
+
 export default authSlice.reducer;
