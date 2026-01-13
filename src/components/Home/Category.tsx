@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ProductCart, { Product } from "./ProductCart";
 import {
   useGetAllCategoriesQuery,
@@ -33,12 +33,12 @@ const CategoryComponent = () => {
   const categories: Category[] = categoryData?.data ?? [];
   const products: Product[] = productData?.data ?? [];
 
-  useEffect(() => {
-    if (selectedCategoryId)
-      console.log("Selected Category ID:", selectedCategoryId);
-    if (productData?.data)
-      console.log("Products for selected category:", productData.data);
-  }, [selectedCategoryId, productData]);
+  // useEffect(() => {
+  //   if (selectedCategoryId)
+  //     console.log("Selected Category ID:", selectedCategoryId);
+  //   if (productData?.data)
+  //     console.log("Products for selected category:", productData.data);
+  // }, [selectedCategoryId, productData]);
 
   return (
     <div className="container mx-auto py-20 md:py-32">

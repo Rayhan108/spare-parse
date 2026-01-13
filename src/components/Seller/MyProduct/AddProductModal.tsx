@@ -493,12 +493,12 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
 
       // Step 5: Log the final payload for debugging before sending the request
       // console.log("Final payload before upload:");
-      formDataToSend.forEach((v, k) => console.log(k, v));
+      // formDataToSend.forEach((v, k) => console.log(k, v));
 
       // Step 6: Send the product data to the API for uploading
 
       const result = await addProduct(formDataToSend).unwrap();
-      console.log("result--------------->", result);
+      // console.log("result--------------->", result);
       if (result?.success) {
         toast.success(result?.message);
       } else {

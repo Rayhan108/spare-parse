@@ -6,7 +6,7 @@ import { Rate, notification } from "antd";
 import { IoIosHeartEmpty } from "react-icons/io";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+
 
 import {
   useGetWishlistQuery,
@@ -116,10 +116,10 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
       : 0;
 
   // Debugging logs for dynamic updates
-  useEffect(() => {
-    console.log("Reviews:", reviews);
-    console.log("Average rating:", averageRating);
-  }, [reviews, averageRating]);
+  // useEffect(() => {
+  //   console.log("Reviews:", reviews);
+  //   console.log("Average rating:", averageRating);
+  // }, [reviews, averageRating]);
 
 
   return (

@@ -68,8 +68,9 @@ const Cart = () => {
         };
 
         try {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const response = await createCheckout(checkoutPayload).unwrap();
-            console.log("✅ Checkout response:", response);
+            // console.log("✅ Checkout response:", response);
             message.success("Checkout request sent successfully!");
             router.push("/checkout");
         } catch (err: unknown) {

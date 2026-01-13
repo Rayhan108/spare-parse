@@ -32,7 +32,7 @@ export default function SignUpForm(): JSX.Element {
         SignUp(signData)
             .unwrap()
             .then((data) => {
-                console.log("SignUp Response:", data)
+                // console.log("SignUp Response:", data)
 
                 // ✅ Save OTP token to localStorage
                 if (data?.data) {

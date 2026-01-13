@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -370,11 +371,11 @@ const CheckoutPage = () => {
             id: billingAddress.id,
             data: billingData,
           }).unwrap();
-          console.log(" BILLING Updated:", res);
+          // console.log(" BILLING Updated:", res);
           message.success("Billing address updated!");
         } else {
           const res = await addAddress(billingData).unwrap();
-          console.log(" BILLING Added///////////////----------->:", res);
+          // console.log(" BILLING Added///////////////----------->:", res);
           message.success("Billing address saved!");
         }
       }

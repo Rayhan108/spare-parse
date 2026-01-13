@@ -45,6 +45,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 messaging.onBackgroundMessage((payload) => {
-  console.log("📩 Received background message:", payload);
+  // console.log("📩 Received background message:", payload);
 });

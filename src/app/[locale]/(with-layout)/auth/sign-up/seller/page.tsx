@@ -47,8 +47,9 @@ export default function SellerSignUp(): JSX.Element {
         }
 
         SignUp(formData).unwrap()
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             .then((data) => {
-                console.log(data);
+                // console.log(data);
                 api.open({
                     type: 'success',
                     message: 'Sign Up',

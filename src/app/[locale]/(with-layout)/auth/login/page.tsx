@@ -147,7 +147,7 @@ export default function LogInForm(): JSX.Element {
       setTimeout(() => router.push("/"), 200);
 
     } catch (error: any) {
-      console.error("Google Login Error:", error);
+      // console.error("Google Login Error:", error);
       api.error({
         message: "Google Login Failed",
         description: error?.data?.message || error?.message || "Something went wrong.",

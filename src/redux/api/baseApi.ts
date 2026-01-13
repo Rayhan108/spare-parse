@@ -91,7 +91,7 @@ const baseQueryWithCsrf = async (
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 403) {
-    console.log("🔄 403 received, refreshing CSRF...");
+    // console.log(" 403 received, refreshing CSRF...");
     clearCsrfToken();
     await ensureCsrfToken();
     result = await baseQuery(args, api, extraOptions);

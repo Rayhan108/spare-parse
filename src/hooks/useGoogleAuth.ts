@@ -37,7 +37,7 @@ export const useGoogleAuth = () => {
       };
 
       toast.success(`Welcome, ${user.displayName}!`);
-      console.log("Google Sign In Success:", googleUser);
+      // console.log("Google Sign In Success:", googleUser);
       
       return googleUser;
     } catch (error: any) {
