@@ -1,28 +1,23 @@
-
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
 import { logout, updateTokens } from "../features/auth/authSlice";
 
-const BASE_URL = "https://backend.sparedoc.com/api/v1";
+// const BASE_URL = "https://backend.sparedoc.com/api/v1";
+const BASE_URL = "http://localhost:7080/api/v1";
 // const BASE_URL = "http://10.10.20.26:7080/api/v1";
-
 
 let csrfToken: string | null = null;
 let csrfPromise: Promise<string | null> | null = null;
 
 async function ensureCsrfToken(): Promise<string | null> {
-
   if (csrfToken) {
     // console.log(" Using cached CSRF token");
     return csrfToken;
   }
 
-
   if (csrfPromise) {
     return csrfPromise;
   }
-
 
   csrfPromise = fetch(`${BASE_URL}/csrf-token`, {
     method: "GET",
@@ -30,13 +25,13 @@ async function ensureCsrfToken(): Promise<string | null> {
   })
     .then(async (res) => {
       if (!res.ok) throw new Error("CSRF fetch failed");
-      
+
       const data = await res.json();
 
       csrfToken = data.token;
-      
+
       // console.log(" CSRF Token saved:", csrfToken?.substring(0, 30) + "...");
-      
+
       return csrfToken;
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -98,43 +93,45 @@ const baseQueryWithCsrf = async (
     result = await baseQuery(args, api, extraOptions);
   }
 
-  if(result.error && result.error.status === 401){ 
+  if (result.error && result.error.status === 401) {
+    const { data } = await baseQuery(
+      {
+        url: `/auth/refresh-token`,
+        method: "POST",
+      },
+      api,
+      extraOptions
+    );
 
-    const {data } = await baseQuery({
-      url: `/auth/refresh-token`, method: "POST"
-    }, api, extraOptions);
-
-    interface IRefreshPayload { 
+    interface IRefreshPayload {
       data: {
-
-        accessToken: string; 
+        accessToken: string;
         refreshToken: string;
-      }
-
+      };
     }
 
-     if (data as IRefreshPayload) {
-         // Refresh Successful
-         const newToken = (data as IRefreshPayload)?.data?.accessToken;
-        //  const newRefreshToken = (data as IRefreshPayload)?.data
-        //     ?.refreshToken;
+    if (data as IRefreshPayload) {
+      // Refresh Successful
+      const newToken = (data as IRefreshPayload)?.data?.accessToken;
+    
+      if(newToken){
+        updateTokens({
+          accessToken: newToken,
+        });
 
-         // Update local storage
-         updateTokens({ 
-          accessToken: newToken, 
-          // refreshToken: newRefreshToken
-         });
-         
+        // Retry the original failed request with the new Access Token
+      result = await baseQuery(args, api, extraOptions);
 
-         // Retry the original failed request with the new Access Token
-         result = await baseQuery(args, api, extraOptions);
-      } else {
-         // Refresh Failed (Refresh Token invalid or expired)
-         logout();
+      }else { 
+        logout()
       }
 
-  
 
+      
+    } else {
+      // Refresh Failed (Refresh Token invalid or expired)
+      logout();
+    }
   }
 
   return result;
