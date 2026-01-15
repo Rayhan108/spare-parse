@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Breadcrumb, Pagination, Select, Spin } from "antd";
@@ -90,14 +91,10 @@ const MyOrder = () => {
             </tr>
           </thead>
           <tbody>
-            {ordersData?.data?.map((order: Order) => {
+            {ordersData?.data?.map((order:any) => {
               const firstItem = order.items?.[0];
-
-              const subtotal = order.items?.reduce(
-                (sum, item) => sum + (item.price - (item.discount || 0)),
-                0
-              );
-
+console.log("order--------->",order);
+           
               const quantity = order.items?.length || 0;
 
               return (
@@ -115,9 +112,9 @@ const MyOrder = () => {
                     {firstItem?.productName || "N/A"}
                   </td>
 
-                  <td className="p-6">${order.totalAmount?.toFixed(2)}..</td>
+                  <td className="p-6">dzd {order?.totalProductAmount?.toFixed(2)}</td>
                   <td className="p-6">{quantity.toString().padStart(2, "0")}</td>
-                  <td className="p-6">${subtotal?.toFixed(2)}..</td>
+                  <td className="p-6">dzd {order.totalAmount?.toFixed(2)}</td>
 
                   <td className="p-6">
                     <IoEyeOutline

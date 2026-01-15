@@ -52,11 +52,11 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       onOk={handleOk}
       onCancel={handleCancel}
     >
-      <div className="container mx-auto p-5">
+      <div className="container mx-auto p-5 ">
         <h2 className="text-2xl font-semibold mb-4">Order Details</h2>
 
         {/* Order Info */}
-        <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-primary pt-8 pb-4 mb-6 text-sm text-gray-700 overflow-x-auto">
+        <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-primary pt-8 pb-4 mb-6 text-sm text-gray-700 dark:text-white overflow-x-auto ">
           <span className="whitespace-nowrap">Order ID</span>
           <span className="h-4 border-l border-gray-300"></span>
           <span className="whitespace-nowrap">{order.orderId}</span>
@@ -73,7 +73,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         {/* Product Table */}
         <div className="overflow-x-auto">
           <div className="min-w-[500px] lg:min-w-full">
-            <div className="grid grid-cols-4 text-left text-gray-600 border-y border-primary px-4 py-3 sm:grid-cols-4 lg:grid-cols-4">
+            <div className="grid grid-cols-4 text-left text-gray-600 dark:text-white border-y border-primary px-4 py-3 sm:grid-cols-4 lg:grid-cols-4">
               <div className="font-normal">Product</div>
               <div className="font-normal">Quantity</div>
               <div className="font-normal">Price</div>
@@ -84,7 +84,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               {order.items?.map((item) => (
                 <div
                   key={item.id}
-                  className="grid grid-cols-4 items-center bg-white border border-orange-200 rounded-lg p-4 sm:grid-cols-4 lg:grid-cols-4"
+                  className="grid grid-cols-4 items-center bg-white dark:bg-[#1F2937] border border-orange-200 rounded-lg p-4 sm:grid-cols-4 lg:grid-cols-4"
                 >
                   <div className="flex items-center space-x-4">
                     <Image
@@ -111,7 +111,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
         {/* Subtotal */}
         <div className="flex justify-end mt-6 pr-4">
-          <div className="text-lg font-semibold text-gray-800 whitespace-nowrap">
+          <div className="text-lg font-semibold text-gray-800 dark:text-white whitespace-nowrap">
             Subtotal: <span className="ml-2">${calculatedSubtotal.toFixed(2)}</span>
           </div>
         </div>

@@ -55,7 +55,7 @@ const ProductTrackModal: React.FC<ProductTrackModalProps> = ({
       <h2 className="text-2xl font-semibold mb-4">Order Track</h2>
 
       {/* Order Info */}
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 border-t border-primary pt-8 pb-4 mb-6 text-sm text-gray-700 overflow-x-auto">
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 border-t border-primary pt-8 pb-4 mb-6 text-sm text-gray-700 dark:text-white overflow-x-auto">
         <span className="whitespace-nowrap">Order ID</span>
         <span className="h-4 border-l border-gray-300"></span>
         <span className="whitespace-nowrap">{order.orderId}</span>
