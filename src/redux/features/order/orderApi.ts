@@ -44,10 +44,11 @@ export interface GetOrdersResponse {
 
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getMyOrders: builder.query<GetOrdersResponse, void>({
-      query: () => ({
+    getMyOrders: builder.query({
+      query: ({status,page,limit}) => ({
         url: "/orders/my-orders",
         method: "GET",
+        params:{status,page,limit}
       }),
     }),
   }),

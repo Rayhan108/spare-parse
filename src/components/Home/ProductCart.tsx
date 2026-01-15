@@ -146,7 +146,7 @@ const ProductCart: React.FC<ProductCartProps> = ({ product }) => {
 
       <IoIosHeartEmpty
         onClick={handleWishlistToggle}
-        className={`${isAdded ? "bg-primary text-white" : "bg-[#e6fbef]"
+        className={`${isAdded ? "bg-primary text-white" : "bg-[#e6fbef] dark:bg-[#24292E]"
           } p-2 w-10 h-10 rounded-full top-2 right-2 absolute cursor-pointer transition`}
       />
 
