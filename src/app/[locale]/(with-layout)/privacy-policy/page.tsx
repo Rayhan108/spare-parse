@@ -23,7 +23,7 @@ const PrivacyPolicyPage = () => {
 
   return (
     <div className="container mx-auto py-16 px-3 md:px-0">
-      {/* Breadcrumb */}
+      {/* Breadcrumbb */}
       <Breadcrumb
         items={[
           {
