@@ -124,6 +124,12 @@ const productsApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSellerSingleProduct: builder.query<ApiResponse<Product>, string>({
+      query: (id) => ({
+        url: `/products/my-products/${id}`,
+        method: "GET",
+      }),
+    }),
 
     getProductByEngine: builder.query<VehicleProductsData, string>({
       query: (id) => ({
@@ -159,4 +165,5 @@ export const {
   useGetReviewOfProductsQuery,
   useGetProductByEngineQuery,
   useAddProductMutation,
+  useGetSellerSingleProductQuery
 } = productsApi;

@@ -38,7 +38,7 @@ export default function TransactionsTableAntd() {
       account: item.customerName,
       method: item.paymentMethod,
       email: item.customerEmail,
-      amount: `$${item.paymentAmount.toFixed(2)}`,
+      amount: `$${item?.paymentAmount?.toFixed(2)}`,
     })) || [];
 
   const columns = [

@@ -35,7 +35,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   handleCancel,
   order,
 }) => {
-  console.log("order--------->",order);
+  // console.log("order--------->",order);
   if (!order) return null;
 
 

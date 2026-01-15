@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import AddProductModal from "@/components/Seller/MyProduct/AddProductModal";
@@ -6,11 +7,13 @@ import MyProductSkeleton from "@/components/Seller/MyProduct/MyProductSkeleton";
 import { useGetMyProductsQuery, useDeleteProductMutation } from "@/redux/features/seller/product/productApi";
 import { useState } from "react";
 import { IoAdd } from "react-icons/io5";
-import { message } from "antd";
+import { message, Pagination } from "antd";
 
 const MyProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, error, refetch } = useGetMyProductsQuery();
+    const [page,setPage]=useState(1)
+  const limit=11
+  const { data, isLoading, error, refetch } = useGetMyProductsQuery({page,limit});
   const [deleteProduct] = useDeleteProductMutation();
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
@@ -44,14 +47,17 @@ const handleOk = async () => {
   if (error) return <p className="text-center mt-20 text-red-500">Error loading products</p>;
 
   const products = data?.data || [];
-
+const totalOrdersCount = data?.meta?.total || 0;
+    const handlePageChange = (page: number) => {
+    setPage(page);
+  };
   return (
     <div className="container mx-auto py-8 md:py-16 px-4 md:px-0">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-10 mt-20">
         <div className="overflow-hidden rounded">
           <div className="relative bg-[#f2fcf6] px-4 py-8 cursor-pointer" onClick={showModal}>
             <div className="flex h-58 items-center justify-center">
-              <IoAdd size={120} />
+              <IoAdd className="dark:text-black" size={120} />
             </div>
           </div>
           <button
@@ -65,7 +71,7 @@ const handleOk = async () => {
         </div>
 
 
-        {products.map((product) => (
+        {products.map((product:any) => (
           <MyProductCart
             key={product.id}
             id={product.id}
@@ -85,6 +91,15 @@ const handleOk = async () => {
             handleOk={handleOk}
             handleCancel={handleCancel}
           />
+               <div className="flex justify-center mt-8 items-center dark:text-white">
+        <Pagination
+        current={page}
+        pageSize={limit}
+        total={totalOrdersCount}
+        onChange={handlePageChange}
+        className="dark:text-white"
+      />
+</div>
     </div>
   );
 };

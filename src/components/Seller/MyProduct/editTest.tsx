@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import TipTapMenu from "./TipTapMenu";
 
 import { useUpdateProductMutation } from "@/redux/features/seller/product/productApi";
-import { useGetSellerSingleProductQuery } from "@/redux/features/products/productsApi";
+import { useGetSingleProductQuery } from "@/redux/features/products/productsApi";
 import { useGetAllCategoriesQuery } from "@/redux/features/categories/categoriesApi";
 import {
   useGetBrandsByYearQuery,
@@ -208,7 +208,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     })) || [];
 
   // Product query + mutation
-  const { data, isLoading, isError } = useGetSellerSingleProductQuery(productId);
+  const { data, isLoading, isError } = useGetSingleProductQuery(productId);
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
 
   const editor = useEditor({
@@ -272,7 +272,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
       ...prev,
       categoryId: product.categoryId,
     }));
-console.log("api product------>",apiProduct);
+
     // Fitment - take first fitVehicle if exists
     const firstFit = apiProduct.fitVehicles?.[0];
 

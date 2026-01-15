@@ -82,7 +82,7 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
           className="absolute right-2 top-2"
           aria-label="Remove item"
         >
-          <RiDeleteBin6Line size={40} className="bg-white rounded-full p-2 cursor-pointer" />
+          <RiDeleteBin6Line size={40} className="bg-white dark:bg-[#242] rounded-full p-2 cursor-pointer" />
         </button>
 
         {/* Edit button */}
@@ -91,7 +91,7 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
           className="absolute left-2 top-2"
           aria-label="Edit item"
         >
-          <TbEdit size={40} className="bg-white rounded-full p-2 cursor-pointer" />
+          <TbEdit size={40} className="bg-white dark:bg-[#242]  rounded-full p-2 cursor-pointer" />
         </button>
 
         {/* Product image */}
@@ -116,12 +116,12 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
 
       {/* Product info */}
       <div className="p-4">
-        <h3 className="text-lg font-bold text-gray-900">{name}</h3>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white">{name}</h3>
         <div className="mt-1 flex items-center">
           <span className="text-xl font-bold text-orange-500">dzd {discountedPrice.toFixed(2)}</span>
           {discount > 0 && <span className="ml-2 text-gray-500 line-through">dzd {price.toFixed(2)}</span>}
         </div>
-        <p className="mt-1 text-sm text-gray-600">Stock: {stock}</p>
+        <p className="mt-1 text-sm text-gray-600 dark:text-white">Stock: {stock}</p>
         {!isVisible && <p className="text-sm text-red-500 mt-1">Not Visible</p>}
       </div>
 

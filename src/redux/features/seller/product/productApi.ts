@@ -52,10 +52,11 @@ export interface AddProductResponse {
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
  
-    getMyProducts: builder.query<SellerProductsResponse, void>({
-      query: () => ({
+    getMyProducts: builder.query({
+      query: ({page,limit}) => ({
         url: "/products/my-products",
         method: "GET",
+        params:{page,limit}
       }),
            providesTags: ["Product"]
      

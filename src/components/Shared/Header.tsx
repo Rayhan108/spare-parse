@@ -666,7 +666,7 @@ const handleSwitchRoleClick = async () => {
         centered
       >
         <div className="py-4">
-          <p className="text-gray-600 text-base">
+          <p className="text-gray-600 dark:text-white text-base">
             Are you sure you want to switch your role from{" "}
             <strong>{user?.role === "BUYER" ? t("buyer") : t("seller")}</strong>{" "}
             to <strong>{targetRole}</strong>?

@@ -664,7 +664,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
                 <Form
                   form={form}
                   layout="vertical"
-                  className="mx-auto p-5 bg-white rounded-md"
+                  className="mx-auto p-5 bg-white dark:bg-[#24292E] rounded-md"
                 >
                   <Form.Item
                     label="Product Name"
@@ -1017,7 +1017,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
           return false;
         }}
       >
-        <div className="w-32 h-32  border border-dashed border-[#f56100] rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#f56100] hover:text-white">
+        <div className="w-32 h-32  border   rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#f56100] hover:text-white">
           <SlCloudUpload size={40} className="transition-all duration-300 hover:scale-110" />
         </div>
       </Upload>
