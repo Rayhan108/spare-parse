@@ -4,10 +4,6 @@ import { useGetTermsAndConditionsQuery } from "@/redux/features/terms/termsApi";
 import { Breadcrumb, Spin } from "antd";
 import Link from "next/link";
 
-// Function to remove HTML tags using a regex
-const removeHTMLTags = (str: string) => {
-  return str.replace(/<\/?[^>]+(>|$)/g, ""); // Regex to remove all HTML tags
-};
 
 const TermsAndConditions = () => {
   const { data, isLoading, isError } = useGetTermsAndConditionsQuery();
@@ -59,11 +55,12 @@ const TermsAndConditions = () => {
       </h1>
 
       {/* Content */}
-      <div className="space-y-6 text-gray-700 dark:text-gray-300 text-lg">
-        {/* Removing HTML tags */}
-        <p>{removeHTMLTags(terms?.content || "No terms and conditions available.")}</p>
-      </div>
+     <div
+        className="space-y-6 text-gray-700 dark:text-gray-300 text-lg"
+        dangerouslySetInnerHTML={{ __html: terms?.content || "" }}
+      />
     </div>
+ 
   );
 };
 
