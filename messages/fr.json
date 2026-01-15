@@ -224,7 +224,20 @@
       "success": "Inscription vendeur réussie ! 🎉",
       "errorDefault": "Échec de l'inscription en tant que vendeur. Veuillez réessayer."
     }
+  },
+  
+  "login": {
+    "loginText": "Se connecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "loginButton": "Se connecter",
+    "continueWithGoogle": "Continuer avec Google",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUp": "S'inscrire"
   }
+
+
 }
 
 

@@ -230,7 +230,24 @@
       "success": "Seller registration successful! 🎉",
       "errorDefault": "Failed to register as seller. Please try again."
     }
+  },
+  
+
+  "login": {
+    "loginText": "Log In",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "loginButton": "Log In",
+    "continueWithGoogle": "Continue with Google",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up"
   }
+
+
+
+
+
 }
 
 

@@ -14,6 +14,7 @@ import Cookies from "js-cookie";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { useTranslations } from "next-intl";
 
 
 interface LogInFormValues {
@@ -47,7 +48,7 @@ export default function LogInForm(): JSX.Element {
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm<LogInFormValues>();
   const [logIn, { isLoading }] = useLogInMutation();
-
+const t = useTranslations('login')
   const router = useRouter();
   const dispatch = useDispatch();
   // Google Auth
@@ -160,7 +161,7 @@ export default function LogInForm(): JSX.Element {
     <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
       {contextHolder}
       <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-10 rounded-lg">
-        <h1 className="text-2xl text-black dark:text-white font-semibold text-center mb-6">Log In</h1>
+        <h1 className="text-2xl text-black dark:text-white font-semibold text-center mb-6">{t('loginText')}</h1>
 
         {/* Email/Password Login field */}
         <Form form={form} layout="vertical" onFinish={onFinish}>
@@ -168,7 +169,7 @@ export default function LogInForm(): JSX.Element {
             label="Email"
             name="email"
             rules={[
-              { required: true, message: "Please input your email!" },
+              { required: true, message: "Please input your email!"},
               { type: "email", message: "Enter a valid email!" },
             ]}
           >
@@ -185,7 +186,7 @@ export default function LogInForm(): JSX.Element {
 
           <div className="flex justify-end mb-6 text-black dark:text-white">
             <Link href="/auth/forget-password" className="text-black">
-              Forgot Password?
+            {t('forgotPassword')}
             </Link>
           </div>
 
@@ -194,7 +195,7 @@ export default function LogInForm(): JSX.Element {
               disabled={isLoading}
               className="bg-primary w-full py-2 rounded-md text-black dark:text-white"
             >
-              {isLoading ? "Loading..." : "Log In"}
+              {isLoading ? "Loading..." : `${t('loginText')}`}
             </button>
           </Form.Item>
         </Form>
