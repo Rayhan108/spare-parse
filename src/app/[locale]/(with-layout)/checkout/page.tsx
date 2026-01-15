@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Breadcrumb,
   Checkbox,
@@ -18,6 +17,7 @@ import { useRouter } from "next/navigation";
 import {
   useGetCheckoutQuery,
   CheckoutItem,
+  useUpdateCheckoutShippingMutation,
 } from "@/redux/features/checkout/checkoutApi";
 import {
   useCreatePaymentSessionMutation,
@@ -65,8 +65,8 @@ interface ShippingOption {
   deliveryMax: number;
 }
 
-interface SelectedShipping {
-  [checkoutId: string]: ShippingOption | null;
+interface ItemShippingSelection {
+  [checkoutItemId: string]: string;
 }
 
 const CheckoutPage = () => {
@@ -75,14 +75,15 @@ const CheckoutPage = () => {
   const [billingForm] = Form.useForm();
   const [shippingForm] = Form.useForm();
 
-  const [selectedShipping, setSelectedShipping] = useState<SelectedShipping>(
-    {}
-  );
-  const [shippingId, setShippingId] = useState<string | null>(null);
+  const [itemShippingSelections, setItemShippingSelections] =
+    useState<ItemShippingSelection>({});
   const [isShippingFormOpen, setIsShippingFormOpen] = useState(false);
   const [sameAsBilling, setSameAsBilling] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  const { data, isLoading, isError } = useGetCheckoutQuery();
+  const { data, isLoading, isError, refetch } = useGetCheckoutQuery();
+  const [updateCheckoutShipping, { isLoading: isUpdatingShipping }] =
+    useUpdateCheckoutShippingMutation();
   const [
     createPaymentSession,
     { data: sessionData, isLoading: paymentLoading },
@@ -91,7 +92,6 @@ const CheckoutPage = () => {
     usePurchaseWithCODMutation();
   const { data: addressesData } = useGetAddressesQuery();
 
-  // Same API - will be called twice
   const [addAddress] = useAddAddressMutation();
   const [updateAddress] = useUpdateAddressMutation();
 
@@ -107,45 +107,194 @@ const CheckoutPage = () => {
     ? [data.data]
     : [];
 
-  const getShippingOptionsForCheckout = (checkout: any): ShippingOption[] => {
-    const allShippings: ShippingOption[] = [];
-    const seenIds = new Set<string>();
+  // Initialize state with existing shipping selections from backend (PERSISTENCE FIX)
+  useEffect(() => {
+    if (checkouts.length > 0 && !isInitialized) {
+      const existingSelections: ItemShippingSelection = {};
+      let hasExistingSelections = false;
 
-    checkout.items?.forEach((item: any) => {
-      item.product?.shippings?.forEach((shipping: ShippingOption) => {
-        if (!seenIds.has(shipping.id)) {
-          seenIds.add(shipping.id);
-          allShippings.push(shipping);
+      checkouts.forEach((checkout) => {
+        checkout.items?.forEach((item: CheckoutItem) => {
+          // Check if this item already has a shippingOptionId saved from backend
+          if (item.shippingOptionId) {
+            existingSelections[item.id] = item.shippingOptionId;
+            hasExistingSelections = true;
+          }
+        });
+      });
+
+      // Update state with existing selections
+      if (hasExistingSelections) {
+        setItemShippingSelections(existingSelections);
+      }
+      
+      setIsInitialized(true);
+    }
+  }, [checkouts, isInitialized]);
+
+  // Get shipping options for a specific item
+  const getShippingOptionsForItem = (item: CheckoutItem): ShippingOption[] => {
+    return item.product?.shippings || [];
+  };
+
+  // Check if all items have shipping selected
+  const allItemsHaveShipping = useCallback((): boolean => {
+    if (checkouts.length === 0) return false;
+
+    for (const checkout of checkouts) {
+      for (const item of checkout.items) {
+        if (!itemShippingSelections[item.id]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }, [checkouts, itemShippingSelections]);
+
+  // Update shipping selections on backend
+  const updateShippingOnBackend = useCallback(
+    async (checkoutId: string) => {
+      try {
+        const shippingSelections = Object.entries(itemShippingSelections).map(
+          ([checkoutItemId, shippingOptionId]) => ({
+            checkoutItemId,
+            shippingOptionId,
+          })
+        );
+
+        await updateCheckoutShipping({
+          checkoutId,
+          shippingSelections,
+        }).unwrap();
+
+        await refetch();
+        message.success("All shipping options saved successfully!");
+      } catch (error: any) {
+        console.error("Failed to update shipping:", error);
+        const errorMessage =
+          error?.data?.message || "Failed to update shipping options";
+        message.error(errorMessage);
+        throw error;
+      }
+    },
+    [itemShippingSelections, updateCheckoutShipping, refetch]
+  );
+
+  // Handle individual item shipping selection
+  const handleItemShippingChange = useCallback(
+    async (
+      checkoutItemId: string,
+      shippingOptionId: string,
+      checkoutId: string
+    ) => {
+      // Check if this is actually a change
+      const isActualChange =
+        itemShippingSelections[checkoutItemId] !== shippingOptionId;
+
+      if (!isActualChange) return;
+
+      // Update local state
+      const newSelections = {
+        ...itemShippingSelections,
+        [checkoutItemId]: shippingOptionId,
+      };
+
+      setItemShippingSelections(newSelections);
+
+      // Check if all items now have shipping selected
+      const allItemsSelected = checkouts[0]?.items?.every(
+        (item: CheckoutItem) => newSelections[item.id]
+      );
+
+      if (allItemsSelected) {
+        // All items have shipping, now update backend
+        try {
+          const shippingSelections = Object.entries(newSelections).map(
+            ([itemId, shippingId]) => ({
+              checkoutItemId: itemId,
+              shippingOptionId: shippingId,
+            })
+          );
+
+          await updateCheckoutShipping({
+            checkoutId,
+            shippingSelections,
+          }).unwrap();
+
+          await refetch();
+          message.success("All shipping options have been saved!");
+        } catch (error: any) {
+          console.error("Failed to update shipping:", error);
+          const errorMessage =
+            error?.data?.message || "Failed to update shipping";
+          message.error(errorMessage);
+
+          // Revert the selection on error
+          setItemShippingSelections((prev) => {
+            const revertedSelections = { ...prev };
+            delete revertedSelections[checkoutItemId];
+            return revertedSelections;
+          });
+        }
+      } else {
+        // Not all items have shipping yet, show remaining count
+        const remainingItems = checkouts[0]?.items?.filter(
+          (item: CheckoutItem) => !newSelections[item.id]
+        ).length;
+
+        if (remainingItems > 0) {
+          message.info(
+            `Please select shipping for ${remainingItems} more item(s)`
+          );
+        }
+      }
+    },
+    [itemShippingSelections, checkouts, updateCheckoutShipping, refetch]
+  );
+
+  // Calculate total shipping cost
+  const calculateTotalShippingCost = (): number => {
+    let totalShipping = 0;
+
+    checkouts.forEach((checkout) => {
+      checkout.items?.forEach((item: CheckoutItem) => {
+        const selectedShippingId = itemShippingSelections[item.id];
+        if (selectedShippingId) {
+          const shippingOptions = getShippingOptionsForItem(item);
+          const selectedShipping = shippingOptions.find(
+            (s) => s.id === selectedShippingId
+          );
+          if (selectedShipping) {
+            totalShipping += selectedShipping.cost * item.quantity;
+          }
         }
       });
     });
 
-    return allShippings;
+    return totalShipping;
   };
 
-  const handleShippingChange = (
-    checkoutId: string,
-    selectedShippingId: string,
-    shippingOptions: ShippingOption[]
-  ) => {
-    const shipping = shippingOptions.find((s) => s.id === selectedShippingId);
-    setShippingId(selectedShippingId);
-    setSelectedShipping((prev) => ({
-      ...prev,
-      [checkoutId]: shipping || null,
-    }));
-  };
-
-  const calculateShippingCost = (checkoutId: string): number => {
-    const shipping = selectedShipping[checkoutId];
-    return shipping?.cost || 0;
-  };
-
+  // Calculate grand total
   const calculateGrandTotal = (checkout: any): number => {
-    const shippingCost = calculateShippingCost(checkout.id);
-    return checkout.totalAmount + shippingCost;
+    let itemShippingCost = 0;
+
+    checkout.items?.forEach((item: CheckoutItem) => {
+      const selectedShippingId = itemShippingSelections[item.id];
+      if (selectedShippingId) {
+        const shippingOptions = getShippingOptionsForItem(item);
+        const selectedShipping = shippingOptions.find(
+          (s) => s.id === selectedShippingId
+        );
+        if (selectedShipping) {
+          itemShippingCost += selectedShipping.cost * item.quantity;
+        }
+      }
+    });
+
+    return checkout.totalAmount + itemShippingCost;
   };
 
+  // Initialize addresses
   useEffect(() => {
     if (addressesData?.data?.length) {
       const billing = addressesData.data.find(
@@ -176,26 +325,12 @@ const CheckoutPage = () => {
     }
   }, [addressesData, billingForm, shippingForm]);
 
+  // Handle payment redirect
   useEffect(() => {
     if (sessionData?.data?.redirectUrl) {
       window.location.href = sessionData.data.redirectUrl;
     }
   }, [sessionData]);
-
-  useEffect(() => {
-    if (checkouts.length > 0) {
-      const initialShipping: SelectedShipping = {};
-      checkouts.forEach((checkout) => {
-        const shippingOptions = getShippingOptionsForCheckout(checkout);
-        if (shippingOptions.length > 0) {
-          initialShipping[checkout.id] = shippingOptions[0];
-          setShippingId(shippingOptions[0].id);
-        }
-      });
-      setSelectedShipping(initialShipping);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
 
   const handleSameAsBilling = (checked: boolean) => {
     setSameAsBilling(checked);
@@ -223,16 +358,13 @@ const CheckoutPage = () => {
     }
   };
 
-  // Print receipt functionality
+  // Print receipt
   const handlePrint = () => {
     const printContent = receiptRef.current;
     if (!printContent) return;
 
     const checkout = checkouts[0];
-    const shippingCost = calculateShippingCost(checkout?.id);
     const grandTotal = calculateGrandTotal(checkout);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const selectedShip = selectedShipping[checkout?.id];
 
     const printWindow = window.open("", "", "width=800,height=600");
     if (!printWindow) return;
@@ -252,26 +384,43 @@ const CheckoutPage = () => {
         <body>
           <div class="receipt-header">
             <h2>Order Receipt</h2>
-      
-            <p>Date: dzd${new Date().toLocaleDateString()}</p>
+            <p>Date: ${new Date().toLocaleDateString()}</p>
           </div>
           <div>
             ${checkout?.items
-              .map(
-                (item: CheckoutItem) => `
-              <div class="item-row">
-                <div> ${item.product.productName} x dzd ${item.quantity}</div>
-                <div>dzd ${item.product.price * item.quantity}</div>
-              </div>
-            `
-              )
+              .map((item: CheckoutItem) => {
+                const selectedShippingId = itemShippingSelections[item.id];
+                const shippingOptions = getShippingOptionsForItem(item);
+                const selectedShipping = shippingOptions.find(
+                  (s) => s.id === selectedShippingId
+                );
+                const shippingCost = selectedShipping
+                  ? selectedShipping.cost * item.quantity
+                  : 0;
+
+                return `
+                  <div class="item-row">
+                    <div>${item.product.productName} x ${item.quantity}</div>
+                    <div>dzd ${item.product.afterDiscount * item.quantity}</div>
+                  </div>
+                  ${
+                    selectedShipping
+                      ? `
+                    <div style="padding-left: 20px; font-size: 14px; color: #666;">
+                      Shipping: ${selectedShipping.carrier} - dzd ${shippingCost}
+                    </div>
+                  `
+                      : ""
+                  }
+                `;
+              })
               .join("")}
           </div>
           <div class="receipt-total">
-            <div class="receipt-item"><span>Subtotal:</span><span>dzd ${checkout?.totalAmount}</span></div>
-            <div class="receipt-item"><span>Shipping:</span><span>${
-              shippingCost > 0 ? `dzd ${shippingCost}` : "Free"
+            <div class="receipt-item"><span>Subtotal:</span><span>dzd ${
+              checkout?.totalAmount
             }</span></div>
+            <div class="receipt-item"><span>Total Shipping:</span><span>dzd ${calculateTotalShippingCost()}</span></div>
             <div class="receipt-item" style="font-size: 20px;"><span>Total:</span><span>dzd ${grandTotal}</span></div>
           </div>
         </body>
@@ -282,26 +431,26 @@ const CheckoutPage = () => {
     printWindow.close();
   };
 
-  // ============ MAIN FORM SUBMIT ============
+  // Main form submit
   const onFinish = async (values: FieldType) => {
-    // console.log("=".repeat(50));
-    // console.log(" CHECKOUT FORM SUBMITTED");
-    // console.log("=".repeat(50));
-
     const { name, street, apartment, city, phone, email, save } = values;
 
+    // Validate required fields
     if (!name || !street || !city || !phone || !email) {
       return message.error("Please fill in all required fields.");
+    }
+
+    // Validate all items have shipping selected
+    if (!allItemsHaveShipping()) {
+      return message.error(
+        "Please select shipping for all items before placing order."
+      );
     }
 
     const checkoutId = checkouts[0]?.id;
     if (!checkoutId) {
       message.error("Checkout ID not found.");
       return;
-    }
-
-    if (!shippingId) {
-      return message.error("Please select a shipping option.");
     }
 
     const shippingValues = shippingForm.getFieldsValue();
@@ -314,47 +463,22 @@ const CheckoutPage = () => {
       checkout.items.map((item: CheckoutItem) => item.product.id)
     );
 
-    const shippingAddressForOrder = sameAsBilling
-      ? { name, street, apartment, city, phone }
-      : {
-          name: shippingValues.shippingName || name,
-          street: shippingValues.shippingStreet,
-          apartment: shippingValues.shippingApartment,
-          city: shippingValues.shippingCity,
-          state: shippingValues.shippingState,
-          postalCode: shippingValues.shippingPostalCode,
-          country: shippingValues.shippingCountry,
-          phone: shippingValues.shippingPhone || phone,
-        };
-
-    const orderData = {
-      checkoutId,
-      productIds,
-      shippingId,
-      name,
-      street,
-      apartment,
-      city,
-      phone,
-      email,
-      saveForNextTime: save,
-      shippingAddress: shippingAddressForOrder,
-    };
-
-    const paymentData = { checkoutId, shippingId };
-
     try {
       setLoading(true);
 
-      // ========================================
-      //  SAME API CALLED TWICE - START
-      // ========================================
+      // Make sure shipping is saved before proceeding
+      setSavingStatus("Confirming shipping selections...");
 
-      // ---------- 1st API Call: BILLING ----------
+      // Final update to ensure all shipping is saved
+      try {
+        await updateShippingOnBackend(checkoutId);
+      } catch (error) {
+        return;
+      }
+
+      // Save billing address if requested
       if (save) {
         setSavingStatus("Saving billing address...");
-        // console.log(" ========== BILLING ADDRESS API CALL ==========");
-
         const billingData = {
           addressLine: street!,
           city: city!,
@@ -364,27 +488,19 @@ const CheckoutPage = () => {
           type: "BILLING" as const,
         };
 
-        // console.log(" BILLING Data:", billingData);
-
         if (billingAddress?.id) {
-          const res = await updateAddress({
+          await updateAddress({
             id: billingAddress.id,
             data: billingData,
           }).unwrap();
-          // console.log(" BILLING Updated:", res);
-          message.success("Billing address updated!");
         } else {
-          const res = await addAddress(billingData).unwrap();
-          // console.log(" BILLING Added///////////////----------->:", res);
-          message.success("Billing address saved!");
+          await addAddress(billingData).unwrap();
         }
       }
 
-      // ---------- 2nd API Call: SHIPPING ----------
+      // Save shipping address if requested
       if (shippingValues.saveShipping) {
         setSavingStatus("Saving shipping address...");
-        // console.log("\n2️ ========== SHIPPING ADDRESS API CALL ==========");
-
         let shippingData;
 
         if (sameAsBilling) {
@@ -407,30 +523,47 @@ const CheckoutPage = () => {
           };
         }
 
-        // console.log(" SHIPPING Data:", shippingData);
-
         if (shippingAddressData?.id) {
-          const res = await updateAddress({
+          await updateAddress({
             id: shippingAddressData.id,
             data: shippingData,
           }).unwrap();
-          console.log(" SHIPPING Updated:", res);
-          message.success("Shipping address updated!");
         } else {
-          const res = await addAddress(shippingData).unwrap();
-          console.log(" SHIPPING Added:", res);
-          message.success("Shipping address saved!");
+          await addAddress(shippingData).unwrap();
         }
       }
 
-      // console.log("========== BOTH API CALLS COMPLETED ==========\n");
+      const shippingAddressForOrder = sameAsBilling
+        ? { name, street, apartment, city, phone }
+        : {
+            name: shippingValues.shippingName || name,
+            street: shippingValues.shippingStreet,
+            apartment: shippingValues.shippingApartment,
+            city: shippingValues.shippingCity,
+            state: shippingValues.shippingState,
+            postalCode: shippingValues.shippingPostalCode,
+            country: shippingValues.shippingCountry,
+            phone: shippingValues.shippingPhone || phone,
+          };
 
-      // ========================================
-      //  SAME API CALLED TWICE - END
-      // ========================================
+      const orderData = {
+        checkoutId,
+        productIds,
+        name,
+        street,
+        apartment,
+        city,
+        phone,
+        email,
+        saveForNextTime: save,
+        shippingAddress: shippingAddressForOrder,
+      };
 
-      // ---------- Process Payment ----------
+      const paymentData = {
+        checkoutId,
+      };
 
+      // Process payment
       setSavingStatus("Processing order...");
 
       if (paymentMethod === "online") {
@@ -446,9 +579,11 @@ const CheckoutPage = () => {
         message.success("Order placed successfully!");
         router.push("/payment-success");
       }
-    } catch (error) {
-      console.error(" Checkout Error:", error);
-      message.error("Failed to process the order.");
+    } catch (error: any) {
+      console.error("Checkout Error:", error);
+      const errorMessage =
+        error?.data?.message || "Failed to process the order.";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
       setSavingStatus("");
@@ -472,6 +607,14 @@ const CheckoutPage = () => {
 
   return (
     <div className="container mx-auto px-3 md:px-0 py-16">
+      {/* Show global loading indicator when updating shipping */}
+      {isUpdatingShipping && (
+        <div className="fixed top-4 right-4 z-50 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+          <span className="animate-spin">⏳</span>
+          Saving all shipping selections...
+        </div>
+      )}
+
       <Breadcrumb
         items={[
           {
@@ -494,10 +637,10 @@ const CheckoutPage = () => {
 
       <div className="flex flex-col lg:flex-row items-start gap-6 md:gap-8 lg:gap-12 mt-8">
         {/* Billing & Shipping Forms */}
- <div className="w-full lg:flex-1">
-  <h1 className="text-3xl md:text-4xl font-semibold mb-5 dark:text-white">
-    Billing Details
-  </h1>
+        <div className="w-full lg:flex-1">
+          <h1 className="text-3xl md:text-4xl font-semibold mb-5 dark:text-white">
+            Billing Details
+          </h1>
           <ConfigProvider
             theme={{
               components: {
@@ -578,13 +721,13 @@ const CheckoutPage = () => {
                 <Input />
               </Form.Item>
 
-              {/* <Form.Item<FieldType> name="save" valuePropName="checked">
+              <Form.Item<FieldType> name="save" valuePropName="checked">
                 <Checkbox>
                   <span className="dark:text-white">
                     Save billing address for next time
                   </span>
                 </Checkbox>
-              </Form.Item> */}
+              </Form.Item>
 
               {/* Collapsible Shipping Address */}
               <div className="mt-6 mb-6 border dark:border-gray-600 rounded-lg overflow-hidden">
@@ -794,11 +937,23 @@ const CheckoutPage = () => {
           </ConfigProvider>
         </div>
 
-        {/* Order Summary */}
-      <div className="w-full lg:flex-1 p-6 space-y-6">
-  <div className="flex justify-end">
-    <button
-      onClick={handlePrint}
+        {/* Order Summary with Per-Item Shipping */}
+        <div className="w-full lg:flex-1 p-6 space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              {!allItemsHaveShipping() && (
+                <p className="text-sm text-orange-600 dark:text-orange-400">
+                  ⚠️ Select shipping for all items to continue
+                </p>
+              )}
+              {allItemsHaveShipping() && (
+                <p className="text-sm text-green-600 dark:text-green-400">
+                  ✓ All shipping options selected
+                </p>
+              )}
+            </div>
+            <button
+              onClick={handlePrint}
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               <FiPrinter className="w-5 h-5 dark:text-white" />
@@ -808,103 +963,164 @@ const CheckoutPage = () => {
 
           <div ref={receiptRef}>
             {checkouts.map((checkout) => {
-              const shippingOptions = getShippingOptionsForCheckout(checkout);
-              const currentShipping = selectedShipping[checkout.id];
+              const allSelected = checkout.items?.every(
+                (item: CheckoutItem) => itemShippingSelections[item.id]
+              );
 
               return (
                 <div
                   key={checkout.id}
                   className="border p-4 rounded-lg dark:border-gray-600 space-y-4"
                 >
-                  <div className="space-y-3">
-                    <h3 className="font-medium dark:text-white text-lg">
-                      Order Items ({checkout.items?.length || 0})
-                    </h3>
-                    {checkout?.items?.map((item: CheckoutItem) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between py-2 border-b dark:border-gray-600"
-                      >
-                        <div className="flex items-center gap-3">
-                          <Image
-                            src={item.product.productImages[0]}
-                            alt={item.product.productName}
-                            width={48}
-                            height={48}
-                            className="object-contain rounded"
-                          />
-                          <div>
-                            <span className="font-medium dark:text-white block">
-                              {item.product.productName}
-                            </span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                              Qty: {item.quantity}
-                            </span>
-                          </div>
-                        </div>
-                        <span className="font-medium dark:text-white">
-                          {/* dzd {item.product.price * item.quantity} */}
-                          dzd {item?.product?.afterDiscount}
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-medium dark:text-white text-lg">
+                        Order Items ({checkout.items?.length || 0})
+                      </h3>
+                      {allSelected && (
+                        <span className="text-green-600 dark:text-green-400 text-sm font-medium">
+                          ✓ All shipping selected
                         </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {shippingOptions.length > 0 && (
-                    <div className="pt-4 border-t dark:border-gray-600">
-                      <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-                        🚚 Select Shipping:
-                      </label>
-                      <ConfigProvider
-                        theme={{
-                          components: {
-                            Select: { controlHeight: 44, borderRadius: 8 },
-                          },
-                        }}
-                      >
-                        <Select
-                          className="w-full"
-                          placeholder="Select shipping"
-                          value={currentShipping?.id}
-                          onChange={(value) =>
-                            handleShippingChange(
-                              checkout.id,
-                              value,
-                              shippingOptions
-                            )
-                          }
-                          options={shippingOptions.map((s) => ({
-                            value: s.id,
-                            label: (
-                              <div className="flex justify-between items-center w-full">
-                                <span>
-                                  {s.countryName} - {s.carrier}
-                                </span>
-                                <span className="text-primary font-bold">
-                                  dzd {s.cost}
-                                </span>
-                              </div>
-                            ),
-                          }))}
-                        />
-                      </ConfigProvider>
-
-                      {currentShipping && (
-                        <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                          <div className="flex justify-between items-center">
-                            <span className="text-green-700 dark:text-green-400 font-medium">
-                              ✓ {currentShipping.carrier} to{" "}
-                              {currentShipping.countryName}
-                            </span>
-                            <span className="text-lg font-bold text-green-700 dark:text-green-400">
-                              +dzd {currentShipping.cost}
-                            </span>
-                          </div>
-                        </div>
                       )}
                     </div>
-                  )}
 
+                    {/* Items with individual shipping selection */}
+                    {checkout?.items?.map(
+                      (item: CheckoutItem, index: number) => {
+                        const shippingOptions = getShippingOptionsForItem(item);
+                        const selectedShippingId =
+                          itemShippingSelections[item.id];
+                        const selectedShipping = shippingOptions.find(
+                          (s) => s.id === selectedShippingId
+                        );
+
+                        return (
+                          <div
+                            key={item.id}
+                            className="border dark:border-gray-700 rounded-lg p-4 space-y-3"
+                          >
+                            {/* Item number badge */}
+                            <div className="flex justify-between items-start">
+                              <span className="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
+                                Item {index + 1} of {checkout.items.length}
+                              </span>
+                              {selectedShippingId ? (
+                                <span className="text-xs text-green-600 dark:text-green-400">
+                                  ✓ Shipping selected
+                                </span>
+                              ) : (
+                                <span className="text-xs text-red-600 dark:text-red-400">
+                                  Shipping required
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Item details */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <Image
+                                  src={item.product.productImages[0]}
+                                  alt={item.product.productName}
+                                  width={60}
+                                  height={60}
+                                  className="object-contain rounded"
+                                />
+                                <div>
+                                  <span className="font-medium dark:text-white block">
+                                    {item.product.productName}
+                                  </span>
+                                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                                    Qty: {item.quantity}
+                                  </span>
+                                </div>
+                              </div>
+                              <span className="font-medium dark:text-white">
+                                dzd{" "}
+                                {item?.product?.afterDiscount * item.quantity}
+                              </span>
+                            </div>
+
+                            {/* Shipping selection for this item */}
+                            {shippingOptions.length > 0 && (
+                              <div className="pt-3 border-t dark:border-gray-700">
+                                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+                                  🚚 Select Shipping Option:
+                                </label>
+                                <ConfigProvider
+                                  theme={{
+                                    components: {
+                                      Select: {
+                                        controlHeight: 40,
+                                        borderRadius: 6,
+                                      },
+                                    },
+                                  }}
+                                >
+                                  <Select
+                                    className="w-full"
+                                    placeholder="Choose shipping method"
+                                    value={selectedShippingId || undefined}
+                                    onChange={(shippingOptionId) =>
+                                      handleItemShippingChange(
+                                        item.id,
+                                        shippingOptionId,
+                                        checkout.id
+                                      )
+                                    }
+                                    disabled={isUpdatingShipping}
+                                    options={shippingOptions.map((shipping) => ({
+                                      value: shipping.id,
+                                      label: (
+                                        <div className="flex justify-between items-center w-full">
+                                          <span>
+                                            {shipping.carrier} -{" "}
+                                            {shipping.countryName}
+                                          </span>
+                                          <span className="text-primary font-bold">
+                                            dzd {shipping.cost * item.quantity}
+                                          </span>
+                                        </div>
+                                      ),
+                                    }))}
+                                  />
+                                </ConfigProvider>
+
+                                {selectedShipping && (
+                                  <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded text-sm">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-green-700 dark:text-green-400">
+                                        ✓ {selectedShipping.carrier} to{" "}
+                                        {selectedShipping.countryName}
+                                      </span>
+                                      <span className="font-bold text-green-700 dark:text-green-400">
+                                        +dzd{" "}
+                                        {selectedShipping.cost * item.quantity}
+                                      </span>
+                                    </div>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                      Delivery: {selectedShipping.deliveryMin}-
+                                      {selectedShipping.deliveryMax} days
+                                    </span>
+                                  </div>
+                                )}
+
+                                {!selectedShippingId && (
+                                  <div className="mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded text-sm">
+                                    <span className="text-yellow-600 dark:text-yellow-400">
+                                      ⚠️ Please select a shipping option for
+                                      this item
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+
+                  {/* Order totals */}
                   <div className="pt-4 space-y-2 border-t dark:border-gray-600">
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-300">
@@ -916,12 +1132,12 @@ const CheckoutPage = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-300">
-                        Shipping:
+                        Total Shipping:
                       </span>
                       <span className="font-medium dark:text-white">
-                        {calculateShippingCost(checkout.id) > 0
-                          ? `dzd${calculateShippingCost(checkout.id)}`
-                          : "Select shipping"}
+                        {allItemsHaveShipping()
+                          ? `dzd ${calculateTotalShippingCost()}`
+                          : "Select all shipping options"}
                       </span>
                     </div>
                     <div className="flex justify-between border-t dark:border-gray-600 pt-3">
@@ -929,11 +1145,14 @@ const CheckoutPage = () => {
                         Total:
                       </span>
                       <span className="text-xl font-bold text-primary">
-                        dzd {calculateGrandTotal(checkout)}
+                        {allItemsHaveShipping()
+                          ? `dzd ${calculateGrandTotal(checkout)}`
+                          : "---"}
                       </span>
                     </div>
                   </div>
 
+                  {/* Payment options */}
                   <div className="space-y-3 mt-4 pt-4 border-t dark:border-gray-600">
                     <h3 className="font-medium dark:text-white">Payment</h3>
                     <div className="flex items-center space-x-3 p-3 border dark:border-gray-600 rounded-lg hover:border-primary cursor-pointer">
