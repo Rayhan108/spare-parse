@@ -93,7 +93,7 @@ const MyOrder = () => {
           <tbody>
             {ordersData?.data?.map((order:any) => {
               const firstItem = order.items?.[0];
-console.log("order--------->",order);
+
            
               const quantity = order.items?.length || 0;
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Modal } from "antd";
@@ -12,6 +13,7 @@ interface OrderItem {
   productImages?: string[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Order {
   orderId: string;
   createdAt?: string;
@@ -24,7 +26,7 @@ interface ProductDetailModalProps {
   isModalOpen: boolean;
   handleOk: () => void;
   handleCancel: () => void;
-  order?: Order;
+  order?: any;
 }
 
 const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -33,14 +35,10 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   handleCancel,
   order,
 }) => {
+  console.log("order--------->",order);
   if (!order) return null;
 
-  // Calculate subtotal considering discount and order-level quantity
-  const calculatedSubtotal = order.items?.reduce(
-    (sum, item) =>
-      sum + ((Number(item.price) - (Number(item.discount) || 0)) * (order.quantity || 1)),
-    0
-  ) || 0;
+
 
   return (
     <Modal
@@ -81,7 +79,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             </div>
 
             <div className="space-y-4 mt-5 pb-5">
-              {order.items?.map((item) => (
+              {order.items?.map((item:any) => (
                 <div
                   key={item.id}
                   className="grid grid-cols-4 items-center bg-white dark:bg-[#1F2937] border border-orange-200 rounded-lg p-4 sm:grid-cols-4 lg:grid-cols-4"
@@ -101,7 +99,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </div>
                   <div className="text-sm sm:text-base">${item.price?.toFixed(2)}</div>
                   <div className="text-right text-sm sm:text-base">
-                    ${((item.price - (item.discount || 0)) * (order.quantity || 1)).toFixed(2)}
+                    dzd {((item.price - (item.discount || 0)) * (order.quantity || 1)).toFixed(2)}
                   </div>
                 </div>
               ))}
@@ -112,7 +110,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         {/* Subtotal */}
         <div className="flex justify-end mt-6 pr-4">
           <div className="text-lg font-semibold text-gray-800 dark:text-white whitespace-nowrap">
-            Subtotal: <span className="ml-2">${calculatedSubtotal.toFixed(2)}</span>
+            Subtotal: <span className="ml-2">dzd {order.totalAmount}</span>
           </div>
         </div>
       </div>
