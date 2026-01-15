@@ -46,6 +46,7 @@ interface ProductDetailModalProps {
   isModalOpen: boolean;
   handleOk: () => void; //boolean //any
   handleCancel: () => void; //boolean //any
+  refetch:()=>void
 }
 
 interface OEMReference {
@@ -107,6 +108,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
   isModalOpen,
   handleOk,
   handleCancel,
+  refetch
 }) => {
   const { data: categoriesData, isLoading: isCategoriesLoading } =
     useGetAllCategoriesQuery({ page: 1, limit: 100 });
@@ -501,6 +503,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
       // console.log("result--------------->", result);
       if (result?.success) {
         toast.success(result?.message);
+        refetch()
       } else {
         toast.error(result?.message);
       }

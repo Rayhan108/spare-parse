@@ -27,6 +27,7 @@ import {
 } from "@/redux/features/carBrand/carBrandApi";
 
 export interface Field {
+  id?: string; // from API
   fieldName: string;
   valueString?: string;
   valueFloat?: number;
@@ -39,19 +40,22 @@ export interface SubSection {
 }
 
 export interface Section {
+  id?: string; // from API
   sectionName: string;
   fields: Field[];
   subSections?: SubSection[];
 }
 
 export interface OEMReference {
+  id?: string; // from API
   type: "OE" | "INTERNAL";
   number: string;
-  brandId?: string;
+  brandId?: string | null;
   brandName?: string;
 }
 
 export interface ShippingInfo {
+  id?: string; // from API
   countryCode: string;
   countryName: string;
   carrier: string;
@@ -65,6 +69,7 @@ interface EditProductModalProps {
   isModalOpen: boolean;
   handleOk: () => void;
   handleCancel: () => void;
+  refetch: () => void;
   productId: string;
 }
 
@@ -90,7 +95,7 @@ interface Model {
 }
 interface Engine {
   engineId: string;
-  kw: number;
+  kw: number | null;
 }
 
 interface Product {
@@ -113,6 +118,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   handleOk,
   handleCancel,
   productId,
+  refetch
 }) => {
   const [nextComponent, setNextComponent] =
     useState<"details" | "description">("details");
@@ -150,7 +156,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     brandName: string;
   }
 
-  // only used inside addReference
   const [refBrandId, setRefBrandId] = useState<string | undefined>();
 
   const [selectedValues, setSelectedValues] = useState<{
@@ -208,7 +213,11 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     })) || [];
 
   // Product query + mutation
-  const { data, isLoading, isError } = useGetSellerSingleProductQuery(productId);
+  const {
+    data,
+    isLoading: isProductLoading,
+    isError,
+  } = useGetSellerSingleProductQuery(productId);
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
 
   const editor = useEditor({
@@ -231,7 +240,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 
   // Prefill everything when product data arrives
   useEffect(() => {
-    if (!data?.data) return;
+    if (!data?.data || !editor) return;
 
     const apiProduct: any = data.data;
 
@@ -244,7 +253,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
       price: apiProduct.price || 0,
       discount: apiProduct.discount || 0,
       stock: apiProduct.stock || 0,
-      isVisible: apiProduct.isVisible,
+      isVisible: apiProduct.isVisible ?? true,
     };
 
     // Basic fields
@@ -254,7 +263,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     setStock(product.stock);
 
     // Description
-    if (product.description && editor) {
+    if (product.description) {
       editor.commands.setContent(product.description);
     }
 
@@ -267,65 +276,107 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     );
 
     // Category
-    setCategoryId(product.categoryId);
-    setSelectedValues((prev) => ({
-      ...prev,
-      categoryId: product.categoryId,
-    }));
-console.log("api product------>",apiProduct);
-    // Fitment - take first fitVehicle if exists
-    const firstFit = apiProduct.fitVehicles?.[0];
-
-    if (firstFit) {
-      const yearValue = String(firstFit.year);
-
-      setYear(yearValue);
-      const finalBrandId = firstFit.brandId ?? product.brandId;
-      const finalBrandName =
-        firstFit.brandName ?? apiProduct.brand?.brandName;
-
-      setBrandId(finalBrandId);
-      setBrandName(finalBrandName);
-
-      setModelId(firstFit.modelId);
-      setModelName(firstFit.modelName);
-
-      const hpValue = firstFit.kw ?? firstFit.hp;
-      if (hpValue) {
-        const hpArr = Array.isArray(hpValue)
-          ? hpValue.map((v: any) => String(v))
-          : [String(hpValue)];
-        setHp(hpArr);
-
-        setSelectedValues((prev) => ({
-          ...prev,
-          kw: hpArr,
-        }));
-      }
-
+    if (apiProduct.categoryId) {
+      setCategoryId(apiProduct.categoryId);
       setSelectedValues((prev) => ({
         ...prev,
-        year: yearValue,
-        brandId: finalBrandId,
-        brandName: finalBrandName,
-        modelId: firstFit.modelId,
-        modelName: firstFit.modelName,
-      }));
-    } else {
-      // no fitVehicles => just brand from product
-      setBrandId(product.brandId);
-      setBrandName(apiProduct.brand?.brandName);
-      setSelectedValues((prev) => ({
-        ...prev,
-        brandId: product.brandId,
-        brandName: apiProduct.brand?.brandName,
+        categoryId: apiProduct.categoryId,
       }));
     }
 
-    // Sections / References / Shippings
-    setSections(apiProduct.sections || []);
-    setOemReferences(apiProduct.references || []);
-    setShippingInfo(apiProduct.shippings || []);
+    // Year from productionStartDate
+    let derivedYear: string | undefined;
+    if (apiProduct.productionStartDate) {
+      const d = new Date(apiProduct.productionStartDate);
+      if (!isNaN(d.getTime())) {
+        derivedYear = String(d.getFullYear());
+        setYear(derivedYear);
+      }
+    }
+
+    // Brand / Model
+    if (apiProduct.brandId) setBrandId(apiProduct.brandId);
+    if (apiProduct.brandName) setBrandName(apiProduct.brandName);
+    if (apiProduct.modelId) setModelId(apiProduct.modelId);
+    if (apiProduct.modelName) setModelName(apiProduct.modelName);
+
+    setSelectedValues((prev) => ({
+      ...prev,
+      year: derivedYear ?? prev.year,
+      brandId: apiProduct.brandId ?? prev.brandId,
+      brandName: apiProduct.brandName ?? prev.brandName,
+      modelId: apiProduct.modelId ?? prev.modelId,
+      modelName: apiProduct.modelName ?? prev.modelName,
+    }));
+
+    // HP from engines -> we use kw/hp as selected engine power(s)
+    const kwStrings: string[] =
+      (apiProduct.engines || [])
+        .map((e: any) => e.kw ?? e.hp)
+        .filter((v: any) => v !== null && v !== undefined)
+        .map((v: any) => String(v));
+
+    if (kwStrings.length) {
+      setHp(kwStrings);
+      setSelectedValues((prev) => ({
+        ...prev,
+        kw: kwStrings,
+      }));
+    }
+
+    // Sections (map API structure -> local Section)
+    const mappedSections: Section[] =
+      (apiProduct.sections || []).map((s: any) => ({
+        id: s.id,
+        sectionName: s.sectionName,
+        fields:
+          (s.fields || []).map((f: any) => {
+            if (f.valueFloat !== null && f.valueFloat !== undefined) {
+              return {
+                id: f.id,
+                fieldName: f.fieldName,
+                valueType: "float",
+                valueFloat: f.valueFloat,
+              } as Field;
+            }
+            return {
+              id: f.id,
+              fieldName: f.fieldName,
+              valueType: "string",
+              valueString: f.valueString ?? "",
+            } as Field;
+          }) ?? [],
+        subSections: [],
+      })) ?? [];
+
+    setSections(mappedSections);
+
+    // References
+    const mappedRefs: OEMReference[] =
+      (apiProduct.references || []).map((r: any) => ({
+        id: r.id,
+        type: r.type,
+        number: r.number,
+        brandId: r.brandId ?? null,
+        brandName: r.brandName ?? undefined,
+      })) ?? [];
+
+    setOemReferences(mappedRefs);
+
+    // Shippings
+    const mappedShip: ShippingInfo[] =
+      (apiProduct.shippings || []).map((s: any) => ({
+        id: s.id,
+        countryCode: s.countryCode,
+        countryName: s.countryName,
+        carrier: s.carrier,
+        cost: s.cost,
+        deliveryMin: s.deliveryMin ?? undefined,
+        deliveryMax: s.deliveryMax ?? undefined,
+        isDefault: s.isDefault ?? undefined,
+      })) ?? [];
+
+    setShippingInfo(mappedShip);
   }, [data, editor]);
 
   // --- Product Sections ---
@@ -386,12 +437,12 @@ console.log("api product------>",apiProduct);
       (b) => b.brandId === formRefBrandId
     );
 
-    if (refType && refNumber && selectedBrand) {
+    if (refType && refNumber) {
       const newRef: OEMReference = {
         type: refType,
         number: refNumber,
-        brandId: formRefBrandId,
-        brandName: selectedBrand.brandName,
+        brandId: formRefBrandId ?? null,
+        brandName: selectedBrand?.brandName,
       };
 
       setOemReferences((prevRefs) => [...prevRefs, newRef]);
@@ -434,7 +485,7 @@ console.log("api product------>",apiProduct);
         shippingDeliveryMax: "",
       });
       message.success("Shipping added");
-    } else message.error("Fill all required shipping fields");
+    } 
   };
 
   const handleRemoveShipping = (index: number) =>
@@ -448,61 +499,88 @@ console.log("api product------>",apiProduct);
 
       const apiProduct: any = data.data;
 
-      const product: SellerProduct = {
-        id: apiProduct.id,
-        categoryId: apiProduct.categoryId || "",
-        brandId: apiProduct.brandId || "",
-        productName: apiProduct.productName || "",
-        description: apiProduct.description || "",
-        price: apiProduct.price || 0,
-        discount: apiProduct.discount || 0,
-        stock: apiProduct.stock || 0,
-        isVisible: apiProduct.isVisible,
+      //  Clean Sections format
+      const sectionsForUpdate = sections.map((s) => {
+        const section: any = {
+          sectionName: s.sectionName,
+          fields: s.fields.map((f) => {
+            const field: any = {
+              fieldName: f.fieldName,
+            };
+            if (f.id) field.id = f.id;
+            if (f.valueType === "float") {
+              field.valueFloat = f.valueFloat;
+            } else {
+              field.valueString = f.valueString;
+            }
+            return field;
+          }),
+        };
+        if (s.id) section.id = s.id;
+        return section;
+      });
+
+      //  Clean References format
+      const referencesForUpdate = oemReferences.map((r) => {
+        const ref: any = {
+          type: r.type,
+          number: r.number,
+        };
+        if (r.id) ref.id = r.id;
+        if (r.brandId) ref.brandId = r.brandId;
+        return ref;
+      });
+
+      //  Clean Shipping format
+      const shippingForUpdate = shippingInfo.map((s) => {
+        const ship: any = {
+          countryCode: s.countryCode,
+          countryName: s.countryName,
+          carrier: s.carrier,
+          cost: s.cost,
+          deliveryMin: s.deliveryMin ?? 0,
+          deliveryMax: s.deliveryMax ?? 0,
+        };
+        if (s.id) ship.id = s.id;
+        if (s.isDefault !== undefined) ship.isDefault = s.isDefault;
+        return ship;
+      });
+
+      //  Final Body Data
+      const bodyData = {
+        categoryId: selectedValues.categoryId || categoryId || apiProduct.categoryId,
+        brandId: selectedValues.brandId || brandId || apiProduct.brandId,
+        productName: productName || apiProduct.productName,
+        description: editor?.getHTML() || apiProduct.description,
+        price: price !== "" ? Number(price) : apiProduct.price,
+        discount: discount !== "" ? Number(discount) : apiProduct.discount,
+        stock: stock !== "" ? Number(stock) : apiProduct.stock,
+        isVisible: apiProduct.isVisible ?? true,
+        sections: sectionsForUpdate,
+        references: referencesForUpdate,
+        shipping: shippingForUpdate,  //  "shipping" NOT "shippings"
       };
 
-      const firstFit = apiProduct.fitVehicles?.[0];
+      console.log("=== SENDING DATA ===");
+      console.log(JSON.stringify(bodyData, null, 2));
 
-      const bodyData: any = {
-        categoryId: selectedValues.categoryId ?? product.categoryId,
-        brandId: selectedValues.brandId ?? product.brandId,
-        brandName:
-          selectedValues.brandName ?? apiProduct.brand?.brandName ?? undefined,
-
-        year: selectedValues.year ?? firstFit?.year ?? undefined,
-        modelId: selectedValues.modelId ?? firstFit?.modelId ?? undefined,
-        modelName: selectedValues.modelName ?? firstFit?.modelName ?? undefined,
-        hp:
-          selectedValues.kw ??
-          firstFit?.kw ??
-          firstFit?.hp ??
-          undefined,
-
-        productName: productName || product.productName,
-        price: price !== "" ? Number(price) : product.price,
-        discount: discount !== "" ? Number(discount) : product.discount,
-        stock: stock !== "" ? Number(stock) : product.stock,
-        description: editor?.getHTML() || product.description,
-        isVisible: product.isVisible,
-
-        sections: sections.length ? sections : apiProduct.sections || [],
-        references: oemReferences.length
-          ? oemReferences
-          : apiProduct.references || [],
-        shippings: shippingInfo.length
-          ? shippingInfo
-          : apiProduct.shippings || [],
-      };
-
+      //  Create FormData
       const formData = new FormData();
-      formData.append("bodyData", JSON.stringify(bodyData));
-      if (profilePic) formData.append("productImages", profilePic);
+      formData.append("bodyData", JSON.stringify(bodyData));  //  "body" key
+      
+      if (profilePic) {
+        formData.append("productImages", profilePic);  //  Same as Postman
+      }
 
+      // API Call
       await updateProduct({ productId, formData }).unwrap();
+      
       toast.success("Product updated successfully!");
       handleOk();
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to update product");
+      refetch()
+    } catch (err: any) {
+      console.error("Update Error:", err);
+      toast.error(err?.data?.message || "Failed to update product");
     } finally {
       setLoading(false);
     }
@@ -663,7 +741,7 @@ console.log("api product------>",apiProduct);
           />
         </div>
 
-        {isLoading ? (
+        {isProductLoading ? (
           <div className="flex justify-center py-10">
             <Spin size="large" />
           </div>
@@ -746,7 +824,7 @@ console.log("api product------>",apiProduct);
                   {sections.map((section, sIdx) => (
                     <div
                       key={sIdx}
-                      className="border rounded-lg p-4 bg-gray-50 mb-4"
+                      className="border rounded-lg p-4 bg-gray-50 dark:bg-[#24292E] mb-4"
                     >
                       <div className="flex justify-between items-center mb-2">
                         <h4 className="font-semibold">{section.sectionName}</h4>
@@ -777,7 +855,7 @@ console.log("api product------>",apiProduct);
                       {section.fields.map((f, fIdx) => (
                         <div
                           key={fIdx}
-                          className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm"
+                          className="flex justify-between bg-gray-100 dark:bg-[#24292E] p-2 rounded mb-1 text-sm"
                         >
                           <span>
                             {f.fieldName}:{" "}
@@ -849,11 +927,11 @@ console.log("api product------>",apiProduct);
                       {oemReferences.map((ref, idx) => (
                         <div
                           key={idx}
-                          className="flex justify-between items-center bg-gray-100 p-2 rounded mb-2"
+                          className="flex justify-between items-center bg-gray-100 dark:bg-[#24292E] p-2 rounded mb-2"
                         >
                           <span>
                             {ref.type} - {ref.number}{" "}
-                            {ref.brandId && `- Brand: ${ref.brandName}`}
+                            {/* {ref.brandId && `- Brand: ${ref.brandName}`} */}
                           </span>
                           <button
                             type="button"
@@ -903,7 +981,7 @@ console.log("api product------>",apiProduct);
                   {shippingInfo.map((ship, idx) => (
                     <div
                       key={idx}
-                      className="flex justify-between bg-gray-100 p-2 rounded mb-1 text-sm"
+                      className="flex justify-between bg-gray-100 dark:bg-[#24292E] p-2 rounded mb-1 text-sm"
                     >
                       <span>
                         {ship.countryName} ({ship.countryCode}) -{" "}
@@ -933,7 +1011,7 @@ console.log("api product------>",apiProduct);
             {/* Description */}
             <div>
               <h2 className="text-xl">Description</h2>
-              <div className="h-auto rounded-2xl border border-dashed border-primary mt-4 mb-5 px-3 py-3">
+              <div className="h-auto rounded-2xl border border-dashed dark:bg-[#24292E] border-primary mt-4 mb-5 px-3 py-3">
                 <TipTapMenu editor={editor} />
                 <EditorContent editor={editor} />
               </div>
@@ -946,7 +1024,11 @@ console.log("api product------>",apiProduct);
                 {profilePic || existingImageUrl ? (
                   <div className="relative w-full h-64 bg-gray-200 overflow-hidden rounded-xl">
                     <Image
-                      src={profilePic ? profilePicUrl : (existingImageUrl as string)}
+                      src={
+                        profilePic
+                          ? profilePicUrl
+                          : (existingImageUrl as string)
+                      }
                       fill
                       style={{ objectFit: "cover" }}
                       alt="Product image"

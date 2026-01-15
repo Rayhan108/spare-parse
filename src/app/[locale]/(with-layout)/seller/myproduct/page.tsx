@@ -83,6 +83,7 @@ const totalOrdersCount = data?.meta?.total || 0;
             images={product.productImages}
             isVisible={product.isVisible}
             onDelete={() => handleDelete(product.id)}
+            refetch={refetch}
           />
         ))}
       </div>
@@ -90,6 +91,7 @@ const totalOrdersCount = data?.meta?.total || 0;
             isModalOpen={isModalOpen}
             handleOk={handleOk}
             handleCancel={handleCancel}
+            refetch={refetch}
           />
                <div className="flex justify-center mt-8 items-center dark:text-white">
         <Pagination

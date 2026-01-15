@@ -18,6 +18,7 @@ interface MyProductCartProps {
   images: string[];
   isVisible: boolean;
   onDelete?: (id: string) => Promise<void>; 
+  refetch:()=>void
 }
 
 const MyProductCart: React.FC<MyProductCartProps> = ({
@@ -29,6 +30,7 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
   images,
   isVisible,
   onDelete,
+  refetch
 }) => {
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -131,6 +133,7 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
         handleOk={() => setIsEditModalOpen(false)}
         handleCancel={() => setIsEditModalOpen(false)}
         productId={id}
+        refetch={refetch}
       />
     </div>
   );
