@@ -204,7 +204,7 @@ const Overview = () => {
               {t("availableBalance")}
             </p>
             <p className="text-3xl font-bold dark:text-white">
-              ${availableBalance.toFixed(2)}
+              DZD {availableBalance.toFixed(2)}
             </p>
           </div>
           <div className="bg-primary rounded-full p-3">
