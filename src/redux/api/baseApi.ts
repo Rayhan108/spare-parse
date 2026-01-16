@@ -86,6 +86,7 @@ const baseQueryWithCsrf = async (
 
   let result = await baseQuery(args, api, extraOptions);
 
+
   if (result.error && result.error.status === 403) {
     // console.log(" 403 received, refreshing CSRF...");
     clearCsrfToken();
@@ -122,7 +123,7 @@ const baseQueryWithCsrf = async (
         // Retry the original failed request with the new Access Token
       result = await baseQuery(args, api, extraOptions);
 
-      }else { 
+      } else { 
         logout()
       }
 

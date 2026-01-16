@@ -32,100 +32,117 @@ const MyProductCart: React.FC<MyProductCartProps> = ({
   onDelete,
   refetch
 }) => {
-  const router = useRouter();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  // console.log("is edit open",isEditModalOpen);
-  const [api, contextHolder] = notification.useNotification();
-  const discountedPrice = discount > 0 ? price - price * (discount / 100) : price;
-  const handleCardClick = () => {
-    router.push(`/product/${id}`);
-  };
+   const router = useRouter();
+   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+   // console.log("is edit open",isEditModalOpen);
+   const [api, contextHolder] = notification.useNotification();
+   const discountedPrice =
+      discount > 0 ? price - price * (discount / 100) : price;
+   const handleCardClick = () => {
+      router.push(`/product/${id}`);
+   };
 
+   const handleRemove = async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (!onDelete) return;
 
-  const handleRemove = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!onDelete) return;
+      try {
+         await onDelete(id);
+         api.success({
+            message: "Deleted",
+            description: "Item deleted successfully!",
+            placement: "topRight",
+         });
+      } catch (err) {
+         api.error({
+            message: "Error",
+            description: `Failed to delete item: ${err}`,
+            placement: "topRight",
+         });
+      }
+   };
 
-    try {
-      await onDelete(id);
-      api.success({
-        message: "Deleted",
-        description: "Item deleted successfully!",
-        placement: "topRight",
-      });
-    } catch (err) {
-      api.error({
-        message: "Error",
-        description: `Failed to delete item: ${err}`,
-        placement: "topRight",
-      });
-    }
-  };
+   const showEditModal = (e: React.MouseEvent) => {
+      // console.log("hit edit button");
+      e.stopPropagation();
+      setIsEditModalOpen(true);
+   };
 
+   return (
+      <div className="overflow-hidden rounded border border-gray-100 hover:shadow-lg transition cursor-pointer relative">
+         {contextHolder}
+         <div className="relative bg-[#f2fcf6] px-4 py-8 ">
+            {discount > 0 && (
+               <div className="absolute left-14 top-3 rounded text-md bg-orange-500 px-4 py-1 text-white">
+                  {discount}%
+               </div>
+            )}
 
-  const showEditModal = (e: React.MouseEvent) => {
-    // console.log("hit edit button");
-    e.stopPropagation();
-    setIsEditModalOpen(true);
-  };
+            <button
+               onClick={handleRemove}
+               className="absolute right-2 top-2"
+               aria-label="Remove item"
+            >
+               <RiDeleteBin6Line
+                  size={40}
+                  className="bg-white dark:bg-[#242] rounded-full p-2 cursor-pointer"
+               />
+            </button>
 
-  return (
-    <div className="overflow-hidden rounded border border-gray-100 hover:shadow-lg transition cursor-pointer relative">
-      {contextHolder} 
-      <div className="relative bg-[#f2fcf6] px-4 py-8 ">
-        {discount > 0 && (
-          <div className="absolute left-14 top-3 rounded text-md bg-orange-500 px-4 py-1 text-white">
-            {discount}%
-          </div>
-        )}
+            {/* Edit button */}
+            <button
+               onClick={showEditModal}
+               className="absolute left-2 top-2"
+               aria-label="Edit item"
+            >
+               <TbEdit
+                  size={40}
+                  className="bg-white dark:bg-[#242]  rounded-full p-2 cursor-pointer"
+               />
+            </button>
 
-        <button
-          onClick={handleRemove}
-          className="absolute right-2 top-2"
-          aria-label="Remove item"
-        >
-          <RiDeleteBin6Line size={40} className="bg-white dark:bg-[#242] rounded-full p-2 cursor-pointer" />
-        </button>
+            {/* Product image */}
+            <div className="flex h-58 items-center justify-center">
+               <Image
+                  src={images[0] || "/placeholder.svg"}
+                  alt={name}
+                  width={500}
+                  height={500}
+                  className=" object-cover"
+               />
+            </div>
+         </div>
 
-        {/* Edit button */}
-        <button
-          onClick={showEditModal}
-          className="absolute left-2 top-2"
-          aria-label="Edit item"
-        >
-          <TbEdit size={40} className="bg-white dark:bg-[#242]  rounded-full p-2 cursor-pointer" />
-        </button>
+         {/* Details button */}
+         <button
+            className="flex gap-2 w-full items-center justify-center bg-primary py-3 text-white rounded-b cursor-pointer"
+            onClick={handleCardClick}
+         >
+            Details
+         </button>
 
-        {/* Product image */}
-        <div className="flex h-58 items-center justify-center">
-          <Image
-            src={images[0] || "/placeholder.svg"}
-            alt={name}
-            width={500}
-            height={500}
-            className=" object-cover"
-          />
-        </div>
-      </div>
-
-      {/* Details button */}
-      <button
-        className="flex gap-2 w-full items-center justify-center bg-primary py-3 text-white rounded-b cursor-pointer"
-        onClick={handleCardClick}
-      >
-        Details
-      </button>
-
-      {/* Product info */}
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white">{name}</h3>
-        <div className="mt-1 flex items-center">
-          <span className="text-xl font-bold text-orange-500">dzd {discountedPrice.toFixed(2)}</span>
-          {discount > 0 && <span className="ml-2 text-gray-500 line-through">dzd {price.toFixed(2)}</span>}
-        </div>
-        <p className="mt-1 text-sm text-gray-600 dark:text-white">Stock: {stock}</p>
-        {!isVisible && <p className="text-sm text-red-500 mt-1">Not Visible</p>}
-      </div>
+         {/* Product info */}
+         <div className="p-4">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+               {name}
+            </h3>
+            <div className="mt-1 flex items-center">
+               <span className="text-xl font-bold text-orange-500">
+                  DZD {discountedPrice.toFixed(2)}
+               </span>
+               {discount > 0 && (
+                  <span className="ml-2 text-gray-500 line-through">
+                     DZD {price.toFixed(2)}
+                  </span>
+               )}
+            </div>
+            <p className="mt-1 text-sm text-gray-600 dark:text-white">
+               Stock: {stock}
+            </p>
+            {!isVisible && (
+               <p className="text-sm text-red-500 mt-1">Not Visible</p>
+            )}
+         </div>
 
       {/* Edit modal */}
       <EditProductModal

@@ -1,15 +1,30 @@
+// src/redux/features/checkout/checkoutApi.ts
 import { baseApi } from "../../api/baseApi";
 
 export interface CheckoutRequest {
   productIds: string[];
 }
 
+export interface ShippingOption {
+  id: string;
+  cost: number;
+  countryCode: string;
+  countryName: string;
+  carrier: string;
+  deliveryMin: number;
+  deliveryMax: number;
+}
 
 export interface CheckoutItem {
   id: string;
   checkoutId: string;
   productId: string;
   quantity: number;
+  shippingOptionId: string | null;
+  shippingCost: number | null;
+  shippingCarrier: string | null;
+  shippingCountry: string | null;
+  estimatedDelivery: string | null;
   createdAt: string;
   updatedAt: string;
   product: {
@@ -18,12 +33,23 @@ export interface CheckoutItem {
     price: number;
     discount: number;
     afterDiscount: number;
-
     productImages: string[];
+    shippings?: ShippingOption[];
   };
+  shippingOption?: {
+    id: string;
+    productId: string;
+    countryName: string;
+    countryCode: string;
+    carrier: string;
+    cost: number;
+    deliveryMin: number;
+    deliveryMax: number;
+    isDefault: boolean;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
 }
-
-
 
 export interface CheckoutData {
   id: string;
@@ -33,16 +59,23 @@ export interface CheckoutData {
   createdAt: string;
   updatedAt: string;
   items: CheckoutItem[];
-  shippingCost: number|string;
 }
-
-
 
 export interface CheckoutResponse {
   success: boolean;
   statusCode: number;
   message: string;
-  data: CheckoutData;
+  data: CheckoutData | CheckoutData[];
+}
+
+export interface ShippingSelection {
+  checkoutItemId: string;
+  shippingOptionId: string;
+}
+
+export interface UpdateCheckoutShippingRequest {
+  checkoutId: string;
+  shippingSelections: ShippingSelection[];
 }
 
 export const checkoutApi = baseApi.injectEndpoints({
@@ -56,7 +89,6 @@ export const checkoutApi = baseApi.injectEndpoints({
       invalidatesTags: ["Cart"],
     }),
 
-
     getCheckout: builder.query<CheckoutResponse, void>({
       query: () => ({
         url: "/checkouts",
@@ -64,7 +96,23 @@ export const checkoutApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Checkouts"],
     }),
+
+    updateCheckoutShipping: builder.mutation<CheckoutResponse, UpdateCheckoutShippingRequest>({
+      query: ({ checkoutId, shippingSelections }) => ({
+        url: `/checkouts/${checkoutId}/shipping`,
+        method: "PATCH",
+        body: {
+          shippingSelections,
+        },
+      }),
+      invalidatesTags: ["Checkouts"],
+    }),
+    
   }),
 });
 
-export const { useCreateCheckoutMutation, useGetCheckoutQuery } = checkoutApi;
+export const { 
+  useCreateCheckoutMutation, 
+  useGetCheckoutQuery,
+  useUpdateCheckoutShippingMutation 
+} = checkoutApi;
