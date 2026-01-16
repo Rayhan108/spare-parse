@@ -561,8 +561,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
         shipping: shippingForUpdate,  //  "shipping" NOT "shippings"
       };
 
-      console.log("=== SENDING DATA ===");
-      console.log(JSON.stringify(bodyData, null, 2));
+      // console.log("=== SENDING DATA ===");
+      // console.log(JSON.stringify(bodyData, null, 2));
 
       //  Create FormData
       const formData = new FormData();
