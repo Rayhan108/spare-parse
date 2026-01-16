@@ -251,15 +251,16 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
     }),
   ];
 
-  const editor = useEditor({
-    extensions,
-    content: "",
-    editorProps: {
-      attributes: {
-        class: "min-h-[400px] rounded-md bg-slate-50 py-2 px-3",
-      },
+const editor = useEditor({
+  extensions,
+  content: "",
+  editorProps: {
+    attributes: {
+      class:
+        "min-h-[400px] rounded-md bg-slate-50 dark:bg-[#24292E] dark:text-white py-2 px-3 focus:outline-none",
     },
-  });
+  },
+});
 
   const [profilePic, setProfilePic] = useState<File | null>(null);
   const profilePicUrl = profilePic ? URL.createObjectURL(profilePic) : null;
@@ -736,7 +737,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
                         {sections.map((section, sectionIndex) => (
                           <div
                             key={sectionIndex}
-                            className="border rounded-lg p-4 bg-gray-50"
+                            className="border rounded-lg p-4 bg-gray-50 dark:bg-[#24292E]"
                           >
                             <div className="flex justify-between items-center mb-3">
                               <h4 className="font-semibold text-base">
@@ -754,7 +755,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
                             </div>
 
                             {/* Fields in section */}
-                            <div className="mb-4 bg-white p-3 rounded">
+                            <div className="mb-4 bg-white  dark:bg-[#24292E] p-3 rounded">
                               <p className="text-sm font-semibold mb-2">
                                 Fields
                               </p>
@@ -798,7 +799,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
                                   {section.fields.map((field, fieldIndex) => (
                                     <div
                                       key={fieldIndex}
-                                      className="flex justify-between items-center bg-gray-100 p-2 rounded text-sm"
+                                      className="flex justify-between items-center bg-gray-100 dark:bg-[#24292E] p-2 rounded text-sm"
                                     >
                                       <span>
                                         {field.fieldName}:{" "}
@@ -878,7 +879,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
                         {oemReferences.map((ref, idx) => (
                           <div
                             key={idx}
-                            className="flex justify-between items-center bg-gray-100 p-2 rounded mb-2"
+                            className="flex justify-between items-center bg-gray-100 dark:bg-[#24292E] p-2 rounded mb-2"
                           >
                             <span>
                               {ref.type} - {ref.number}{" "}
@@ -949,7 +950,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
                         {shippingInfo.map((ship, idx) => (
                           <div
                             key={idx}
-                            className="flex justify-between items-center bg-gray-100 p-2 rounded mb-2"
+                            className="flex justify-between items-center bg-gray-100 dark:bg-[#24292E] p-2 rounded mb-2"
                           >
                             <span>
                               {ship.countryName} ({ship.countryCode}) -{" "}
@@ -983,11 +984,14 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
             <>
               <div>
                 <h2 className="text-xl">Description</h2>
-                <div className=" h-auto rounded-2xl border border-dashed border-[#f56100] mt-4 mb-5 px-3 py-3">
-                  <div>
+                <div className=" h-auto rounded-2xl border border-dashed dark:bg-[#24292E] border-[#f56100] mt-4 mb-5 px-3 py-3">
+                  <div className="dark:bg-[#24292E]">
                     <TipTapMenu editor={editor} />
                   </div>
+                  <div className="dark:bg-[#24292E]">
+
                   <EditorContent editor={editor} />
+                  </div>
                 </div>
               </div>
       <div className="mb-5">
@@ -995,7 +999,7 @@ const AddProductModal: React.FC<ProductDetailModalProps> = ({
   <div className="flex items-center justify-center rounded-2xl py-3 border border-dashed border-[#f56100] mt-4 relative">
     {profilePic ? (
       <>
-        <div className="relative w-full h-64 bg-gray-200 overflow-hidden rounded-xl ">
+        <div className="relative w-full h-64 bg-gray-200 dark:bg-[#24292E] overflow-hidden rounded-xl ">
           <Image
             src={profilePicUrl || ""}
             layout="fill"
