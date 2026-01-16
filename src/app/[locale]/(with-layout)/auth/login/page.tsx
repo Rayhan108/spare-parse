@@ -166,7 +166,7 @@ const t = useTranslations('login')
         {/* Email/Password Login field */}
         <Form form={form} layout="vertical" onFinish={onFinish}>
            <Form.Item
-            label="Email"
+              label={t('email')}
             name="email"
             rules={[
               { required: true, message: "Please input your email!"},
@@ -177,7 +177,7 @@ const t = useTranslations('login')
           </Form.Item>
 
           <Form.Item
-            label="Password"
+           label={t('password')}
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
@@ -221,16 +221,16 @@ const t = useTranslations('login')
       ) : (
         <FcGoogle className="w-5 h-5" />
       )}
-      <span>{googleLoading ? "Signing in..." : "Continue with Google"}</span>
+      <span>{googleLoading ? "Signing in..." : `${t('continueWithGoogle')}`}</span>
     </button>
         </div>
 
 
 
         <p className="text-center dark:text-white text-black mt-4 text-sm">
-          Don’t have an account?{" "}
+         {t('noAccount')} {""}
           <Link href="/auth/sign-up" className="text-primary">
-            Sign Up
+        {t('signUp')}
           </Link>
         </p>
       </div>

@@ -3,6 +3,7 @@ import { JSX } from "react";
 import { Form, Input, notification } from "antd";
 import { useForgetPasswordMutation } from "@/redux/features/auth/authApi";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface ForgetPasswordFormValues {
   email: string;
@@ -11,6 +12,7 @@ interface ForgetPasswordFormValues {
 export default function ForgetPassword(): JSX.Element {
   const [form] = Form.useForm<ForgetPasswordFormValues>();
   const [api, contextHolder] = notification.useNotification();
+  const t = useTranslations('forgetpass')
   const router = useRouter();
   const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
   const onFinish = async (values: ForgetPasswordFormValues) => {
@@ -55,9 +57,9 @@ export default function ForgetPassword(): JSX.Element {
       {contextHolder}
       <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-10 rounded-lg">
         <div className="text-center mb-6">
-          <h1 className="text-2xl  text-black dark:text-white font-semibold">Forget Password?</h1>
+          <h1 className="text-2xl  text-black dark:text-white font-semibold">{t('forgetpassword')}</h1>
           <p className="mt-2  text-black dark:text-white">
-            Enter your email to receive a verification code
+          {t('enteremail')}
           </p>
         </div>
 
@@ -68,7 +70,7 @@ export default function ForgetPassword(): JSX.Element {
           autoComplete="off"
         >
           <Form.Item
-            label="Email"
+            label={t('email')}
             name="email"
             rules={[
               { required: true, message: "Please enter your email!" },
@@ -84,7 +86,7 @@ export default function ForgetPassword(): JSX.Element {
               disabled={isLoading}
               className="bg-primary w-full py-2 rounded-md text-white"
             >
-              {isLoading ? "Processing..." : "CONTINUE"}
+              {isLoading ? "Processing..." : `${t('continue')}`}
             </button>
           </Form.Item>
         </Form>

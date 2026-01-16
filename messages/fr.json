@@ -216,7 +216,7 @@
       "text": "En soumettant ce formulaire, vous acceptez nos <terms>Conditions Générales de Vente</terms> et notre <privacy>Politique de Confidentialité</privacy>."
     },
     "buttons": {
-      "cancel": "Annuler",
+      "cancel": "Annuler",  
       "submit": "Soumettre la candidature",
       "submitting": "Envoi en cours..."
     },
@@ -228,13 +228,35 @@
   
   "login": {
     "loginText": "Se connecter",
-    "email": "Email",
+    "email": "Courriel",
     "password": "Mot de passe",
     "forgotPassword": "Mot de passe oublié ?",
     "loginButton": "Se connecter",
     "continueWithGoogle": "Continuer avec Google",
     "noAccount": "Vous n'avez pas de compte ?",
     "signUp": "S'inscrire"
+  },
+   "forgetpass": {
+    "forgetpassword": "Mot de passe oublié ?",
+    "enteremail": "Entrez votre e-mail pour recevoir un code de vérification",
+    "email": "E-mail",
+    "emailplaceholder": "Entrez votre e-mail",
+    "continue": "CONTINUER"
+  },
+    "signup": {
+    "signup": "S'INSCRIRE",
+     "login": "Se connecter",
+    "fullname": "Nom complet",
+    "fullnameplaceholder": "Entrez votre nom complet",
+    "email": "E-mail",
+    "emailplaceholder": "Entrez votre e-mail",
+    "phonenumber": "Numéro de téléphone",
+    "phonenumberplaceholder": "Entrez votre numéro de mobile",
+    "password": "Mot de passe",
+    "passwordplaceholder": "Entrez votre mot de passe",
+    "passwordrequirements": "Le mot de passe doit contenir au moins 8 caractères, y compris des majuscules, des minuscules, des chiffres et des caractères spéciaux, sans espaces.",
+    "signupbutton": "S'INSCRIRE",
+    "alreadyhaveaccount": "Vous avez déjà un compte? "
   }
 
 

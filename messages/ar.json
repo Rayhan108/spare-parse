@@ -225,7 +225,7 @@
   },
 
   
-  
+    
 
 
   "login": {
@@ -237,6 +237,28 @@
     "continueWithGoogle": "التسجيل عبر جوجل",
     "noAccount": "ليس لديك حساب؟",
     "signUp": "إنشاء حساب"
+  },
+   "forgetpass": {
+    "forgetpassword": "هل نسيت كلمة المرور؟",
+    "enteremail": "أدخل بريدك الإلكتروني لاستلام رمز التحقق",
+    "email": "البريد الإلكتروني",
+    "emailplaceholder": "أدخل بريدك الإلكتروني",
+    "continue": "استمرار"
+  },
+   "signup": {
+    "signup": "التسجيل",
+    "login": "تسجيل الدخول",
+    "fullname": "الاسم الكامل",
+    "fullnameplaceholder": "أدخل اسمك الكامل",
+    "email": "البريد الإلكتروني",
+    "emailplaceholder": "أدخل بريدك الإلكتروني",
+    "phonenumber": "رقم الهاتف",
+    "phonenumberplaceholder": "أدخل رقم هاتفك المحمول",
+    "password": "كلمة المرور",
+    "passwordplaceholder": "أدخل كلمة المرور",
+    "passwordrequirements": "يجب أن تكون كلمة المرور مكونة من 8 أحرف على الأقل وتشمل الحروف الكبيرة والصغيرة والأرقام والرموز الخاصة، بدون مسافات.",
+    "signupbutton": "التسجيل",
+    "alreadyhaveaccount": "هل لديك حساب؟ "
   }
 
 

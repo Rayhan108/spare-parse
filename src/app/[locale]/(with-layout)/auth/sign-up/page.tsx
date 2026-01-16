@@ -5,6 +5,7 @@ import type React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSignUpMutation } from "@/redux/features/auth/authApi"
+import { useTranslations } from "next-intl"
 
 interface SignUpFormValues {
     fullName: string
@@ -18,7 +19,7 @@ export default function SignUpForm(): JSX.Element {
     const [SignUp, { isLoading }] = useSignUpMutation()
     const router = useRouter()
     const [form] = Form.useForm<SignUpFormValues>()
-
+  const t = useTranslations('signup')
     const onFinish = (values: SignUpFormValues) => {
         const signData = {
             fullName: values.fullName,
@@ -65,60 +66,10 @@ export default function SignUpForm(): JSX.Element {
             {contextHolder}
             <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-10 rounded-lg">
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl font-semibold">SIGN UP</h1>
+                    <h1 className="text-2xl font-semibold">{t('signup')}</h1>
                 </div>
 
-                {/* <Form<SignUpFormValues>
-                    form={form}
-                    name="signup"
-                    layout="vertical"
-                    onFinish={onFinish}
-                    autoComplete="off"
-                >
-                    <Form.Item
-                        label="Full Name"
-                        name="fullName"
-                        rules={[{ required: true, message: "Name is required!" }]}
-                    >
-                        <Input placeholder="Enter your full name" className="h-10" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[
-                            { required: true, message: "Email is required!" },
-                            { type: "email", message: "Please enter a valid email!" },
-                        ]}
-                    >
-                        <Input placeholder="Enter your email" className="h-10" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Phone Number"
-                        name="phoneNumber"
-                        rules={[{ required: true, message: "Phone number is required!" }]}
-                    >
-                        <Input placeholder="Enter your mobile number" className="h-10" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[{ required: true, message: "Password is required!" }]}
-                    >
-                        <Input.Password placeholder="Enter your password" className="h-10" />
-                    </Form.Item>
-
-                    <Form.Item className="mt-6">
-                        <button
-                            disabled={isLoading}
-                            className="bg-primary w-full py-2 rounded-md cursor-pointer text-white"
-                        >
-                            {isLoading ? "Loading..." : "SIGN UP"}
-                        </button>
-                    </Form.Item>
-                </Form> */}
+      
 
 
                 <Form<SignUpFormValues>
@@ -129,7 +80,7 @@ export default function SignUpForm(): JSX.Element {
                     autoComplete="off"
                 >
                     <Form.Item
-                        label="Full Name"
+                        label={t('fullname')}
                         name="fullName"
                         rules={[
                             { required: true, message: "Full name is required!" },
@@ -145,7 +96,7 @@ export default function SignUpForm(): JSX.Element {
                     </Form.Item>
 
                     <Form.Item
-                        label="Email"
+                        label={t('email')}
                         name="email"
                         rules={[
                             { required: true, message: "Email is required!" },
@@ -156,7 +107,7 @@ export default function SignUpForm(): JSX.Element {
                     </Form.Item>
 
                     <Form.Item
-                        label="Phone Number"
+                        label={t('phonenumber')}
                         name="phoneNumber"
                         rules={[
                             { required: true, message: "Phone number is required!" },
@@ -170,7 +121,7 @@ export default function SignUpForm(): JSX.Element {
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
+                        label={t('password')}
                         name="password"
                         rules={[
                             { required: true, message: "Password is required!" },
@@ -190,7 +141,7 @@ export default function SignUpForm(): JSX.Element {
                             disabled={isLoading}
                             className="bg-primary w-full py-2 rounded-md cursor-pointer text-black dark:text-white"
                         >
-                            {isLoading ? "Loading..." : "SIGN UP"}
+                            {isLoading ? "Loading..." : `${t('signup')}`}
                         </button>
                     </Form.Item>
                 </Form>
@@ -200,9 +151,9 @@ export default function SignUpForm(): JSX.Element {
 
                 <div className="text-center mt-4 flex flex-col gap-1.5">
                     <span className="text-sm">
-                        Already have an account?
+                        {t('alreadyhaveaccount')}
                         <Link href="/auth/login" className="text-primary ml-1">
-                            Log in
+                          {t('login')}
                         </Link>
                     </span>
                     {/* <span className="text-sm">

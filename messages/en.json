@@ -230,7 +230,7 @@
       "success": "Seller registration successful! 🎉",
       "errorDefault": "Failed to register as seller. Please try again."
     }
-  },
+  },  
   
 
   "login": {
@@ -242,6 +242,28 @@
     "continueWithGoogle": "Continue with Google",
     "noAccount": "Don't have an account?",
     "signUp": "Sign Up"
+  },
+  "forgetpass": {
+    "forgetpassword": "Forget Password?",
+    "enteremail": "Enter your email to receive a verification code",
+    "email": "Email",
+    "emailplaceholder": "Enter your email",
+    "continue": "CONTINUE"
+  },
+  "signup": {
+    "signup": "SIGN UP",
+    "login": "Log In",
+    "fullname": "Full Name",
+    "fullnameplaceholder": "Enter your full name",
+    "email": "Email",
+    "emailplaceholder": "Enter your email",
+    "phonenumber": "Phone Number",
+    "phonenumberplaceholder": "Enter your mobile number",
+    "password": "Password",
+    "passwordplaceholder": "Enter your password",
+    "passwordrequirements": "Password must be at least 8 characters, include uppercase, lowercase, number, and special character, no spaces.",
+    "signupbutton": "SIGN UP",
+    "alreadyhaveaccount": "Already have an account?"
   }
 
 
