@@ -29,7 +29,7 @@ import {
    useUpdateAddressMutation,
    Address,
 } from "@/redux/features/address/addressApi";
-import { FiPrinter } from "react-icons/fi";
+
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { FaTruck } from "react-icons/fa";
 
@@ -282,25 +282,6 @@ const CheckoutPage = () => {
       return subTotal || 0;
    };
 
-   // Calculate grand total
-   const calculateGrandTotal = (checkout: any): number => {
-      let itemShippingCost = 0;
-
-      checkout.items?.forEach((item: CheckoutItem) => {
-         const selectedShippingId = itemShippingSelections[item.id];
-         if (selectedShippingId) {
-            const shippingOptions = getShippingOptionsForItem(item);
-            const selectedShipping = shippingOptions.find(
-               (s) => s.id === selectedShippingId
-            );
-            if (selectedShipping) {
-               itemShippingCost += selectedShipping.cost * item.quantity;
-            }
-         }
-      });
-
-      return checkout.totalAmount + itemShippingCost;
-   };
 
    // Initialize addresses
    useEffect(() => {
@@ -367,6 +348,7 @@ const CheckoutPage = () => {
    };
 
    // Print receipt
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const handlePrint = () => {
       const printContent = receiptRef.current;
       if (!printContent) return;
@@ -481,6 +463,7 @@ const CheckoutPage = () => {
          // Final update to ensure all shipping is saved
          try {
             await updateShippingOnBackend(checkoutId);
+         // eslint-disable-next-line @typescript-eslint/no-unused-vars
          } catch (error) {
             return;
          }
@@ -1005,13 +988,13 @@ const CheckoutPage = () => {
                         </p>
                      )}
                   </div>
-                  <button
+                  {/* <button
                      onClick={handlePrint}
                      className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                   >
                      <FiPrinter className="w-5 h-5 dark:text-white" />
                      <span className="dark:text-white">Print Receipt</span>
-                  </button>
+                  </button> */}
                </div>
 
                <div ref={receiptRef}>
