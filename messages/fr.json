@@ -257,6 +257,56 @@
     "passwordrequirements": "Le mot de passe doit contenir au moins 8 caractères, y compris des majuscules, des minuscules, des chiffres et des caractères spéciaux, sans espaces.",
     "signupbutton": "S'INSCRIRE",
     "alreadyhaveaccount": "Vous avez déjà un compte? "
+  },
+   "updatePassword": {
+    "updatePassword": "Mettre à jour le mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "Entrez le nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Confirmer le nouveau mot de passe",
+    "updateButton": "Mettre à jour le mot de passe",
+    "updatingButton": "Mise à jour...",
+    "passwordRequired": "Veuillez entrer votre nouveau mot de passe!",
+    "confirmPasswordRequired": "Veuillez confirmer votre nouveau mot de passe!"
+  },
+   "verification": {
+    "verification": "Vérification",
+    "verificationMessage": "Nous avons envoyé un code à votre adresse e-mail. Veuillez vérifier votre e-mail pour le code à 6 chiffres.",
+    "enterOtp": "Entrez le code à 6 chiffres",
+    "verifyButton": "VÉRIFIER",
+    "loadingButton": "Chargement...",
+    "didNotGetMail": "Vous n'avez pas reçu l'e-mail ?",
+    "resendIn": "Renvoi dans",
+    "resendButton": "Renvoyer le code",
+    "sendingButton": "Envoi en cours..."
+  },
+  "resetPassword": {
+    "resetPassword": "Réinitialiser le mot de passe",
+    "createNewPassword": "Créez un nouveau mot de passe. Assurez-vous qu'il soit différent des précédents pour des raisons de sécurité.",
+    "oldPassword": "Ancien mot de passe",
+    "oldPasswordPlaceholder": "Entrez l'ancien mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "Entrez le nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Confirmer le nouveau mot de passe",
+    "resetButton": "RÉINITIALISER LE MOT DE PASSE",
+    "processingButton": "Traitement...",
+    "oldPasswordRequired": "Veuillez entrer votre ancien mot de passe",
+    "newPasswordRequired": "Veuillez entrer votre nouveau mot de passe",
+    "confirmPasswordRequired": "Veuillez confirmer votre mot de passe"
+  },
+   "setNewPassword": {
+    "setNewPassword": "Définir un nouveau mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "Entrez le nouveau mot de passe",
+    "newPasswordCriteria": "Le mot de passe doit contenir au moins 8 caractères, inclure des majuscules, des minuscules, des chiffres et des caractères spéciaux, sans espaces.",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Confirmer le nouveau mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas!",
+    "updateButton": "Mettre à jour le mot de passe",
+    "updatingButton": "Mise à jour...",
+    "newPasswordRequired": "Veuillez entrer votre nouveau mot de passe!",
+    "confirmPasswordRequired": "Veuillez confirmer votre nouveau mot de passe!"
   }
 
 

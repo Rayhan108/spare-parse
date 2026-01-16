@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation"
 import { JSX, FC } from "react"
 import { Form, Input, notification } from "antd"
 import { useChangePasswordMutation } from "@/redux/features/auth/authApi"
+import { useTranslations } from "next-intl"
 
 interface ResetPasswordFormValues {
     oldPassword: string
@@ -72,27 +73,27 @@ const ResetPassword: FC = (): JSX.Element => {
             })
         }
     }
-
+  const t = useTranslations('resetPassword')
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
             {contextHolder}
             <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-10 rounded-lg">
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl font-semibold">Reset Password</h1>
+                    <h1 className="text-2xl font-semibold">   {t('resetPassword')}</h1>
                     <p className="mt-2 text-black dark:text-white">
-                        Create a new password. Ensure it differs from previous ones for security
+                          {t('createNewPassword')}
                     </p>
                 </div>
 
                 <Form<ResetPasswordFormValues>
                     form={form}
-                    name="resetPassword"
+                    name=   {t('resetPassword')}
                     layout="vertical"
                     onFinish={onFinish}
                     autoComplete="off"
                 >
                     <Form.Item
-                        label="Old Password"
+                        label=   {t('oldPassword')}
                         name="oldPassword"
                         rules={[{ required: true, message: "Please enter your old password" }]}
                     >
@@ -100,7 +101,7 @@ const ResetPassword: FC = (): JSX.Element => {
                     </Form.Item>
 
                     <Form.Item
-                        label="New Password"
+                        label=   {t('newPassword')}
                         name="newPassword"
                         rules={[{ required: true, message: "Please enter your new password" }]}
                     >
@@ -108,7 +109,7 @@ const ResetPassword: FC = (): JSX.Element => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Confirm Password"
+                        label=   {t('confirmPassword')}
                         name="confirmPassword"
                         rules={[{ required: true, message: "Please confirm your password" }]}
                     >
@@ -121,7 +122,7 @@ const ResetPassword: FC = (): JSX.Element => {
                             disabled={isLoading}
                             className="bg-primary w-full py-2 rounded-md cursor-pointer text-black dark:text-white mt-3"
                         >
-                            {isLoading ? "Processing..." : "RESET PASSWORD"}
+                            {isLoading ? "Processing..." : `${t('resetButton')}`}
                         </button>
                     </Form.Item>
                 </Form>

@@ -4,6 +4,7 @@ import OTPInput from "react-otp-input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOtpVerificationMutation, useResendOtpMutation } from "@/redux/features/auth/authApi";
 import { notification } from "antd";
+import { useTranslations } from "next-intl";
 
 export default function OtpVerify(): JSX.Element {
     const [api, contextHolder] = notification.useNotification();
@@ -107,15 +108,15 @@ export default function OtpVerify(): JSX.Element {
                 });
             });
     };
-
+  const t = useTranslations('verification')
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
             {contextHolder}
             <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-4 md:px-14 py-14 rounded-lg">
                 <div className="text-center mb-6">
-                    <h1 className="text-2xl text-black dark:text-white font-semibold">Verification</h1>
+                    <h1 className="text-2xl text-black dark:text-white font-semibold">{t('verification')}</h1>
                     <p className="mt-2 text-black dark:text-white">
-                        We sent a code to your email address. Please check your email for the 6-digit code.
+                       {t('verificationMessage')}
                     </p>
                 </div>
 
@@ -141,12 +142,12 @@ export default function OtpVerify(): JSX.Element {
                     onClick={onFinish}
                     className="bg-primary w-full py-2 rounded-md cursor-pointer text-black dark:text-white disabled:opacity-50"
                 >
-                    {isLoading ? "Loading..." : "VERIFY"}
+                    {isLoading ? "Loading..." : `${t('verifyButton')}`}
                 </button>
 
                 <div className="text-center mt-6">
                     <p className="text-gray-600">
-                        Didn’t get the mail?{" "}
+                        {t('didNotGetMail')}{" "}
                         {timer > 0 ? (
                             <span className="text-black dark:text-white">
                                 Resend in <span className="font-semibold">{timer}s</span>
@@ -157,7 +158,7 @@ export default function OtpVerify(): JSX.Element {
                                 disabled={resendLoading}
                                 className="text-black dark:text-white font-semibold hover:underline disabled:opacity-50"
                             >
-                                {resendLoading ? "Sending..." : "Resend Code"}
+                                {resendLoading ? "Sending..." : `${t('resendButton')}`}
                             </button>
                         )}
                     </p>

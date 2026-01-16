@@ -3,6 +3,7 @@ import { JSX, useState, useEffect } from "react";
 import { Form, Input, notification } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUpdatePasswordMutation } from "@/redux/features/auth/authApi";
+import { useTranslations } from "next-intl";
 
 interface SetNewPasswordFormValues {
   newPassword: string;
@@ -94,13 +95,13 @@ export default function SetNewPassword(): JSX.Element {
     { label: "Contains special character (!@#$%^&*)", test: (pw: string) => /[!@#$%^&*]/.test(pw) },
     { label: "No spaces", test: (pw: string) => !/\s/.test(pw) }
   ];
-
+  const t = useTranslations('setNewPassword')
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200 dark:bg-[#24292e] p-4">
       {contextHolder}
       <div className="w-full max-w-lg shadow-md bg-white dark:bg-[#32373b] px-6 md:px-14 py-10 rounded-lg">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-semibold text-black dark:text-white">Set New Password</h1>
+          <h1 className="text-2xl font-semibold text-black dark:text-white">   {t('setNewPassword')}</h1>
         </div>
 
         <Form<SetNewPasswordFormValues>
@@ -110,7 +111,7 @@ export default function SetNewPassword(): JSX.Element {
           autoComplete="off"
         >
           <Form.Item
-            label="New Password"
+            label={t('newPassword')}
             name="newPassword"
             rules={[
               { required: true, message: "Please enter your new password!" },
@@ -150,7 +151,7 @@ export default function SetNewPassword(): JSX.Element {
           </div>
 
           <Form.Item
-            label="Confirm Password"
+            label={t('confirmPassword')}
             name="confirmPassword"
             dependencies={['newPassword']}
             hasFeedback
@@ -175,7 +176,7 @@ export default function SetNewPassword(): JSX.Element {
               disabled={isLoading}
               className="bg-primary w-full py-2 rounded-md text-black dark:text-white cursor-pointer hover:bg-primary/90 transition"
             >
-              {isLoading ? "Updating..." : "Update Password"}
+              {isLoading ? "Updating..." : `${t('updateButton')}`}
             </button>
           </Form.Item>
         </Form>

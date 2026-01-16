@@ -264,7 +264,60 @@
     "passwordrequirements": "Password must be at least 8 characters, include uppercase, lowercase, number, and special character, no spaces.",
     "signupbutton": "SIGN UP",
     "alreadyhaveaccount": "Already have an account?"
+  },
+  "updatePassword": {
+    "updatePassword": "Update Password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "updateButton": "Update Password",
+    "updatingButton": "Updating...",
+    "passwordRequired": "Please enter your new password!",
+    "confirmPasswordRequired": "Please confirm your new password!"
+  },
+    "verification": {
+    "verification": "Verification",
+    "verificationMessage": "We sent a code to your email address. Please check your email for the 6-digit code.",
+    "enterOtp": "Enter the 6-digit code",
+    "verifyButton": "VERIFY",
+    "loadingButton": "Loading...",
+    "didNotGetMail": "Didn’t get the mail?",
+    "resendIn": "Resend in",
+    "resendButton": "Resend Code",
+    "sendingButton": "Sending..."
+  },
+   "resetPassword": {
+    "resetPassword": "Reset Password",
+    "createNewPassword": "Create a new password. Ensure it differs from previous ones for security.",
+    "oldPassword": "Old Password",
+    "oldPasswordPlaceholder": "Enter old password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "resetButton": "RESET PASSWORD",
+    "processingButton": "Processing...",
+    "oldPasswordRequired": "Please enter your old password",
+    "newPasswordRequired": "Please enter your new password",
+    "confirmPasswordRequired": "Please confirm your password"
+  },
+    "setNewPassword": {
+    "setNewPassword": "Set New Password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "newPasswordCriteria": "Password must be at least 8 characters, include uppercase, lowercase, number, and special character, no spaces.",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "passwordMismatch": "Passwords do not match!",
+    "updateButton": "Update Password",
+    "updatingButton": "Updating...",
+    "newPasswordRequired": "Please enter your new password!",
+    "confirmPasswordRequired": "Please confirm your new password!"
   }
+
+
+  
 
 
 

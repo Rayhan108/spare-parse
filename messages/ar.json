@@ -259,6 +259,56 @@
     "passwordrequirements": "يجب أن تكون كلمة المرور مكونة من 8 أحرف على الأقل وتشمل الحروف الكبيرة والصغيرة والأرقام والرموز الخاصة، بدون مسافات.",
     "signupbutton": "التسجيل",
     "alreadyhaveaccount": "هل لديك حساب؟ "
+  },
+    "updatePassword": {
+    "updatePassword": "تحديث كلمة المرور",
+    "newPassword": "كلمة المرور الجديدة",
+    "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "تأكيد كلمة المرور الجديدة",
+    "updateButton": "تحديث كلمة المرور",
+    "updatingButton": "جاري التحديث...",
+    "passwordRequired": "يرجى إدخال كلمة المرور الجديدة!",
+    "confirmPasswordRequired": "يرجى تأكيد كلمة المرور الجديدة!"
+  },
+    "verification": {
+    "verification": "التحقق",
+    "verificationMessage": "لقد أرسلنا رمزًا إلى عنوان بريدك الإلكتروني. يرجى التحقق من بريدك الإلكتروني للحصول على الرمز المكون من 6 أرقام.",
+    "enterOtp": "أدخل الرمز المكون من 6 أرقام",
+    "verifyButton": "تحقق",
+    "loadingButton": "جاري التحميل...",
+    "didNotGetMail": "لم تستلم البريد؟",
+    "resendIn": "إعادة الإرسال خلال",
+    "resendButton": "إعادة إرسال الرمز",
+    "sendingButton": "جاري الإرسال..."
+  },
+    "resetPassword": {
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "createNewPassword": "أنشئ كلمة مرور جديدة. تأكد من اختلافها عن السابق من أجل الأمان.",
+    "oldPassword": "كلمة المرور القديمة",
+    "oldPasswordPlaceholder": "أدخل كلمة المرور القديمة",
+    "newPassword": "كلمة المرور الجديدة",
+    "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "تأكيد كلمة المرور الجديدة",
+    "resetButton": "إعادة تعيين كلمة المرور",
+    "processingButton": "جاري المعالجة...",
+    "oldPasswordRequired": "يرجى إدخال كلمة المرور القديمة",
+    "newPasswordRequired": "يرجى إدخال كلمة المرور الجديدة",
+    "confirmPasswordRequired": "يرجى تأكيد كلمة المرور"
+  },
+    "setNewPassword": {
+    "setNewPassword": "تعين كلمة مرور جديدة",
+    "newPassword": "كلمة المرور الجديدة",
+    "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+    "newPasswordCriteria": "يجب أن تكون كلمة المرور مكونة من 8 أحرف على الأقل، وتشمل الأحرف الكبيرة والصغيرة، والأرقام، والرموز الخاصة، بدون مسافات.",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "تأكيد كلمة المرور الجديدة",
+    "passwordMismatch": "كلمات المرور لا تتطابق!",
+    "updateButton": "تحديث كلمة المرور",
+    "updatingButton": "جاري التحديث...",
+    "newPasswordRequired": "يرجى إدخال كلمة المرور الجديدة!",
+    "confirmPasswordRequired": "يرجى تأكيد كلمة المرور الجديدة!"
   }
 
 
