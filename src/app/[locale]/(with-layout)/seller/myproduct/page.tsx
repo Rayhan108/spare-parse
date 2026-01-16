@@ -43,7 +43,7 @@ const handleOk = async () => {
     }
   };
 
-  if (isLoading) return <MyProductSkeleton />;
+  if (isLoading) return <MyProductSkeleton      refetch={refetch}/>;
   if (error) return <p className="text-center mt-20 text-red-500">Error loading products</p>;
 
   const products = data?.data || [];

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
 
@@ -6,7 +7,7 @@ import AddProductModal from "@/components/Seller/MyProduct/AddProductModal";
 import { useState } from "react";
 import { IoAdd } from "react-icons/io5";
 
-const MyProductSkeleton = () => {
+const MyProductSkeleton = ({refetch}:any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => setIsModalOpen(true);
@@ -39,6 +40,7 @@ const MyProductSkeleton = () => {
             isModalOpen={isModalOpen}
             handleOk={handleOk}
             handleCancel={handleCancel}
+            refetch={refetch}
           />
         </div>
 
