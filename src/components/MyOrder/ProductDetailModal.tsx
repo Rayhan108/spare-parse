@@ -101,7 +101,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                               </span>
                            </div>
                            <div className="text-sm sm:text-base">
-                              {(order.quantity || 1)
+                              {(item.quantity || 1)
                                  .toString()
                                  .padStart(2, "0")}
                            </div>
