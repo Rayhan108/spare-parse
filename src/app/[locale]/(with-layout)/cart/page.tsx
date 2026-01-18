@@ -12,6 +12,7 @@ import {
 import { useCreateCheckoutMutation } from "@/redux/features/checkout/checkoutApi";
 import type { CartItem as ApiCartItem } from "@/redux/features/cart/cartApi";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface CartItem extends ApiCartItem {
    quantity: number;
@@ -29,7 +30,7 @@ const Cart = () => {
    const [api, contextHolder] = notification.useNotification();
    const router = useRouter();
    const [isProcessing, setIsProcessing] = useState(false);
-
+const t = useTranslations("others");
    // Refetch cart data when page loads
    useEffect(() => {
       refetch();
@@ -156,16 +157,16 @@ const Cart = () => {
          {!cartItems.length ? (
             <div className="flex flex-col items-center justify-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md">
                <h1 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-                  Your Cart is Empty
+             {t("cartEmptyTitle")}
                </h1>
                <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-                  Looks like you haven&apos;t added anything yet.
+                 {t("cartEmptyMessage")}
                </p>
                <Link
                   href="/product"
                   className="px-5 md:px-6 py-2 md:py-3 bg-primary text-white text-lg font-semibold rounded-md shadow-md hover:bg-[#ec5f00] transition-all duration-200"
                >
-                  Shop Now
+                 {t("cartEmptyButton")}
                </Link>
             </div>
          ) : (
