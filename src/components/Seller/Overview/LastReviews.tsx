@@ -4,6 +4,7 @@ import ordersIcon from '../../../../public/seller/orders-icon.svg';
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface Review {
   id: number;
@@ -20,8 +21,8 @@ interface Review {
 interface LastReviewsProps {
   reviews: Review[];
 }
-
 const LastReviews: React.FC<LastReviewsProps> = ({ reviews }) => {
+  const t = useTranslations("sellerOverview");
   return (
     <div className="border rounded-xl border-primary p-4 sm:p-6 my-8 max-w-full overflow-x-auto">
       <div className="flex items-center justify-between mb-4 sm:mb-6 px-2 sm:px-0">
@@ -36,9 +37,9 @@ const LastReviews: React.FC<LastReviewsProps> = ({ reviews }) => {
             />
           </div>
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">Last 5 Reviews</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">{t("lastReviewsTitle")}</h2>
             <p className="text-sm sm:text-base text-gray-500 max-w-xs sm:max-w-md dark:text-white">
-              See your recent product reviews
+                  {t("lastReviewsMessage")}
             </p>
           </div>
         </div>

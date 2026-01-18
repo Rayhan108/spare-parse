@@ -146,6 +146,8 @@
     "welcomeMessage": "Welcome Back,",
     "overviewDescription": "Here's an overview of your business performance and activities today.",
     "currentOrders": "Current Orders",
+    
+    "currentOrdersMessage": "Manage your current orders and track booking orders.",
     "availableBalance": "Available Balance",
     "totalOrders": "Total Orders",
     "currentOrdersCount": "Current Orders Count",
@@ -154,7 +156,17 @@
     "orderCardTitle": "Orders",
     "balanceCardTitle": "Balance",
     "transactionsTableTitle": "Transactions Table",
-    "paginationTitle": "Page"
+    "paginationTitle": "Page",
+        "lastReviewsTitle": "Last 5 Reviews",
+    "lastReviewsMessage": "See your recent product reviews",
+        "transactionsTitle": "Transactions",
+    "lastTransactionsButton": "Last 10 Transactions",
+    "date": "Date",
+    "accountName": "Account Name",
+    "withdrawMethod": "Withdraw Method",
+    "email": "E-mail",
+    "amount": "Amount"
+
   },
    "profileLayout": {
     "breadcrumbs": {
@@ -323,7 +335,9 @@
     "wrongMessageMessage": "You are not signed in. Please sign in to view your wishlist.",
     "cartEmptyTitle": "Your Cart is Empty",
     "cartEmptyMessage": "Looks like you haven't added anything yet.",
-    "cartEmptyButton": "Shop Now"
+    "cartEmptyButton": "Shop Now",
+    "currentOrdersTitle": "Current Orders",
+    "currentOrdersMessage": "Manage your current orders and track booking orders."
   }
 
   

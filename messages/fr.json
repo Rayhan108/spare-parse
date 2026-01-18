@@ -149,7 +149,18 @@
     "orderCardTitle": "Commandes",
     "balanceCardTitle": "Solde",
     "transactionsTableTitle": "Tableau des transactions",
-    "paginationTitle": "Page"
+    "paginationTitle": "Page",
+    
+    "currentOrdersMessage": "Gérez vos commandes en cours et suivez les commandes de réservation.",
+        "transactionsTitle": "Transactions",
+      "lastReviewsTitle": "Dernières 5 critiques",
+    "lastReviewsMessage": "Voir vos critiques récentes de produits",
+    "lastTransactionsButton": "Last 10 Transactions",
+    "date": "Date",
+    "accountName": "Account Name",
+    "withdrawMethod": "Withdraw Method",
+    "email": "E-mail",
+    "amount": "Amount"
   },
     "profileLayout": {
     "breadcrumbs": {
@@ -316,7 +327,9 @@
     "wrongMessageMessage": "Vous n'êtes pas connecté. Veuillez vous connecter pour voir votre liste de souhaits.",
     "cartEmptyTitle": "Votre panier est vide",
     "cartEmptyMessage": "Il semble que vous n'ayez rien ajouté pour le moment.",
-    "cartEmptyButton": "Magasiner maintenant"
+    "cartEmptyButton": "Magasiner maintenant",
+    "currentOrdersTitle": "Commandes en cours",
+    "currentOrdersMessage": "Gérez vos commandes en cours et suivez les commandes de réservation."
   }
 
 

@@ -147,7 +147,18 @@
     "orderCardTitle": "الطلبات",
     "balanceCardTitle": "الرصيد",
     "transactionsTableTitle": "جدول المعاملات",
-    "paginationTitle": "الصفحة"
+    "paginationTitle": "الصفحة",
+    "currentOrdersMessage": "إدارة طلباتك الحالية وتتبع طلبات الحجز.",
+        "lastReviewsTitle": "آخر 5 مراجعات",
+    "lastReviewsMessage": "شاهد مراجعاتك الأخيرة للمنتجات",
+    "transactionsTitle": "المعاملات",
+    
+    "lastTransactionsButton": "آخر 10 معاملات",
+    "date": "التاريخ",
+    "accountName": "اسم الحساب",
+    "withdrawMethod": "طريقة السحب",
+    "email": "البريد الإلكتروني",
+    "amount": "المبلغ"
   },
     "profileLayout": {
     "breadcrumbs": {

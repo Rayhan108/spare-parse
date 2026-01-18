@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Select, Spin, message } from "antd";
 import { useState, useEffect } from "react";
 import { useUpdateOrderStatusMutation } from "@/redux/features/seller/orderApi";
+import { useTranslations } from "next-intl";
 
 const { Option } = Select;
 
@@ -30,7 +31,7 @@ const CurrentOrders = ({ orders }: CurrentOrdersProps) => {
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
   const [loadingOrderId, setLoadingOrderId] = useState<string | null>(null);
   const [localOrders, setLocalOrders] = useState<OrderItem[]>([]);
-
+ const t = useTranslations("sellerOverview");
   useEffect(() => {
     setLocalOrders(orders);
   }, [orders]);
@@ -70,10 +71,10 @@ const CurrentOrders = ({ orders }: CurrentOrdersProps) => {
           </div>
           <div>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">
-              Current Orders
+             {t("currentOrders")}
             </h2>
             <p className="text-sm sm:text-base text-gray-500 max-w-xs sm:max-w-md dark:text-white">
-              Manage your current orders and track booking orders.
+               {t("currentOrdersMessage")}
             </p>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { useGetSalesReportQuery } from "@/redux/features/Sales/salesReportApi";
 import { Table, ConfigProvider, Spin } from "antd";
+import { useTranslations } from "next-intl";
 import { LuCalendar } from "react-icons/lu";
 
 interface Transaction {
@@ -14,6 +15,7 @@ interface Transaction {
 }
 
 export default function TransactionsTableAntd() {
+   const t = useTranslations("sellerOverview");
   const { data, isLoading, error } = useGetSalesReportQuery();
 
   if (isLoading)
@@ -61,13 +63,13 @@ export default function TransactionsTableAntd() {
           style={{ fontWeight: 600, marginBottom: 16 }}
           className="text-lg sm:text-2xl dark:text-white"
         >
-          Transactions
+             {t("transactionsTitle")}
         </h2>
 
         <div style={{ marginBottom: 12, textAlign: "right" }}>
           <button className="sm:text-lg border border-primary rounded-lg px-4 py-2 flex gap-2 items-center">
             <LuCalendar size={22} className="text-black dark:text-white" />{" "}
-            <p className="font-semibold dark:text-white">Last 10 Transactions</p>
+            <p className="font-semibold dark:text-white"> {t("lastTransactionsButton")}</p>
           </button>
         </div>
       </div>
