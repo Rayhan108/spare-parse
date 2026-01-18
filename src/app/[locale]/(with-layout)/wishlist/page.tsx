@@ -10,6 +10,7 @@ import Link from "next/link";
 import { message, Spin } from "antd";
 import { useState } from "react";
 import { MdFavorite } from "react-icons/md";
+import { useTranslations } from "next-intl";
 
 
 export interface WishlistItem {
@@ -42,7 +43,7 @@ const Wishlist = () => {
       setClearing(false);
     }
   };
-
+  const t = useTranslations("others");
   if (isLoading) {
     return (
       <div className="text-center py-16">
@@ -59,9 +60,9 @@ const Wishlist = () => {
         <div className="flex justify-center mb-4">
          <MdFavorite size={24}/>
         </div>
-        <p className="text-xl font-semibold mb-4">Oops! Something went wrong</p>
-        <p className="text-lg">
-          You are not signed in. Please sign in to view your wishlist.
+        <p className="text-xl font-semibold mb-4 dark:text-white">    {t("wrongMessageTitle")}</p>
+        <p className="text-lg dark:text-white">
+       {t("wrongMessageMessage")}
         </p>
       </div>
     </div>
@@ -74,17 +75,16 @@ const Wishlist = () => {
       {!wishlist || wishlist.length === 0  ? (
         <div className="flex flex-col items-center justify-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md">
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-            Your Wishlist is Empty
+             {t("title")}
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-            Looks like you haven&apos;t added anything to your wishlist yet.
-            Explore our products and start shopping.
+              {t("message")}
           </p>
           <Link
             href="/product"
             className="px-5 md:px-6 py-2 md:py-3 bg-primary text-white text-lg font-semibold rounded-md shadow-md hover:bg-[#ec5f00] transition-all duration-200"
           >
-            Shop Now
+              {t("")}
           </Link>
         </div>
       ) : (

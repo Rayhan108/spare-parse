@@ -314,8 +314,14 @@
     "updatingButton": "Updating...",
     "newPasswordRequired": "Please enter your new password!",
     "confirmPasswordRequired": "Please confirm your new password!"
+  },
+"others": {
+    "title": "Your Wishlist is Empty",
+    "message": "Looks like you haven't added anything to your wishlist yet. Explore our products and start shopping.",
+    "button": "Shop Now",
+      "wrongMessageTitle": "Oops! Something went wrong",
+    "wrongMessageMessage": "You are not signed in. Please sign in to view your wishlist."
   }
-
 
   
 

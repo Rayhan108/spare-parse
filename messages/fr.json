@@ -307,6 +307,13 @@
     "updatingButton": "Mise à jour...",
     "newPasswordRequired": "Veuillez entrer votre nouveau mot de passe!",
     "confirmPasswordRequired": "Veuillez confirmer votre nouveau mot de passe!"
+  },
+   "others": {
+    "title": "Votre liste de souhaits est vide",
+    "message": "Il semble que vous n'ayez rien ajouté à votre liste de souhaits pour le moment. Explorez nos produits et commencez à magasiner.",
+    "button": "Magasiner maintenant",
+        "wrongMessageTitle": "Oups! Quelque chose a mal tourné",
+    "wrongMessageMessage": "Vous n'êtes pas connecté. Veuillez vous connecter pour voir votre liste de souhaits."
   }
 
 
