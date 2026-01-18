@@ -53,6 +53,8 @@ const Header = ({ locale }: { locale: string }) => {
   const pathname = usePathname();
   const { message } = App.useApp();
 
+
+
   // States
   const [isSellerFormOpen, setIsSellerFormOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -210,6 +212,7 @@ const handleInputChange = (e: any) => {
 
 
 
+
 const handleSwitchRoleClick = async () => {
   setSubMenu(false);
   
@@ -305,6 +308,76 @@ const handleSwitchRoleClick = async () => {
   };
 
   const targetRole = user?.role === "BUYER" ? "Seller" : "Buyer";
+
+
+
+
+
+
+
+
+
+
+
+
+// ✅ Reusable Dark Mode Toggle Component with RTL support
+const DarkModeToggle = ({
+  isDarkMode,
+  onToggle,
+
+  showLabel = false,
+  labelText = "Dark Mode",
+}: {
+  isDarkMode: boolean;
+  onToggle: () => void;
+  isRTL: boolean;
+  showLabel?: boolean;
+  labelText?: string;
+}) => {
+  return (
+    <div className="flex items-center gap-2">
+      {showLabel && (
+        <p className="text-gray-200 dark:text-black whitespace-nowrap">
+          {labelText}:
+        </p>
+      )}
+      <div className="flex items-center gap-1 flex-shrink-0">
+        {isDarkMode ? (
+          <FiMoon className="w-5 h-5 text-white flex-shrink-0" />
+        ) : (
+          <FiSun className="w-5 h-5 text-black dark:text-white flex-shrink-0" />
+        )}
+        <button
+          onClick={onToggle}
+          className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors flex-shrink-0 ${
+            isDarkMode ? "bg-gray-700" : "bg-gray-300"
+          }`}
+          dir="ltr" // ✅ Force LTR for the toggle button itself
+        >
+          <div
+            className={`w-4 h-4 bg-white rounded-full transition-transform duration-300 ${
+              isDarkMode ? "translate-x-6" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <header>
@@ -492,29 +565,14 @@ const handleSwitchRoleClick = async () => {
       />
     </div>
   )}
-  {
-    !token && (
-    <div className="flex items-center justify-between ">
-                {isDarkMode ? (
-                               <FiMoon className={`w-5 h-5 text-white mr-1`} />
-                             ) : (
-                               <FiSun className={`w-5 h-5 text-black mr-1`} />
-                             )}
-                <button
-                  onClick={handleToggle}
-                  className={`w-14 h-6 flex items-center rounded-full p-1 ${
-                    isDarkMode ? "bg-gray-700" : "bg-gray-300"
-                  }`}
-                >
-                  <div
-                    className={`w-4 h-4 bg-white rounded-full transition-all ${
-                      isDarkMode ? "translate-x-8" : ""
-                    }`}
-                  ></div>
-                </button>
-              </div>
-    )
-  }
+        {/* ✅ Fixed Dark Mode Toggle for non-logged in users */}
+            {!token && (
+              <DarkModeToggle
+                isDarkMode={isDarkMode}
+                onToggle={handleToggle}
+                isRTL={isRTL}
+              />
+            )}
           
 
 
@@ -540,20 +598,25 @@ const handleSwitchRoleClick = async () => {
     }`}
             >
               {/* Dark Mode */}
-              <div className="flex items-center justify-between mb-5">
-                <p className="text-gray-200 dark:text-black">{t("darkmode")}:</p>
-                <button
-                  onClick={handleToggle}
-                  className={`w-14 h-6 flex items-center rounded-full p-1 ${
-                    isDarkMode ? "bg-gray-700" : "bg-gray-300"
-                  }`}
-                >
-                  <div
-                    className={`w-4 h-4 bg-white rounded-full transition-all ${
-                      isDarkMode ? "translate-x-8" : ""
+        <div className="flex items-center justify-between mb-5">
+                <p className="text-gray-200 dark:text-black whitespace-nowrap">
+                  {t("darkmode")}:
+                </p>
+                {/* Force LTR direction for toggle to work correctly */}
+                <div dir="ltr">
+                  <button
+                    onClick={handleToggle}
+                    className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors ${
+                      isDarkMode ? "bg-gray-700" : "bg-gray-300"
                     }`}
-                  ></div>
-                </button>
+                  >
+                    <div
+                      className={`w-4 h-4 bg-white rounded-full transition-transform duration-300 ${
+                        isDarkMode ? "translate-x-6" : "translate-x-0"
+                      }`}
+                    />
+                  </button>
+                </div>
               </div>
 
               {/* Manage Account */}
