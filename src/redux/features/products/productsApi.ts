@@ -107,12 +107,12 @@ export interface ReviewsResponse {
 const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: ({searchTerm,page}) => {
+      query: ({searchTerm,page,priceMin,priceMax,stockMin,stockMax}) => {
         // const params = searchTerm ? { searchTerm } : undefined;
         return {
           url: `/products`,
           method: "GET",
-          params:{searchTerm,page},
+          params:{searchTerm,page,priceMin,priceMax,stockMin,stockMax},
         };
       },
     }),
